@@ -105,9 +105,11 @@ if [ $MISSING_VARS -eq 1 ]; then
     echo ""
 fi
 
-# PHPエラーログの場所を表示
-echo "PHP Error Log: /var/log/apache2/php_error.log"
-echo "Apache Error Log: /var/log/apache2/error.log"
+# エラーログを標準エラー出力にリダイレクト
+ln -sf /dev/stderr /var/log/apache2/php_error.log
+ln -sf /dev/stderr /var/log/apache2/error.log
+
+echo "PHP errors will be logged to stderr"
 echo ""
 
 # Apache起動
