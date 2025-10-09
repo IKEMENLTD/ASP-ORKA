@@ -1,0 +1,60 @@
+# アフィリエイトシステムプロ - Apache設定
+
+# PHP設定
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 60
+php_value memory_limit 256M
+
+# デフォルトエンコーディング
+php_value default_charset UTF-8
+php_value mbstring.language Japanese
+php_value mbstring.internal_encoding UTF-8
+php_value mbstring.http_input auto
+php_value mbstring.http_output UTF-8
+
+# エラー表示（本番環境では無効化）
+php_flag display_errors Off
+php_flag display_startup_errors Off
+php_value error_reporting 0
+
+# セッション設定
+php_value session.gc_maxlifetime 3600
+php_value session.cookie_lifetime 0
+
+# セキュリティヘッダー
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# URL Rewrite（必要に応じて有効化）
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # HTTPSリダイレクト（本番環境で有効化）
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # index.phpへのルーティング（必要に応じて）
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# ディレクトリリスティング無効化
+Options -Indexes
+
+# .htaccessと.envの直接アクセス禁止
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 特定ファイルタイプのアクセス制御
+<FilesMatch "\.(env|log|sql|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

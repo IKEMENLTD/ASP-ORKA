@@ -1,0 +1,50 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; アフィリエイト会員登録 &gt; 入力フォーム &gt; 入力内容の確認 &gt; <span>登録完了</span> &gt; アカウントの有効化</div>
+
+    <div class="comp_list">
+    <dl>
+
+<!--# ifbegin val_equal (!--# ecode getSiteProfile nuser_default_activate #--) 1 #-->
+    <dt>[ COMPLETE - 仮登録が完了しました ]</dt>
+    <dd>
+    <p>ご入力頂いたメールアドレス宛てに自動でメールを送信しました。</p>
+        <ul>
+        <li>記載されたURLにアクセスして、IDを有効にしてください。</li>
+        </ul>
+    </dd>
+    </dl>
+<!--# else #-->
+<!--# ifbegin val_equal (!--# ecode getSiteProfile nuser_accept_admin #--) 2 #-->
+    <dt>[ COMPLETE - 仮登録が完了しました ]</dt>
+    <dd>
+    <p>管理者より認証を行いますので、しばらくお待ち下さい。</p>
+        <ul>
+        <li>認証の完了はメールにてご連絡致します。</li>
+        </ul>
+    </dd>
+    </dl>
+<!--# else #-->
+    <dt>[ COMPLETE - 登録が完了しました ]</dt>
+    <dd>
+    <p>トップページよりログインしてください。</p>
+        <ul>
+        <li><a href="index.php">トップページ</a>に戻る</li>
+        </ul>
+    </dd>
+    </dl>
+<!--# endif #-->
+<!--# endif #-->
+    </div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

@@ -1,0 +1,11 @@
+<!--# readhead subject #-->
+【<!--# ecode getSiteProfile site_title #-->】換金申請があります
+<!--# readend #-->
+<!--# readhead main #-->
+アフィリエイターから換金申請があります。
+サイトにログインし、申請内容を確認してください。
+
+<!--# ecode getSiteProfile site_title #-->
+<!--# ecode getSiteProfile home #-->
+
+<!--# readend #-->

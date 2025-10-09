@@ -1,0 +1,14 @@
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 INFORMATION 】</div>
+
+<!--# ifbegin val_equal (!--# ecode getSiteProfile nuser_default_activate #--) 1 #-->
+<p>ご登録いただいたﾒｰﾙｱﾄﾞﾚｽ宛に確認用ﾒｰﾙを送信いたしました。<br /> 
+そちらのﾒｰﾙに記載されているURLをｸﾘｯｸしてください。</p>
+<!--# else #-->
+<!--# ifbegin val_equal (!--# ecode getSiteProfile nuser_accept_admin #--) 4 #-->
+<p>>管理者より認証を行いますので、しばらくお待ち下さい。<br /> 
+認証の完了はメールにてご連絡致します。</p>
+<!--# else #-->
+<p>トップページよりログインしてください。<br /> 
+<a href="index.php">トップページ</a>に戻る</p>
+<!--# endif #-->
+<!--# endif #-->

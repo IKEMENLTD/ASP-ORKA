@@ -1,0 +1,44 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 換金申請 &gt; <span>換金額の入力</span> &gt; 入力内容の確認 &gt; 申請完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>換金額を入力してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>現在の配当金合計</th>
+    <td><!--# ecode getExchange now #-->円</td>
+</tr>
+<tr>
+    <th>最低換金額</th>
+    <td><!--# ecode getCostType exchangeLimit  #-->円</td>
+</tr>
+<tr>
+    <th>換金額<span>※</span></th>
+    <td><!--# form text cost 6 6 (!--# ecode getCostType exchangeLimit  #--) #-->円</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

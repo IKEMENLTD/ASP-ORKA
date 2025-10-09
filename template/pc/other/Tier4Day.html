@@ -1,0 +1,43 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>日別ティア集計</span></div>
+
+    <div class="calendar">
+
+        <div class="calendar_go">
+            <a href="other.php?key=tier4day&registA=(!--# ecode createEpochTime (!--# calc (!--# get registA #--)-1 #--) mt #--)&registB=(!--# ecode createEpochTime (!--# calc (!--# get registA #--)-1 #--) me #--)(!--# ecode getParam & a c n id #--)">＜</a>
+            <!--# code timestamp (!--# calc (!--# get registA #--) #--) Y/m #-->
+            <a href="other.php?key=tier4day&registA=(!--# ecode createEpochTime (!--# calc (!--# get registB #--)+1 #--) mt #--)&registB=(!--# ecode createEpochTime (!--# calc (!--# get registB #--)+1 #--) me #--)(!--# ecode getParam & a c n id #--)">＞</a>
+        </div>
+        
+        <table class="calendar">
+        <tr>
+        	<th colspan="7"><!--# code timestamp (!--# get registA #--) Y/m #--> <!--# valueAlias nUser (!--# get id #--) id name #-->&nbsp;</th>
+        </tr>
+        <tr>
+            <th class="day_sun">SUN</th>
+            <th class="day">MON</th>
+            <th class="day">TUE</th>
+            <th class="day">WED</th>
+            <th class="day">THU</th>
+            <th class="day">FRI</th>
+            <th class="day_sat">SAT</th>
+        </tr>
+        <!--# ecode tierList4day #-->
+        </table>
+    
+        <div class="calendar_back"><a href="other.php?key=tier4month(!--# ecode getParam & a c n id #--)">月別ティア集計に戻る</a></div>
+        
+    </div><!--calendar-->
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

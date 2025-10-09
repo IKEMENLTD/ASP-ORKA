@@ -1,0 +1,263 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt;  <span>サイト設定の変更</span> &gt; 入力内容の確認 &gt; 変更完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>システムに関する設定を行なってください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr class="(!--# syscode is_validate site_title #--) (!--# syscode is_validate keywords #--) (!--# syscode is_validate description #--)">
+    <th>サイトのタイトルと解説<span>※</span></th>
+    <td>
+    サイト名：<br />
+	<!--# form text site_title 50 #--><br />
+    キーワード：<br />
+	<!--# form text keywords 50 #--><br />
+    概要：<br />
+	<!--# form text description 50 #--><br />
+	<span class="info">
+		※キーワードはカンマ区切りで入力してください。
+	</span>
+    <!--# syscode validate site_title #-->
+    <!--# syscode validate keywords #-->
+    <!--# syscode validate description #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate home #--) (!--# syscode is_validate home_REGEX #--)">
+    <th>サイトのURL<span>※</span></th>
+    <td>
+    <!--# form text home 50 #-->
+	<span class="info">
+		※システムから送信されるメールに記載されますので、必ず正しいURLを入力してください。<br />
+		URLの末尾はスラッシュで終了する必要があります。
+	</span>
+    <!--# syscode validate home #-->
+    <!--# syscode validate home_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate mail_address_MAIL #--) (!--# syscode is_validate mail_address #--)">
+    <th>メール送信元アドレス<span>※</span></th>
+    <td>
+    <!--# form text mail_address 50 #-->
+	<span class="info">
+		※システムから送信されるメールの送信元メールアドレスに使用されます。<br />
+		ユーザーに送信するメールの控えを受信しますので、必ず受信可能なメールアドレスを入力してください。
+	</span>
+    <!--# syscode validate mail_address #-->
+    <!--# syscode validate mail_address_MAIL #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate mail_name #--)">
+    <th>メール送信者名<span>※</span></th>
+    <td>
+    <!--# form text mail_name 50 #-->
+	<span class="info">
+		※システムから送信されるメールの送信者名に使用されます。
+	</span>
+    <!--# syscode validate mail_name #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>成果・換金処理に関する設定を行なってください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>換金申請<span>※</span></th>
+    <td><!--# form radio users_returnss true 　 TRUE/FALSE 許可/一時停止 #-->
+		<span class="info">
+			※一時停止にすると、全てのユーザーは換金申請ができなくなります。
+		</span>
+	</td>
+</tr>
+<tr class="(!--# syscode is_validate exchange_limit #--) (!--# syscode is_validate exchange_limit_REGEX #--)">
+    <th>換金申請の最低必要額<span>※</span></th>
+    <td>
+    <!--# form text exchange_limit 6 6 #-->円<span class="info">※換金申請に必要な最低金額を入力してください。</span>
+    <!--# syscode validate exchange_limit #-->
+    <!--# syscode validate exchange_limit_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate adwares_pass #--)">
+    <th>広告認証パスワード<span>※</span></th>
+    <td>
+    <!--# form text adwares_pass 32 32 #-->
+	<span class="info">
+		※トラッキングコードのパラメータ「check=」がこのパスワードと一致しない場合、成果を発生させません。<br />
+		不正利用防止のために必ずデフォルト値から変更してください。
+	</span>
+    <!--# syscode validate adwares_pass #-->
+    </td>
+</tr>
+<tr>
+    <th>自動ランク設定<span>※</span></th>
+    <td>
+		<!--# form radio sales_auto 1  1/0 入/切(手動) #-->
+	<span class="info">
+		※入の場合、会員ランクの昇格は自動で行われます。<br />
+		※切の場合、会員ランクは管理者が自由に割り当てることができます。
+	</span>
+	</td>
+</tr>
+<tr class="(!--# syscode is_validate access_limit #--) (!--# syscode is_validate access_limit_REGEX #--)">
+    <th>アクセスログ有効期限<span>※</span></th>
+    <td>
+    <!--# form text access_limit 10 10 #-->秒
+	<span class="info">※広告経由後、この期間を過ぎてからの成果はカウントしません。</span>
+	<span class="info">※「0秒」で設定を行うと無制限となります。</span>
+    <!--# syscode validate access_limit #-->
+    <!--# syscode validate access_limit_REGEX #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ティアに関する設定を行なってください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr class="(!--# syscode is_validate child_per #--) (!--# syscode is_validate child_per_REGEX #--)">
+    <th>子から受け取る割合<span>※</span></th>
+    <td>
+    <!--# form text child_per 3 3 #-->％　※ティア報酬を発生させない場合は、0%で設定して下さい。
+	<span class="info">
+		※子ユーザーが成果報酬を得た場合、親ユーザーはその報酬のn%分の報酬をティア報酬として受け取れます。<br />
+		子ユーザーの成果からの差し引きはありません。
+	</span>
+    <!--# syscode validate child_per #-->
+    <!--# syscode validate child_per_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate grandchild_per #--) (!--# syscode is_validate grandchild_per_REGEX #--)">
+    <th>孫から受け取る割合<span>※</span></th>
+    <td>
+    <!--# form text grandchild_per 3 3 #-->％　※ティア報酬を発生させない場合は、0%で設定して下さい。
+	<span class="info">
+		※孫ユーザーが成果報酬を得た場合、親ユーザーはその報酬のn%分の報酬をティア報酬として受け取れます。<br />
+		孫ユーザーの成果からの差し引きはありません。
+	</span>
+    <!--# syscode validate grandchild_per #-->
+    <!--# syscode validate grandchild_per_REGEX #-->
+	</td>
+</tr>
+<tr class="(!--# syscode is_validate greatgrandchild_per #--) (!--# syscode is_validate greatgrandchild_per_REGEX #--)">
+    <th>ひ孫から受け取る割合<span>※</span></th>
+    <td>
+    <!--# form text greatgrandchild_per 3 3 #-->％　※ティア報酬を発生させない場合は、0%で設定して下さい。
+	<span class="info">
+		※ひ孫ユーザーが成果報酬を得た場合、親ユーザーはその報酬のn%分の報酬をティア報酬として受け取れます。<br />
+		ひ孫ユーザーの成果からの差し引きはありません。
+	</span>
+    <!--# syscode validate greatgrandchild_per #-->
+    <!--# syscode validate greatgrandchild_per_REGEX #-->
+    </td>
+</tr>
+<tr  class="(!--# syscode is_validate parent_limit #--) (!--# syscode is_validate parent_limit_REGEX #--)">
+    <th>ティア紹介制限数<span>※</span></th>
+    <td>
+    <!--# form text parent_limit 3 3 #-->人
+	<span class="info">
+		※一人のユーザーが持つ事ができる子ユーザーの最大数です。<br />
+		「999人」で設定を行うと無制限となります。
+	</span>
+    <!--# syscode validate parent_limit #-->
+    <!--# syscode validate parent_limit_REGEX #-->
+    </td>
+</tr>
+<tr  class="(!--# syscode is_validate parent_limit_url #--)">
+    <th>ティア紹介制限URL<span>※</span></th>
+    <td>
+    <!--# form text parent_limit_url 50 255 #--><span class="info">※ティア紹介制限数の上限に達した際のリダイレクト先を設定してください。</span>
+    <!--# syscode validate parent_limit_url #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ユーザーに関する設定を行なってください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>アフィリエイター<br/>メール認証<span>※</span></th>
+    <td>
+    <!--# form radio nuser_default_activate   1/2 メールアドレス認証あり/メールアドレス認証なし #-->
+	<span class="info">
+		※認証ありの場合、アフィリエイターはアクティベートメールを受信して認証作業をしなければいけません。<br />
+		認証なしの場合、アクティベートメールは送信されません。<br />
+		いずれの場合も管理者認証ありの場合は即座に本登録にはなりません。
+	</span>
+    </td>
+</tr>
+<tr>
+    <th>アフィリエイター<br/>管理者認証<span>※</span></th>
+    <td>
+    <!--# form radio nuser_accept_admin   2/4 管理者認証あり/管理者認証なし #-->
+	<span class="info">
+		※認証ありの場合、ユーザーは管理者から認証されるまでログインできません。<br />
+		認証なしの場合、ユーザーは登録後すぐにログインできます。
+	</span>
+    </td>
+</tr>
+<tr>
+    <th>管理者宛て<br/>成果発生通知メール</th>
+    <td>
+    <!--# form checkbox send_mail_admin  　 1/2/4 クリック広告/成果認証/継続報酬 #-->
+	<span class="info">
+		※それぞれ成果が発生した際に通知メールを送信できます。
+	</span>
+    </td>
+</tr>
+<tr>
+    <th>アフィリエイター宛て<br/>成果発生通知メール</th>
+    <td>
+    <!--# form checkbox send_mail_nuser  　 1/2/4 クリック広告/成果認証/継続報酬 #-->
+	<span class="info">
+		※それぞれ成果が発生した際に通知メールを送信できます。
+	</span>
+    </td>
+</tr>
+<tr>
+    <th>未確認・非認証成果の通知</th>
+    <td>
+    <!--# form checkbox send_mail_status  <br> 0/1 認証未確認の成果も通知する/成果を非認証とした場合も通知する #-->
+	<span class="info">
+		※通常は認証された成果のみを通知しますが、上記にチェックを入れると未確認/非認証の成果も通知されるようになります。
+	</span>
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->
+

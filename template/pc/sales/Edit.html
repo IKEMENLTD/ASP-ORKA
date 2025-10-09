@@ -1,0 +1,94 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 登録情報編集 &gt; <span>入力フォーム</span> &gt; 入力内容の確認 &gt; 編集完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>※ユーザーランクに基づいた成果報酬を発生させるには、トラッキングコードに「sales」パラメータを指定する必要があります。</dt>
+<dd>
+	以下のように記述して成果ごとに売上高の情報を渡すようにしてください。<br />
+	<!--# ecode getSiteProfile home #-->add.php?r=done&check=<!--# ecode getSiteProfile adwares_pass #-->&sales=1000<br />
+	(旧トラッキングコードの場合は　<!--# ecode getSiteProfile home #-->add.php?check=<!--# ecode getSiteProfile adwares_pass #-->&sales=1000)
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ランク名を入力してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>ランク名<span>※</span></th>
+    <td><!--# form text name 32 32 #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ユーザーの報酬レートを入力してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>報酬レート<span>※</span></th>
+    <td>
+		<!--# form text rate 3 3 #-->%<br />
+		<span>※トラッキングコードのオプションパラメータ「sales」の値にこのレートを掛けたものが成果報酬となります。</span><br />
+		<span>※獲得単価に「会員ランク適用」が指定されていない広告にはこの報酬レートは適用されません。</span>
+	</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>このランクへの昇格条件を入力してください</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>売上高<span>※</span></th>
+    <td><!--# form text sales 10 10 #-->円<br />
+		<span>※売上高の情報はトラッキングコードのオプションパラメータ「sales」で指定してください。</span><br />
+		<span>※「sales」パラメータが指定されていない成果は集計対象になりません。</span>
+	</td>
+</tr>
+<tr>
+    <th>成果件数<span>※</span></th>
+    <td><!--# form text lot 4 4 #-->件</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<!--# ifbegin val_equal (!--# calc 0 < (!--# code getRow nUser rank = (!--# value id #--) #--) #--) 1 #-->
+<!--# form checkbox delete   true このランクを削除する disabled #--><br>
+※このランクの該当ユーザーが<!--# code getRow nUser rank = (!--# value id #--) #-->人います。別のランクに割り当てるまでは削除できません。
+<!--# endif #-->
+<!--# ifbegin val_equal (!--# calc 0 < (!--# code getRow nUser rank = (!--# value id #--) #--) #--) #-->
+<!--# form checkbox delete   true このランクを削除する #-->
+<!--# endif #-->
+
+<div class="input_box">
+<input type="submit" value="編集内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

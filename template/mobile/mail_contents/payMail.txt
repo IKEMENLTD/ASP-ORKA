@@ -1,0 +1,13 @@
+<!--# readhead subject #-->
+<!--# valueValueReplace (!--# variable pay_type #--) click_pay/pay/continue_pay クリック成果/成果認証/継続成果 #-->が発生しました。
+<!--# readend #-->
+<!--# readhead main #-->
+管理者様
+広告に<!--# valueValueReplace (!--# variable pay_type #--) click_pay/pay/continue_pay クリック成果/成果認証/継続成果 #-->が発生しました。
+
+ 広告名 ：<!--# alias adwares adwares id name #-->
+　日時　：<!--# value regist #-->
+成果金額：<!--# code comma (!--# value cost #--) #-->　円
+認証状態：<!--# valueReplace state 2/1 認証/非認証 #-->
+
+<!--# readend #-->

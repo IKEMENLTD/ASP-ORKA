@@ -1,0 +1,19 @@
+{
+  "name": "affiliate-system-pro",
+  "description": "Affiliate System Pro - Render × Supabase Migration",
+  "type": "project",
+  "require": {
+    "php": ">=8.0",
+    "ext-mbstring": "*",
+    "ext-pgsql": "*",
+    "ext-curl": "*",
+    "ext-gd": "*",
+    "ext-exif": "*",
+    "ext-json": "*"
+  },
+  "config": {
+    "platform": {
+      "php": "8.2"
+    }
+  }
+}

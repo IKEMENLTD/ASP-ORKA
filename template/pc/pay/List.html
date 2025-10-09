@@ -1,0 +1,20 @@
+<!--blocks-->
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+	<div class="pay_list">
+    	<table class="pay_table">
+        	<tr>
+<!--# ifbegin equal adwares_type secretAdwares #-->
+            	<th><!--# alias secretAdwares adwares id name #-->(<!--# value adwares #-->)</th>
+<!--# else #-->
+            	<th><!--# alias adwares adwares id name  #-->(<!--# value adwares #-->)</th>
+<!--# endif #-->
+                <th colspan="2" width="30%" class="regist">発生日時　<!--# value regist #--></th>
+            </tr>
+            <tr>
+            	<td width="10%" class="center"><div class="pay_info">広告ID</div><!--# value adwares #--></td>
+                <td width="15%" class="t_right i_right"><div class="pay_info">成果報酬</div><!--# code comma (!--# value cost #--) #-->　円</td>
+                <td width="15%" class="center"><div class="pay_info">成果の認証状態</div><!--# valueReplace state 2/1/0 認証/非認証/確認中 #--></td>
+            </tr>
+        </table>
+    </div>
+<!--blocks_END-->

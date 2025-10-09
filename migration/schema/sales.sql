@@ -1,0 +1,11 @@
+-- sales テーブル
+DROP TABLE IF EXISTS sales CASCADE;
+CREATE TABLE sales (
+  id CHAR(4),
+  name VARCHAR(8) NOT NULL,
+  rate INTEGER NOT NULL,
+  lot INTEGER NOT NULL,
+  sales INTEGER NOT NULL,
+  PRIMARY KEY (id)
+);
+

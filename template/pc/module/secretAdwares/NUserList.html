@@ -1,0 +1,10 @@
+<button onclick="javascript:t=window.parent.document.sys_form.open_user;v=t.value;if(v.search(/[¥s¥S]*(!--# value id #--)/)){t.value=v+'(!--# value id #--)¥n';this.innerText='削除'}else{t.value=v.replace(/([¥s¥S]*)(!--# value id #--)[¥r¥n]*([¥s¥S]*)/,'$1$2');this.innerText='追加'}">
+<!--# ifbegin val_equal (!--# mod secretAdwares hasUser (!--# get sa #--) (!--# value id #--) #--) #-->
+追加
+<!--# else #-->
+削除
+<!--# endif #-->
+</button>
+<a href="info.php?type=nUser&id=(!--# value id #--)" target="_blank"><!--# value id #--> <!--# value name #--></a>
+<br />
+<hr />

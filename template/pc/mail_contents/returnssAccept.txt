@@ -1,0 +1,13 @@
+<!--# readhead subject #-->
+【<!--# ecode getSiteProfile site_title #-->】入金を行いました
+<!--# readend #-->
+<!--# readhead main #-->
+<!--# convert owner to nUser.id -> name #--> 様
+換金申請の入金が完了しましたのでお知らせいたします。
+
+入金額：<!--# value cost #--> 円
+
+<!--# ecode getSiteProfile site_title #-->
+<!--# ecode getSiteProfile home #-->
+
+<!--# readend #-->

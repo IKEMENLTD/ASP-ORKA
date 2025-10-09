@@ -1,0 +1,191 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; ユーザー検索 &gt; <span>ユーザーの詳細</span></div>
+
+    <div class="topics_list">
+
+        <div class="common_black">
+        	<table class="common_table_black">
+            	<tr>
+                	<th colspan="4" class="common_info">【DATA】　<!--# value name #--> [ <!--# value id #--> ] のデータ</th>
+                </tr>
+            	<tr>
+                	<th width="50%" rowspan="7" colspan="2"><span class="bold">ユーザーリスト</span><br>
+                    <a href="search.php?type=access&run=true&owner=(!--# value id #--)&owner_PAL%5B%5D=match+comp">この紹介者からの広告へのアクセスリスト</a><br>
+                    <a href="search.php?type=pay&run=true&owner=(!--# value id #--)&owner_PAL%5B%5D=match+comp">この紹介者からの会員登録・商品の購入リスト</a><br>
+                    <a href="search.php?type=click_pay&run=true&owner=(!--# value id #--)&owner_PAL%5B%5D=match+comp">この紹介者からの広告クリック履歴</a>
+                    </th>
+                    <td><p class="right">広告バナーからの訪問</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code getRow access owner = (!--# value id #--) #--></span>　人</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">広告バナー経由の成果</a></p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code getRow pay owner = (!--# value id #--) #--></span>　件</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">紹介人数</p></td>
+                    <td width="25%"><p class="right"><span class="num"><a href="search.php?type=nUser&run=true&parent=(!--# value id #--)&parent_PAL[]=match comp"><!--# code getRow nUser parent = (!--# value id #--) activate = 4 #--></a></span>　人</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">累積ティア報酬</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code comma (!--# ecode getTier (!--# value id #--) #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">会員ランク</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# arrayAlias sales rank id name #-->　|　<!--# arrayAlias sales rank id rate #-->％</span></p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">パーソナルレート</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# value personal_rate #-->％</span></p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">成果換算レート</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# value magni #-->％</span></p></td>
+                </tr>
+                <tr>
+                	<th rowspan="4"><span class="bold">成果報酬の状況</span></th>
+                    <td class="center fee">アフィリエイト成果未認証</td>
+                    <td class="center fee">合計額</td>
+                    <td class="fee"><p class="right"><span class="num red"><!--# ecode getExchange unattestation (!--# value id #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td rowspan="3" width="25%" class="center ffe">アフィリエイト成果認証済<br>( 成果自動認証を含む )</td>
+                    <td class="center ffe">獲得成果　( 換金可能額 )</td>
+                    <td class="ffe"><p class="right"><span class="num"><!--# ecode getExchange now (!--# value id #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td class="center eff">換金申請済み　( 換金処理中 )</td>
+                    <td class="eff"><p class="right"><span class="num"><!--# ecode getExchange proc (!--# value id #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td class="center efe">配当済み　( 支払い済み )</td>
+                    <td class="efe"><p class="right"><span class="num"><!--# ecode getExchange past (!--# value id #--) #--></span>　円</p></td>
+                </tr>
+            </table>
+        </div>
+    </div><!--topics_list_END-->
+
+<div class="search_list">
+<dl>
+<dt>登録情報</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>ID／名前</th>
+    <td><!--# value id #-->／<!--# value name #--></td>
+</tr>
+<tr>
+    <th>メールアドレス</th>
+    <td><!--# value mail #--></td>
+</tr>
+<tr>
+    <th>パスワード</th>
+    <td><!--# ecode decryptPassword (!--# value pass #--) #--></td>
+</tr>
+<tr>
+    <th>アクティベート状態</th>
+    <td>
+    <!--# form radio activate   1/2/4/8 未アクティベート/アクティベート/認証済み/認証拒否 #-->
+    <input type="submit" value="変更">
+    </td>
+</tr>
+<tr>
+    <th>バナー掲載ＵＲＬ</th>
+    <td><!--# value url #--></td>
+</tr>
+<tr>
+    <th>紹介者(親)</th>
+    <td>
+<!--# ifbegin val< 0 (!--# code getRow nUser id = (!--# value parent #--) #--) #-->
+	<!--# alias nUser parent id name #--> ( <a href="./info.php?type=nUser&id=(!--# value parent #--)">(!--# value parent #--)</a> )
+<!--# else #-->
+<!--# ifbegin nullcheck parent #-->
+	退会済みユーザー(<!--# value parent #-->)
+<!--# else #-->
+	なし
+<!--# endif #-->
+<!--# endif #-->
+	</td>
+</tr>
+<tr>
+    <th>登録日</th>
+    <td><!--# value regist #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>連絡先</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>住所</th>
+    <td>〒<!--# value zip1 3 3 #-->-<!--# value zip2 4 4 #-->&nbsp;<!--# alias prefectures adds id name #--><!--# value add_sub #--></td>
+</tr>
+<tr>
+    <th>電話番号</th>
+    <td><!--# value tel #--></td>
+</tr>
+<tr>
+    <th>FAX番号</th>
+    <td><!--# value fax #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>振込先</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>金融機関番号</th>
+    <td><!--# value bank_code #--></td>
+</tr>
+<tr>
+    <th>金融機関名</th>
+    <td><!--# value bank #--></td>
+</tr>
+<tr>
+    <th>支店番号</th>
+    <td><!--# value branch_code #--></td>
+</tr>
+<tr>
+    <th>支店名</th>
+    <td><!--# value branch #--></td>
+</tr>
+<tr>
+    <th>種別</th>
+    <td><!--# value bank_type #-->　(<!--# valueReplace bank_type 1/2/4 普通/当座/貯蓄 #-->)</td>
+</tr>
+<tr>
+    <th>口座番号</th>
+    <td><!--# value number #--></td>
+</tr>
+<tr>
+    <th>口座名義(カナ)</th>
+    <td><!--# value bank_name #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+<a href="edit.php?type=nUser&id=(!--# value id #--)" class="input_base">編集する</a>
+<a href="login.php?type=nUser&id=(!--# value id #--)&run=true" class="input_base">ログイン</a>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

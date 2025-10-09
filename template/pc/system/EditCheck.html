@@ -1,0 +1,149 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; サイト設定の変更 &gt; <span>入力内容の確認</span> &gt; 変更完了</div>
+
+<div class="search_list">
+<dl>
+<dt>サイトURL、メール送信アドレス、メール送信者</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>サイトのタイトルと解説<span>※</span></th>
+    <td>
+    サイト名：<br />
+	<!--# value site_title #--><br />
+    キーワード：<br />
+	<!--# value keywords #--><br />
+    概要：<br />
+	<!--# value description #--><br />
+    </td>
+</tr>
+<tr>
+    <th>サイトのURL</th>
+    <td><!--# value home #--></td>
+</tr>
+<tr>
+    <th>メール送信元アドレス</th>
+    <td><!--# value mail_address #--></td>
+</tr>
+<tr>
+    <th>メール送信者名</th>
+    <td><!--# value mail_name #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ティアに関する設定</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>子から受け取る割合</th>
+    <td><!--# value child_per #-->％</td>
+</tr>
+<tr>
+    <th>孫から受け取る割合</th>
+    <td><!--# value grandchild_per #-->％</td>
+</tr>
+<tr>
+    <th>ひ孫から受け取る割合</th>
+    <td><!--# value greatgrandchild_per #-->％</td>
+</tr>
+<tr>
+    <th>ティア紹介制限数</th>
+    <td><!--# value parent_limit #-->人</td>
+</tr>
+<tr>
+    <th>ティア紹介制限URL</th>
+    <td><!--# value parent_limit_url #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>成果・換金処理に関する設定</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>換金申請</th>
+    <td><!--# valueReplace users_returnss TRUE/FALSE 可/不可 #--></td>
+</tr>
+<tr>
+    <th>換金申請の最低必要額</th>
+    <td><!--# value exchange_limit #-->円</td>
+</tr>
+<tr>
+    <th>広告認証パスワード</th>
+    <td><!--# value adwares_pass #--></td>
+</tr>
+<tr>
+    <th>自動ランク設定</th>
+    <td><!--# valueReplace sales_auto 1/0 入(自動)/切(手動) #--></td>
+</tr>
+<tr>
+    <th>アクセスログ有効期限</th>
+    <td><!--# value access_limit #-->秒</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>ユーザーに関する設定</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>アフィリエイターメール認証</th>
+    <td><!--# valueReplace nuser_default_activate 1/2 メールアドレス認証あり/メールアドレス認証なし #--></td>
+</tr>
+<tr>
+    <th>アフィリエイター管理者認証</th>
+    <td><!--# valueReplace nuser_accept_admin 2/4 管理者認証あり/管理者認証なし #--></td>
+</tr>
+<tr>
+    <th>管理者宛て<br/>成果発生通知メール</th>
+    <td>
+    <!--# arrayReplace send_mail_admin / 1/2/4 クリック広告/成果認証/継続課金 #-->
+    </td>
+</tr>
+<tr>
+    <th>アフィリエイター宛て<br/>成果発生通知メール</th>
+    <td>
+    <!--# arrayReplace send_mail_nuser / 1/2/4 クリック広告/成果認証/継続課金 #-->
+    </td>
+</tr>
+<tr>
+    <th>未確認・非認証成果の通知</th>
+    <td>
+    <!--# arrayReplace send_mail_status / 0/1 認証未確認の成果も通知する/成果を非認証とした場合も通知する #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="変更を完了する" class="input_base">
+<input type="submit" value="入力画面に戻る" class="input_base" name="back">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

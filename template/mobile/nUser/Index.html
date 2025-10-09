@@ -1,0 +1,61 @@
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 ﾕｰｻﾞｰﾄｯﾌﾟﾍﾟｰｼﾞ 】</div>
+<p><!--# value name #-->様 <!--# ecode hello #--></p>
+<div style="text-align:left;">
+
+<div style="background:#363;color:#FFF;text-align:center;font-size:normal;">ｱﾌｨﾘｴｲﾄ成果</div>
+<br />
+<div style="text-align:left;background:#EEE;">*　ﾊﾞﾅｰからのｻｲﾄ訪問</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# code getRow access owner = (!--# value id #--) #-->人　</span></div>
+
+<div style="text-align:left;background:#EEE;">*　ﾊﾞﾅｰからの登録,購入</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# code getRow pay owner = (!--# value id #--) #-->人　</span></div>
+
+<div style="text-align:left;background:#EEE;">*　配当残高</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# ecode getExchange now #-->円　</span></div>
+
+<div style="text-align:left;background:#EEE;">*　ﾃｨｱの累計額</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# ecode getTier #-->円　</span></div>
+
+<div style="text-align:left;background:#EEE;">*　処理中換金額</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# ecode getExchange proc #-->円　</span></div>
+
+<div style="text-align:left;background:#EEE;">*　配当済み金額</div>
+<div style="text-align:right;"><span style="color:#363;"><!--# ecode getExchange past #-->円　</span></div>
+<br />
+
+<div style="background:#363;color:#FFF;text-align:center;font-size:normal;">ﾕｰｻﾞｰﾒﾆｭｰ</div>
+<br />
+<div style="background:#EEE;">*　<a href="search.php?type=adwares&run=true">広告一覧</a></div>
+<div style="text-align:right;font-size:smaller;">掲載できる広告の一覧　</div>
+
+<div style="background:#EEE;">*　<a href="search.php?type=secretAdwares&run=true">ｸﾛｰｽﾞﾄﾞ広告</a></div>
+<div style="text-align:right;font-size:smaller;">あなた専用のｸﾛｰｽﾞﾄﾞ広告の一覧　</div>
+
+<div style="background:#EEE;">*　<a href="search.php?type=access&run=true&y=(!--# code now y #--)&m=(!--# code now m #--)">アクセスリスト </a></div>
+<div style="text-align:right;font-size:smaller;">あなたのﾊﾞﾅｰからのｱｸｾｽ解析　</div>
+
+<div style="background:#EEE;">*　<a href="search.php?type=pay&run=true&y=(!--# code now y #--)&m=(!--# code now m #--)">会員登録・商品購入履歴 </a></div>
+<div style="text-align:right;font-size:smaller;">ｱﾌｨﾘｴｲﾄ成果の詳細　</div>
+
+<!--# code ifelse (!--# val users_returnss #--) TRUE <div¥ style="background:#EEE;">*　<a¥ href="regist.php?type=returnss">換金申請</a></div> #-->
+<div style="text-align:right;font-size:smaller;">ｱﾌｨﾘｴｲﾄ報酬の申請　</div>
+
+<div style="background:#EEE;">*　<a href="search.php?type=returnss&run=true">換金申請履歴 </a></div>
+<div style="text-align:right;font-size:smaller;">過去の申請履歴　</div>
+
+<div style="background:#EEE;">*　<a href="edit.php?type=nUser&id=(!--# value id #--)">ユーザー情報の編集 </a></div>
+<div style="text-align:right;font-size:smaller;">ﾊﾟｽﾜｰﾄﾞ,ﾒｰﾙｱﾄﾞﾚｽ等の変更　</div>
+
+<div style="background:#EEE;">*　<a href="edit.php?type=nUser&id=(!--# value id #--)&delete=true">退会 </a></div>
+<div style="text-align:right;font-size:smaller;">退会処理,登録情報の削除　</div>
+
+<div style="background:#EEE;">*&nbsp;<!--# ecode drawMailLink #--></div>
+<div style="text-align:right;font-size:smaller;">友達に紹介ﾒｰﾙを送る　</div>
+
+<div style="background:#EEE;">*　<a href="quick.php?guid=on">[ｸｲｯｸﾛｸﾞｲﾝ]設定 </a></div>
+<div style="text-align:right;font-size:smaller;">次回からのﾛｸﾞｲﾝ方法の変更　</div>
+
+<div style="background:#EEE;">*　<a href="login.php?logout=true">ﾛｸﾞｱｳﾄ </a></div>
+<div style="text-align:right;font-size:smaller;">ｼｽﾃﾑからﾛｸﾞｱｳﾄします　</div>
+<br /><br />
+</div>

@@ -1,0 +1,41 @@
+<!--blocks-->
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+<form name="form" method="post" action="" style="margin: 0px 0px;" onSubmit="return checkChangeAlert(this,(!--# value cost #--),(!--# value state #--));">
+<input name="id" type="hidden" value="(!--# value id #--)" >
+	<div class="pay_list">
+    	<table class="pay_table">
+        	<tr>
+				<th colspan="2">
+<!--# ifbegin equal adwares_type secretAdwares #-->
+            	<a href="info.php?type=secretAdwares&id=(!--# value adwares #--)"><!--# alias secretAdwares adwares id name #-->(<!--# value adwares #-->)</a>
+<!--# else #-->
+            	<a href="info.php?type=adwares&id=(!--# value adwares #--)"><!--# ecode getCostType name (!--# value adwares #--) #-->(<!--# value adwares #-->)</a>
+<!--# endif #-->
+				<!--# ifbegin equal state 0 #-->
+					　[※未確認成果]
+				<!--# endif #-->
+				</th>
+            	<th >
+            	        <a href="info.php?type=pay&id=(!--# value id #--)">詳細</a>&nbsp;&nbsp;
+						<a href="edit.php?type=pay&id=(!--# value id #--)">編集</a>&nbsp;&nbsp;
+            			<a href="edit.php?type=pay&id=(!--# value id #--)&delete=true">削除</a>
+            	</th>
+                <th colspan="2" width="30%" class="regist">発生日時　<!--# value regist #--></th>
+            </tr>
+            <tr>
+            	<td width="20%" class="center"><div class="pay_info">紹介者名（アフィリエイトID）</div><!--# code getName (!--# value owner #--) true #--></td>
+                <td width="25%"><div class="pay_info">関連データ（from）</div><!--# value froms #--></td>
+                <td width="25%"><div class="pay_info">関連データ（from_sub）</div><!--# value froms_sub #--></td>
+                <td width="10%" class="t_right i_right"><div class="pay_info">成果報酬</div><!--# form text cost 6 6 (!--# value cost #--) #-->円</td>
+                <td width="20%" class="t_right"><div class="pay_info">成果の認証</div><!--# ecode drawStateRadio (!--# value state #--) #-->　
+                <input type="submit" class="normal" value="変更" ></td>
+            </tr>
+<!--# ifbegin nullcheck continue_uid #-->
+	    <tr>
+		<td class="t_right" colspan="5" >【continue_uid】<!--# value continue_uid #--></td>
+	    </tr>
+<!--# endif #-->
+        </table>
+    </div>
+</form>
+<!--blocks_END-->

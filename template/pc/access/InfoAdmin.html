@@ -1,0 +1,118 @@
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; アクセスリスト &gt; 検索結果一覧 &gt; <span>詳細</span> </div>
+
+<div class="search_list">
+<dl>
+<dt>詳細</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+
+<tr>
+    <th>アクセス日時</th>
+    <td><!--# value regist #--></td>
+</tr>
+
+
+<tr>
+    <th>成果発生日時</th>
+	<td>
+	<!--# ifbegin val_equal (!--# valueAlias pay (!--# get id #--) access_id regist #--)  #-->
+    このアクセスによる成果は発生していません。
+    <!--# else #-->
+    <a href="info.php?type=pay&id=(!--# valueAlias pay (!--# get id #--) access_id id #--)">
+    <!--# valueAlias pay (!--# get id #--) access_id regist #-->
+	</a>
+	&nbsp;&nbsp;※このアクセスによる成果発生日時です。
+	<!--# endif #-->
+	</td>
+</tr>
+
+
+<tr>
+    <th>アクセスID（ハッシュ）</th>
+    <td><!--# value id #--></td>
+</tr>
+
+
+<tr>
+    <th>成果ID（ハッシュ）</th>
+    <td>
+    <!--# ifbegin val_equal (!--# valueAlias pay (!--# get id #--) access_id regist #--)  #-->
+    このアクセスによる成果は発生していません。
+    <!--# else #-->
+    <a href="info.php?type=pay&id=(!--# valueAlias pay (!--# get id #--) access_id id #--)">
+    <!--# valueAlias pay (!--# get id #--) access_id id #-->
+    </a>
+    &nbsp;&nbsp;※このアクセスによる成果IDです。
+	<!--# endif #-->
+	</td>
+</tr>
+
+
+<tr>
+    <th>広告名</th>
+<!--# ifbegin equal adwares_type secretAdwares #-->
+    <td><a href="info.php?type=secretAdwares&id=<!--# value adwares #-->"><!--# alias secretAdwares adwares id name #-->（&nbsp;<!--# value adwares #-->&nbsp;）</a></td>
+<!--# else #-->
+    <td><a href="info.php?type=adwares&id=<!--# value adwares #-->"><!--# alias adwares adwares id name #-->（&nbsp;<!--# value adwares #-->&nbsp;）</a></td>
+<!--# endif #-->
+</tr>
+
+
+<tr>
+    <th>紹介者（アフィリエイトID）</th>
+    <td><!--# code getName (!--# value owner #--) true #--></td>
+</tr>
+
+
+<tr>
+    <th>アクセス者のIPアドレス</th>
+    <td><!--# value ipaddress #--></td>
+</tr>
+
+
+<tr>
+    <th>成果報酬元IPアドレス</th>
+    <td>
+	<!--# ifbegin val_equal (!--# valueAlias pay (!--# get id #--) access_id regist #--)  #-->
+    このアクセスによる成果は発生していません。
+    <!--# else #-->
+	<!--# valueAlias pay (!--# get id #--) access_id ipaddress #-->
+	<!--# endif #-->
+	</td>
+</tr>
+
+<tr>
+    <th>ブラウザ</th>
+    <td><!--# ecode htmlescape (!--# value useragent #--) #--></td>
+</tr>
+
+<tr>
+    <th>リンク元</th>
+    <td><a href ="<!--# ecode htmlescape (!--# value referer #--) #-->"><!--# ecode htmlescape (!--# value referer #--) #--></a></td>
+</tr>
+
+<!--# ifbegin enableMobile #-->
+<tr>
+    <th>固体識別番号（携帯）</th>
+    <td><!--# value utn #--></td>
+</tr>
+<!--# endif #-->
+
+</table>
+</dd>
+</dl>
+</div>
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

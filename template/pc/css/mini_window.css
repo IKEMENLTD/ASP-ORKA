@@ -1,0 +1,46 @@
+*	{
+	margin: 0;
+	padding: 0;
+}
+
+body	{
+	font-size: 12px;
+	background: #EEE;
+}
+
+div.mini_window	{
+	position: absolute;
+	width: 380px;
+	height: 230px;
+	left: 50%;
+	top: 50%;
+	margin-left: -190px;
+	margin-top: -115px;
+	background: #FFF;
+}
+
+div.mini_window dl dt,
+div.mini_window dl dd p	{
+	margin-bottom: 20px;
+}
+
+div.mini_window dl	{
+	height: 180px;
+	text-align: center;
+	margin-top: 50px;
+}
+
+div.mini_window dl dd p span	{
+	color: red;
+}
+
+/* input */
+input.input_base	{
+	border: 0;
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px !important;
+	background: url(../../../img/splite.gif) no-repeat 0px -300px;
+	color: #FFF;
+}

@@ -1,0 +1,25 @@
+<div id="side_bar">
+	<div class="side_menu">
+    <ul>
+    <li class="title1">広告の掲載</li>
+    <li><a href="search.php?type=adwares&run=true">掲載できる広告</a></li>
+    <li><a href="regist.php?type=invitation">招待状の発行</a></li>
+<!--# ifbegin mod_on secretAdwares #-->
+    <li class="title1">クローズド広告</li>
+    <li><a href="search.php?type=secretAdwares&run=true">掲載できる広告</a></li>
+<!--# endif #-->
+    <li class="title2">累計</li>
+    <li><a href="search.php?type=access&run=true">アクセスリスト</a></li>
+    <li><a href="search.php?type=pay&run=true">会員登録・商品購入履歴</a></li>
+    <li><a href="search.php?type=click_pay&run=true">広告クリック履歴</a></li>
+   <li><a href="search.php?type=continue_pay&run=true">継続報酬の発生履歴</a></li>
+     <li class="title3">換金</li>
+    <!--# code ifelse (!--# val users_returnss #--) TRUE <li><a¥ href="regist.php?type=returnss">換金申請</a></li> #-->
+    <li><a href="search.php?type=returnss&run=true">換金申請履歴</a></li>
+    <li class="title4">ユーザー情報</li>
+    <li><a href="edit.php?type=nUser&id=(!--# val LOGIN_ID #--)">ユーザー情報の編集</a></li>
+    <li><a href="edit.php?type=nUser&id=(!--# val LOGIN_ID #--)&delete=true">退会</a></li>
+    <li><a href="other.php?key=pay_report">成果レポート出力</a></li>
+    </ul>
+    </div>
+</div><!--side_bar_END-->

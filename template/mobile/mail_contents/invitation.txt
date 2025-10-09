@@ -1,0 +1,17 @@
+<!--# readhead subject #-->
+【アフィリエイトＡＳＰシステム】<!--# alias nUser owner id name #-->様があなたを招待しています。
+<!--# readend #-->
+<!--# readhead main #-->
+
+<!--# alias nUser owner id name #-->様があなたを招待しています。
+
+▼メッセージ
+<!--# value message #-->
+
+下記のURLから会員登録を行いますと、仮登録となります。
+<!--# ecode getSiteProfile home #-->index.php?friend=<!--# value owner #-->
+
+アフィリエイトＡＳＰシステム
+http://www.sample.com/
+
+<!--# readend #-->

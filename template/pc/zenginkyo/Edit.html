@@ -1,0 +1,84 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt;  <span>全銀協データの変更</span> &gt; 入力内容の確認 &gt; 変更完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>※印が付いている項目は必須です。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr class="(!--# syscode is_validate name_kana_REGEX #--)">
+    <th>委託者名(カナ)</th>
+    <td>
+    <!--# form text name_kana 50 40 #-->
+    <!--# syscode validate name_kana_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate bank_code #--) (!--# syscode is_validate bank_code_REGEX #--)">
+    <th>金融機関番号(4桁)<span>※</span></th>
+    <td>
+    <!--# form text bank_code 6 4 #-->
+    <!--# syscode validate bank_code #-->
+    <!--# syscode validate bank_code_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate bank_name_kana_REGEX #--)">
+    <th>金融機関名(カナ)</th>
+    <td>
+    <!--# form text bank_name_kana 20 15 #-->
+    <!--# syscode validate bank_name_kana_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate branch_code #--) (!--# syscode is_validate branch_code_REGEX #--)">
+    <th>支店番号(3桁)<span>※</span></th>
+    <td>
+    <!--# form text branch_code 5 3 #-->
+    <!--# syscode validate branch_code #-->
+    <!--# syscode validate branch_code_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate branch_name_kana_REGEX #--)">
+    <th>支店名(カナ)</th>
+    <td>
+    <!--# form text branch_name_kana 20 15 #-->
+    <!--# syscode validate branch_name_kana_REGEX #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate bank_type #--)">
+    <th>預金種目<span>※</span></th>
+    <td>
+    <!--# form radio bank_type 1 　 1/2/4 普通/当座/貯蓄 #-->
+    <!--# syscode validate bank_type #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate number #--) (!--# syscode is_validate number_REGEX #--)">
+    <th>口座番号(7桁)<span>※</span></th>
+    <td>
+    <!--# form text number 9 7 #-->
+    <!--# syscode validate number #-->
+    <!--# syscode validate number_REGEX #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->
+

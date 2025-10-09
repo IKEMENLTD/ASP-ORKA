@@ -1,0 +1,13 @@
+<!--# readhead subject #-->
+【<!--# ecode getSiteProfile site_title #-->】換金申請が差し戻されました
+<!--# readend #-->
+<!--# readhead main #-->
+<!--# convert owner to nUser.id -> name #--> 様
+換金申請が差し戻されましたのでお知らせいたします。
+
+差し戻し額：<!--# value cost #--> 円
+
+<!--# ecode getSiteProfile site_title #-->
+<!--# ecode getSiteProfile home #-->
+
+<!--# readend #-->

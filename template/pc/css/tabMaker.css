@@ -1,0 +1,37 @@
+#tabContent {
+	background-color: #C0C6D6;
+	
+	border: #98A4B6 solid 1px;
+}
+
+#tabIndex {
+	margin: 0px;
+	padding: 0px;
+}
+
+#tabIndex li {
+	float:left;
+	margin-right: 5px;
+	padding: 0.5em;
+	font-weight: bold;
+	list-style-type: none;
+	cursor: pointer;
+	display: block;
+}
+
+#tabIndex .close {
+  background-color: #C0C6D6;
+  text-decoration: underline;
+  color:#FF9900;
+}
+#tabIndex .open {
+  background-color: #F1F3F8;
+  text-decoration: none;
+}
+
+#tabBoxIndex {
+	background-color: #F1F3F8;
+	border: #F1F3F8 solid 1px;
+	clear: both;
+	padding-left: 5px;	
+}

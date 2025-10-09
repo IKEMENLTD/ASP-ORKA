@@ -1,0 +1,21 @@
+<?php
+	include_once './include/extends/SSLUtil.php';
+
+	//SSLへのリダイレクトを有効に
+	$CONFIG_SSL_ENABLE = false;
+	
+	$CONFIG_SSL_MOBILE = false;
+	
+    $CONFIG_SSL_CHECK_CONTROLLER_NAME = true;
+
+	$CONFIG_SSL_ON_CHECK_USERS = Array( //SSLを常時有効にするユーザー
+	//		'nUser' , 'cUser', 'admin'
+	);
+
+    $CONFIG_SSL_ON_CHECK_CONTROLLER_NAME = Array( //SSLを常時有効にするコントロール
+        'register', 'edit', 'login', 'reminder', 'other'
+    );
+
+    $CONFIG_SSL_OUT_CHECK_CONTROLLER_NAME = Array( //SSLを常時無効にするコントロール
+        'activate', 'index', 'info', 'page', 'search'
+    );

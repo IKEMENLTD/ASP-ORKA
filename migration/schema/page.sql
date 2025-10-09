@@ -1,0 +1,11 @@
+-- page テーブル
+DROP TABLE IF EXISTS page CASCADE;
+CREATE TABLE page (
+  id CHAR(6),
+  name VARCHAR(128) NOT NULL,
+  authority VARCHAR(128) NOT NULL,
+  open BOOLEAN NOT NULL DEFAULT FALSE,
+  regist BIGINT,
+  PRIMARY KEY (id)
+);
+

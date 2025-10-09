@@ -1,0 +1,48 @@
+<!--# readhead list_month_head #-->
+                    <div class="calendar">
+                    
+                    <div class="calendar_go"><!--# variable year #-->年のアクセス数</div>
+                    
+                    <table class="calendar">
+                    <tr>
+<!--# readend #-->
+<!--# readhead list_day_head #-->
+                    <th class="calendar_day"><!--# variable day #-->&nbsp;日</th>
+<!--# readend #-->
+<!--# readhead list_day_body #-->
+                    <td>
+                        <a href="search.php?type=access&run=true&regist_PAL[]=match+between&regist_yearA=(!--# variable year #--)&regist_yearB=(!--# variable year #--)&regist_monthA=(!--# variable month #--)&regist_monthB=(!--# variable month #--)&regist_dayA=(!--# variable day #--)&regist_dayB=(!--# variable day #--)(!--# ecode getParam & adwares owner #--)&adwares_PAL[]=match+comp&owner_PAL[]=match+comp">
+                        <!--# code comma (!--# value cnt #--) #-->&nbsp;件
+                        </a>
+                    </td>
+<!--# readend #-->
+<!--# readhead list_day_return #-->
+                    </tr>
+                    <tr>
+<!--# readend #-->
+
+<!--# readhead list_month_row_head #-->
+                    <th><!--# variable month #-->月</th>
+<!--# readend #-->
+<!--# readhead list_month_row_body #-->
+                    <td>
+                    <a href="other.php?key=access4day&registA=(!--# ecode createEpochTime4ymd mt (!--# variable year #--) (!--# variable month #--) #--)&registB=(!--# ecode createEpochTime4ymd me (!--# variable year #--) (!--# variable month #--) #--)(!--# ecode getParam & adwares owner #--)">
+                    <!--# code comma (!--# value cnt #--) #-->&nbsp;件
+                    </a>
+                    </td>
+<!--# readend #-->
+<!--# readhead list_month_return #-->
+                    </tr>
+                    <tr>
+<!--# readend #-->
+<!--# readhead blank_head #-->
+                    <th>&nbsp;</th>
+<!--# readend #-->
+<!--# readhead blank_body #-->
+                      <td>&nbsp;</td>
+<!--# readend #-->
+<!--# readhead list_month_foot #-->
+                    </tr>
+                    </table>
+                    </div><!--calendar-->
+<!--# readend #-->

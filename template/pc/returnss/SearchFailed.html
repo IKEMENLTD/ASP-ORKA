@@ -1,0 +1,55 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 換金申請履歴 &gt; <span>検索結果一覧</span></div>
+
+<form name="form" method="get" action="search.php" style="margin: 0px 0px;">
+<input name="type" type="hidden" value="(!--# get type #--)">
+<input name="run" type="hidden" value="true">
+<input name="id" type="hidden" value="(!--# get id #--)">
+<input name="id_PAL[]" type="hidden" id="id_PAL[]" value="match like">
+
+<div class="topics_accs_list">
+<dl>
+<dt>換金申請された時期</dt>
+<dd>
+	<!--# form text y 4 4 (!--# code now y #--) #-->&nbsp;年&nbsp;<!--# form option m (!--# code now m #--) 1/2/3/4/5/6/7/8/9/10/11/12 1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->から
+	<!--# ifbegin val_equal 13 (!--# code now m 1 #--) #-->
+		<!--# form text y2 4 4 (!--# code now y 1 #--) #-->&nbsp;年&nbsp;<!--# form option m2 1 1/2/3/4/5/6/7/8/9/10/11/12 1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->の間
+	<!--# else #-->
+		<!--# form text y2 4 4 (!--# code now y #--) #-->&nbsp;年&nbsp;<!--# form option m2 (!--# code now m 1 #--) 1/2/3/4/5/6/7/8/9/10/11/12 1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->の間
+	<!--# endif #-->
+</dd>
+<dt>状態</dt>
+<dd>
+	<!--# form checkbox state   管理者確認待ち/入金待ち/入金済み/差し戻し 管理者確認待ち/入金待ち/入金済み/差し戻し #-->
+	<input type="hidden" name="state_PAL[]" value="match or" />
+</dd>
+</dl>
+<input type="submit" value="表示する">
+</div><!--topics_list_END-->
+
+</form>
+
+    <div class="comp_list">
+    <dl>
+    <dt>[ SEARCH - 検索が完了しました ]</dt>
+    <dd>
+    <p>その条件に一致する情報はありませんでした。</p>
+        <ul>
+        <li>条件を変更して、継続して検索がご利用いただけます。</li>
+        </ul>
+    </dd>
+    </dl>
+    </div>
+    
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

@@ -1,0 +1,69 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 招待状発行 &gt; <span>招待状の入力</span> &gt; 入力内容の確認 &gt; 招待状発行完了</div>
+
+<!--# ifbegin not val_equal (!--# ecode getSiteProfile parent_limit #--) 999 #-->
+
+    <div class="comp_list">
+    <dl>
+    <dt>あと、<!--# ecode invitationRow #-->人招待することができます。</dt>
+    </dl>
+    </div>
+
+<!--# endif #-->
+
+<!--# ifbegin val_equal (!--# ecode invitationCheck #--) 1 #-->
+
+    <!--# variable error_msg #-->
+    
+    <div class="search_list">
+    <dl>
+    <dt>招待状の内容を入力してください。</dt>
+    <dd>
+    <table class="search_list_table" summary="詳細テーブル">
+    <tr>
+        <th>メールアドレス<span>※</span></th>
+        <td><!--# form text mail 50 128 #--></td>
+    </tr>
+    <tr>
+        <th>メッセージ</th>
+        <td><!--# form textarea message 30 6 #--></td>
+    </tr>
+    </table>
+    </dd>
+    </dl>
+    </div>
+    
+    <div class="input_box">
+    <input type="submit" value="入力内容の確認" class="input_base">
+    <input type="reset" value="リセット" class="input_base">
+    </div>
+
+<!--# endif #-->
+
+<!--# ifbegin val_equal (!--# ecode invitationCheck #--) 0 #-->
+
+    <div class="error_list">
+    <dl>
+    <dt>INFORMATION - 招待人数の上限に達しました。</dt>
+    <dd>
+        <ul>
+        <li>招待人数の上限に達しましたので、これ以上招待状を送信することはできません。</li>
+        </ul>
+    </dd>
+    </dl>
+    </div>
+
+<!--# endif #-->
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

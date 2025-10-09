@@ -1,0 +1,13 @@
+<script type="text/javascript">
+  if(window.opener && !window.opener.closed){
+      elm = $("select[name='category']",window.opener.document);
+      elm.addOption("(!--# value id #--)","(!--# value name #--)");
+      window.opener.focus();
+      window.close();
+  }
+</script>
+	 <div id="information">
+			カテゴリの登録が完了しました。<br />
+			<br />
+			自動で閉じられない場合、このウィンドウを右上の×をクリックして閉じてください。<br />
+	 </div>

@@ -1,0 +1,74 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 登録情報編集 &gt; 入力フォーム &gt; <span>入力内容の確認</span> &gt; 編集完了</div>
+
+<!--# ifbegin isvariable alert #-->
+
+    <div class="error_list">
+    <dl>
+    <dt>ALERT - [ 警告 ] 問題がないか確認してから完了させてください。</dt>
+    <dd>
+        <ul>
+        <li><!--# variable alert #--></li>
+        </ul>
+    </dd>
+    </dl>
+    </div>
+<!--# endif #-->
+
+<div class="search_list">
+<dl>
+<dt>広告の情報</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>アフィリエイター</th>
+    <td><!--# alias nUser owner id name #--></td>
+</tr>
+<tr>
+    <th>広告</th>
+    <td><!--# alias (!--# value adwares_type #--) adwares id name #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>成果情報</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>成果報酬</th>
+    <td><!--# value cost #-->円</td>
+</tr>
+<tr>
+    <th>売り上げ</th>
+    <td><!--# value sales #-->円</td>
+</tr>
+<tr>
+    <th>成果の認証</th>
+    <td><!--# valueReplace state 2/1 認証/非認証 #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="編集を完了する" class="input_base">
+<input type="submit" value="入力画面に戻る" class="input_base" name="back">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

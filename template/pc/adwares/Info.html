@@ -1,0 +1,306 @@
+<div id="contents">
+	<!--# include head #-->
+	<!--# include side_bar #-->
+
+	<div id="inc_side_body">
+		<div class="topics">HOME &gt; 掲載広告 &gt; 広告の検索結果一覧 &gt; <span>広告の詳細</span></div>
+		<!--blocks-->
+
+		<div class="blue_list">
+
+			<dl>
+				<dt>広告名：<!--# value name #--></dt>
+
+				<dd>
+
+					<ul>
+						<li>報酬：<!--# ecode getCostType money (!--# value money #--) (!--# value ad_type #--) #--></li>
+						<li>クリック報酬：<!--# code comma (!--# value click_money #--) #-->円</li>
+					</ul>
+
+					<br>
+					<!--# value comment #--><br>
+					<br>
+				</dd>
+
+			</dl>
+
+		</div>
+
+		<!--blocks_END-->
+
+		<div class="orange_list">
+
+			<dl>
+				<dt>この広告を掲載するには、あなたのホームページに下記ソースを貼り付けてください。</dt>
+
+				<dd>
+
+					<div class="common_black">
+
+						<table class="common_table_black">
+
+							<tr>
+
+								<td>
+									※ダイレクトリンク方式はアフィリエイトURLが表示されないため、アフィリエイト広告を避けるユーザーにもクリックしてもらえる確率が高まりますが、<br />
+									javascript未対応環境からのクリックを計測することができません。<br />
+									全てのクリックを正しく計測したい場合は通常方式を使用してください。
+								</td>
+
+							</tr>
+
+							<tr>
+								<th width="50%" class="common_info center">PC用</th>
+							</tr>
+
+							<tr>
+
+								<td>
+
+									<!--# ifbegin bool url_users #-->
+
+										<script type="text/javascript">
+
+											function set_url_pc(){
+												var urlInputForm = $('#url_pc');
+												var userURL      = urlInputForm.val();
+												var encodeURL    = encodeURIComponent( userURL );
+												var parent       = urlInputForm.get( 0 ).parentNode.parentNode;
+												var urlForm      = $('input.info_url' , parent ).get( 0 );
+
+												$('textarea',parent ).each(
+													function(){
+														this.value= this.value.replace( /url=([^']*)'/ , 'url=' + encodeURL + "'" );
+
+														if( 'direct' == this.name ){
+															this.value= this.value.replace( /href="([^"]*)"/ , 'href="' + userURL + '"' );
+														}else{
+															this.value= this.value.replace( /url=([^"]*)"/ , 'url=' + encodeURL + '"' );
+														}
+													}
+												);
+
+												urlForm.value = urlForm.value.replace( /url=(.*)$/ , 'url=' + encodeURL );
+											}
+
+										</script>
+
+										<p>
+											<input type="text" id="url_pc" name="url_pc" size="30" value="http://"/>
+											<input type="button" value="URLを設定する" onclick="set_url_pc()">
+										</p>
+
+									<!--# endif #-->
+
+									<ul>
+										<li>広告URL</li>
+									</ul>
+
+									<p>
+										<input class="info_url" size="50" value='(!--# variable host #--)link.php?id=(!--# variable loginID #--)&adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &url= #--)'>
+									</p>
+
+									<br>
+
+									<!--# ifbegin anycheck banner/banner2/banner3 #-->
+
+										<ul>
+											<li>バナー広告掲載タグ（ダイレクトリンク方式）</li>
+										</ul>
+
+										<p>※javascript未環境対応では動作しません。</p>
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner #-->
+										<p><!--# object image banner #--></p>
+
+										<p>
+											<textarea class="info_url" name="direct">&lt;a href="(!--# value url #--)" onclick="location.replace('(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)');return false;"&gt;&lt;img src="(!--# variable host #--)(!--# value banner #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner2 #-->
+										<p><!--# object image banner2 #--></p>
+
+										<p>
+											<textarea class="info_url" name="direct">&lt;a href="(!--# value url #--)" onclick="location.replace('(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)');return false;"&gt;&lt;img src="(!--# variable host #--)(!--# value banner2 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner3 #-->
+										<p><!--# object image banner3 #--></p>
+
+										<p>
+											<textarea class="info_url" name="direct">&lt;a href="(!--# value url #--)" onclick="location.replace('(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)');return false;"&gt;&lt;img src="(!--# variable host #--)(!--# value banner3 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin anycheck banner/banner2/banner3 #-->
+										<ul>
+											<li>バナー広告掲載タグ（通常方式）</li>
+										</ul>
+
+										<p>※通常はこちらをお使いください。</p>
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner #-->
+										<p><!--# object image banner #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner2 #-->
+										<p><!--# object image banner2 #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner2 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner3 #-->
+										<p><!--# object image banner3 #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner3 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<ul>
+										<li>テキスト広告掲載タグ（ダイレクトリンク方式）</li>
+									</ul>
+
+									<p>※javascript未環境対応では動作しません。</p>
+
+									<p>
+										<textarea class="info_url" name="direct">&lt;a href="(!--# value url #--)" onclick="location.replace('(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)');return false;"&gt;<!--# value ad_text #-->&lt;/a&gt;</textarea>
+									</p>
+
+									<ul>
+										<li>テキスト広告掲載タグ（通常方式）</li>
+									</ul>
+
+									<p>※通常はこちらをお使いください。</p>
+
+									<p>
+										<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;<!--# value ad_text #-->&lt;/a&gt;</textarea>
+									</p>
+
+								</td>
+
+							</tr>
+
+							<!--# ifbegin enableMobile #-->
+							<!--# ifbegin nullcheck url_m #-->
+							<tr>
+								<th width="50%" class="common_info center">モバイル用</th>
+							</tr>
+
+							<tr>
+
+								<td>
+
+									<!--# ifbegin bool url_users #-->
+
+										<script type="text/javascript">
+											function set_url_mobile(){
+												var urlInpufTorm = $('#url_mobile');
+												var userURL      = urlInpufTorm.val();
+												var encodeURL    = encodeURIComponent( userURL );
+												var parent       = urlInpufTorm.get(0).parentNode.parentNode;
+												var urlForm      = $('input.info_url' , parent ).get( 0 );
+
+												$('textarea',parent ).each(
+													function(){
+													this.value= this.value.replace( /url=([^"]*)"/ , 'url=' + encodeURL + '"' );
+													}
+												);
+
+												urlForm.value = urlForm.value.replace( /url=(.*)$/ , 'url=' + encodeURL );
+											}
+										</script>
+
+										<p>
+											<input type="text" id="url_mobile" name="url_mobile" size="30" value="http://"/>
+											<input type="button" value="URLを設定する" onclick="set_url_mobile()">
+										</p>
+
+									<!--# endif #-->
+
+									<ul>
+										<li>広告URL</li>
+									</ul>
+
+									<p>
+										<input class="info_url" size="50" value='(!--# variable host #--)link.php?id=(!--# variable loginID #--)&adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &url= #--)'>
+									</p>
+
+									<!--# ifbegin anycheck banner_m/banner_m2/banner_m3 #-->
+
+										<ul>
+											<li>バナー広告掲載タグ（通常方式）</li>
+										</ul>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner_m #-->
+										<p><!--# object image banner_m #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner_m #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner_m2 #-->
+										<p><!--# object image banner_m2 #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner_m2 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+									<!--# ifbegin nullcheck banner_m3 #-->
+										<p><!--# object image banner_m3 #--></p>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;&lt;img src="(!--# variable host #--)(!--# value banner_m3 #--)" border="0"&gt;&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+										<ul><li>テキスト広告掲載タグ（通常方式）</li></ul>
+
+										<p>
+											<textarea class="info_url">&lt;a href="(!--# variable host #--)link.php?id=(!--# variable loginID #--)&amp;adwares=(!--# get id #--)(!--# code ifelse (!--# value url_users #--) TRUE &amp;url= #--)"&gt;<!--# value ad_text #-->&lt;/a&gt;</textarea>
+										</p>
+
+									<!--# endif #-->
+
+								</td>
+								<!--# endif #-->
+								<!--# endif #-->
+
+						</table>
+
+					</div>
+
+				</dd>
+
+			</dl>
+
+		</div>
+
+	</div><!--inc_side_body_END-->
+
+	<br class="clear">
+
+</div><!--contents_END-->

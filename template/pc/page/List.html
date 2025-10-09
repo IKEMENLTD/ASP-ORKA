@@ -1,0 +1,20 @@
+<!--blocks-->
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+    <div class="blue_list">
+    <dl>
+    <dt><a href="edit.php?type=page&id=(!--# value id #--)">[<!--# value id #-->]　<!--# value name #--></a></dt>
+    <dd>
+        <ul>
+        <li>【状態】　<!--# valueReplace open TRUE/FALSE 公開/非公開 #--></li>
+        <li>【対象】　<!--# arrayReplace authority / nobody/nUser 非ログイン/アフィリエイター #--></li>
+        </ul>
+        <br />
+        <input type="text" value="(!--# ecode getSiteProfile home #--)page.php?p=(!--# value name #--)" size="100" /><br />
+        ※上記URLへリンクして頂くことでページ閲覧が可能となります。<br />
+        <br />
+	    <a href="edit.php?type=page&id=(!--# value id #--)&delete=true">削除</a>　/　
+	    <a href="edit.php?type=page&id=(!--# value id #--)">編集</a>
+    </dd>
+    </dl>
+    </div>
+<!--blocks_END-->

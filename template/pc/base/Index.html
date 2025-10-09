@@ -1,0 +1,42 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME</div>
+
+    <div class="login_list">
+    <dl>
+    <dt>[ LOGIN - ログインフォーム ]</dt>
+    <dd>
+    <p>ご登録時のメールアドレスとパスワードを入力し、ログインしてください。</p>
+    <form action="login.php" method="post" >
+        <table cellspacing="20" class="login_table" summary="ログインテーブル">
+        <tr>
+            <th>メールアドレス</th>
+            <td><input type="text" name="mail"></td>
+        </tr>
+        <tr>
+            <th>パスワード</th>
+            <td><input type="password" name="passwd" ></td>
+        </tr>
+        </table>
+        <div class="input_single"><input type="submit" value="ログイン" class="input_base"></div>
+	</form>
+    </dd>
+	<dt>パスワードを忘れた方はこちら</dt>
+	<dd>
+		<p>登録メールアドレス宛にパスワードを再発行いたします。</p>
+		<p><a href="reminder.php?type=nUser">パスワードの再発行</a></p>
+	</dd>
+    </dl>
+    </div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

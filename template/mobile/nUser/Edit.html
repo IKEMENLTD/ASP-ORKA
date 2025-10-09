@@ -1,0 +1,66 @@
+<!--# variable error_msg #-->
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 ﾕｰｻﾞｰ情報の編集 】</div>
+
+<div style="text-align:left;">
+
+<div style="background:#EEE;">名前<span style="color:#ff0000">*</span>:<br />
+<!--# form text name 16 16  #--><br /><br /></div>
+
+<div style="background:#DDD;">住所<span style="color:#ff0000">*</span>:<br />
+〒<!--# form text zip1 3 3  (!--# code getInputMode 4 #--) #-->-<!--# form text zip2 4 4  (!--# code getInputMode 4 #--) #-->　
+<!--# code tableSelectForm adds prefectures name id  未選択 #--><br /><br />
+<!--# form text add_sub 30 128 #--><br /><br /></div>
+
+<div style="background:#EEE;">電話番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text tel 16 16  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">FAX番号:<br />
+<!--# form text fax 16 16  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">バナー掲載URL<span style="color:#ff0000">*</span>:<br />
+<!--# form text url 30 256  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">メールアドレス<span style="color:#ff0000">*</span>:<br />
+<!--# form text mail 32 128  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">メールアドレス再入力<span style="color:#ff0000">*</span>:<br />
+<!--# form text mail_confirm 32 128  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">金融機関番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text bank_code 6 4 #--><br /><br /></div>
+
+<div style="background:#EEE;">支店番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text branch_code 5 3 #--><br /><br /></div>
+
+
+<div style="background:#EEE;">銀行名<span style="color:#ff0000">*</span>:<br />
+<!--# form text bank 32 128  #--><br /><br /></div>
+
+<div style="background:#DDD;">支店<span style="color:#ff0000">*</span>:<br />
+<!--# form text branch 32 128  #--><br /><br /></div>
+
+<div style="background:#EEE;">口座種別<span style="color:#ff0000">*</span>:<br />
+<!--# form radio bank_type 1  1/2/3 普通/当座/貯蓄 #--><br /><br /></div>
+
+<div style="background:#DDD;">口座番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text number 16 32  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">口座名義(カナ)<span style="color:#ff0000">*</span>:<br /> 
+<!--# form text bank_name 16 32  #--><br /><br /></div>
+
+<div style="background:#DDD;">パスワード<span style="color:#ff0000">*</span>:<br />
+<!--# form password pass 8 8 (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">パスワード再入力<span style="color:#ff0000">*</span>:<br />
+<!--# form password pass_confirm 8 8 (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 退会 】</div>
+<div style="text-align:center;"><br /><!--# form checkbox delete   true 退会する #--><br /><br />
+
+<!--# form hidden parent #-->
+
+<div style="text-align:center;"><input type="submit" value="確認">　<input type="reset" value="リセット"></div>
+<br />
+
+</div>

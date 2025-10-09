@@ -1,0 +1,20 @@
+<!--blocks-->
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+    <div class="blue_list">
+    <dl>
+    <dt><a href="info.php?type=adwares&id=(!--# value id #--)">広告名：<!--# value name #--></a></dt>
+    <dd>
+        <ul>
+        <li>報酬：<!--# ecode getCostType money (!--# value money #--) (!--# value ad_type #--) #--></li>
+        <li>クリック報酬：<!--# value click_money #--></li>
+        </ul>
+        <br>
+	    <!--# value comment #--><br>
+<!--# ifbegin nullcheck banner #-->
+        <br>
+        <!--# object image banner #--><br>
+<!--# endif #-->
+    </dd>
+    </dl>
+    </div>
+<!--blocks_END-->

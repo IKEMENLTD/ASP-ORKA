@@ -1,0 +1,43 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>アカウントロック設定の変更</span></div>
+
+<div class="search_list">
+<dl>
+<dt>アカウントロック設定</dt>
+<dd>
+<p class="mb10">変更内容を確認してください。</p>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>対象ユーザー種別</th>
+    <td><!--# valueReplace user_type admin/nUser/cUser 管理者/アフィリエイター/広告主 #--></td>
+</tr>
+<tr>
+    <th>ロックの使用</th>
+    <td><!--# valueReplace is_use TRUE/FALSE ロックする/ロックしない #--></td>
+</tr>
+<tr>
+    <th>ロック条件</th>
+    <td>過去、<!--# value max_try_time #-->秒の間に<!--# value max_try_count #-->回の失敗履歴がある場合、そのアカウントにログイン出来ないようにする。</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="編集を完了する" class="input_base">
+<input type="submit" value="入力画面に戻る" class="input_base" name="back">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

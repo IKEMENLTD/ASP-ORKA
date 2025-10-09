@@ -1,0 +1,45 @@
+<div id="contents">
+<!--# include head #-->
+<!--# include side_bar #-->
+<div id="inc_side_body">
+<div class="topics">HOME &gt; ページ編集 &gt; <span>内容の編集</span> &gt; 編集内容の確認 &gt; ページ編集完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>ページの内容を入力してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>名前 (※英数字)<span>※</span></th>
+    <td><!--# form text name 32 32  (!--# code getTabindex #--) #--></td>
+</tr>
+<tr>
+    <th>権限<span>※</span></th>
+    <td><!--# form checkbox authority   nobody/nUser 非ログイン/アフィリエイター (!--# code getTabindex #--) #--></td>
+</tr>
+<tr>
+    <th>ソース<span>※</span></th>
+    <td><!--# form textarea html 80 20  (!--# code getTabindex #--) #--></td>
+</tr>
+<tr>
+    <th>公開/非公開<span>※</span></th>
+    <td><!--# form radio open TRUE 　 TRUE/FALSE 公開/非公開  (!--# code getTabindex #--) #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<!--# form hidden receive_id #-->
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

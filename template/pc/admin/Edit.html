@@ -1,0 +1,56 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt;  <span>ログイン情報の変更</span> &gt; 入力内容の確認 &gt; 変更完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>※印が付いている項目は必須です。</dt>
+<dt>※パスワードが空欄の場合、パスワード変更は行なわれません。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr class="(!--# syscode is_validate mail #--) (!--# syscode is_validate mail_MAIL #--)">
+    <th>メールアドレス<span>※</span></th>
+    <td>
+    <!--# form text mail 50 #-->
+    <!--# syscode validate mail #-->
+    <!--# syscode validate mail_MAIL #-->
+    </td>
+</tr>
+<tr class="(!--# syscode is_validate pass_CONFIRM_CHECK #--)">
+    <th>パスワード</th>
+    <td>
+    <!--# form password pass 50 50 #-->
+    <!--# syscode validate pass_CONFIRM_CHECK #-->
+    </td>
+</tr>
+<tr  class="(!--# syscode is_validate pass_CONFIRM_NOT #--) (!--# syscode is_validate pass_CONFIRM_CHECK #--)">
+    <th>パスワード(再度)</th>
+    <td>
+    <!--# form password pass_confirm 50 50 #-->
+    <!--# syscode validate pass_CONFIRM_NOT #-->
+    <!--# syscode validate pass_CONFIRM_CHECK #-->
+    </td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

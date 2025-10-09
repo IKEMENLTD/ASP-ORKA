@@ -1,0 +1,31 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>日別アクセス集計</span></div>
+
+    <div class="calendar">
+
+        <div class="calendar_go">
+        <a href="other.php?key=access4day&registA=(!--# ecode createEpochTime (!--# calc (!--# get registA #--)-1 #--) mt #--)&registB=(!--# ecode createEpochTime (!--# calc (!--# get registA #--)-1 #--) me #--)(!--# ecode getParam & adwares owner #--)">＜</a>
+        <!--# code timestamp (!--# calc (!--# get registA #--) #--) Y/m #-->
+        <a href="other.php?key=access4day&registA=(!--# ecode createEpochTime (!--# calc (!--# get registB #--)+1 #--) mt #--)&registB=(!--# ecode createEpochTime (!--# calc (!--# get registB #--)+1 #--) me #--)(!--# ecode getParam & adwares owner #--)">＞</a>
+        </div>
+        
+        <table class="calendar">
+            <!--# ecode accessList4day #-->
+        </table>
+    
+        <div class="calendar_back"><a href="other.php?key=access4month(!--# ecode getParam & adwares owner #--)">月別アクセス数に戻る</a></div>
+        
+    </div><!--calendar-->
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

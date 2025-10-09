@@ -1,0 +1,81 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+<div class="topics">HOME</div>
+    
+    <div class="topics_list">
+
+        <div class="common_black">
+        	<table class="common_table_black">
+            	<tr>
+                	<th colspan="4" class="common_info"><!--# value name #-->様、<!--# ecode hello #--></th>
+                </tr>
+            	<tr>
+                	<th width="50%" rowspan="5" colspan="2"><span class="bold">アフィリエイト状況</span><br>※登録情報に変更があった場合は変更をお願いします。<br>ユーザー情報の編集　＞　<a href="edit.php?type=nUser&id=(!--# val LOGIN_ID #--)">登録情報の変更</a></th>
+                    <td><p class="right">広告バナーからの訪問</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code getRow access owner = (!--# value id #--) #--></span>　人</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">広告バナー経由の成果</a></p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code getRow pay owner = (!--# value id #--) #--></span>　件</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">紹介人数</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code getRow nUser parent = (!--# value id #--) activate = 4 #--></span>　人</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">累積ティア報酬</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# code comma (!--# ecode getTier #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td><p class="right">会員ランク</p></td>
+                    <td width="25%"><p class="right"><span class="num"><!--# arrayAlias sales rank id name #-->（<!--# arrayAlias sales rank id rate #-->％）</span></p></td>
+                </tr>
+                <tr>
+                	<th rowspan="5"><span class="bold">成果報酬の状況</span></th>
+                    <td class="center fee">アフィリエイト成果の未確認</td>
+                    <td class="center fee">合計額</td>
+                    <td class="fee"><p class="right"><span class="num red"><!--# code comma (!--# ecode getExchange uncheck #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td class="center fee">アフィリエイト成果未認証</td>
+                    <td class="center fee">合計額</td>
+                    <td class="fee"><p class="right"><span class="num red"><!--# code comma (!--# ecode getExchange unattestation #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td rowspan="3" width="25%" class="center ffe">アフィリエイト成果認証済<br>( 成果自動認証を含む )</td>
+                    <td class="center ffe">獲得成果　( 換金可能額 )</td>
+                    <td class="ffe"><p class="right"><span class="num"><!--# code comma (!--# ecode getExchange now #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td class="center eff">換金申請済み　( 換金処理中 )</td>
+                    <td class="eff"><p class="right"><span class="num"><!--# code comma (!--# ecode getExchange proc #--) #--></span>　円</p></td>
+                </tr>
+                <tr>
+                    <td class="center efe">配当済み　( 支払い済み )</td>
+                    <td class="efe"><p class="right"><span class="num"><!--# code comma (!--# ecode getExchange past #--) #--></span>　円</p></td>
+                </tr>
+            </table>
+        </div>
+    </div><!--topics_list_END-->
+
+    <div class="orange_list">
+    <dl>
+    <dt>[ INFORMATION - インフォメーション ]</dt>
+    <dd>
+        <ul><li>お友達紹介用URLです。コピーして使用してください。</li></ul>
+		<p><textarea class="url">(!--# ecode getSiteProfile home #--)index.php?friend=(!--# value id #--)</textarea></p>
+    </dd>
+    </dl>
+    </div><!--orange_list_END-->
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+<!--フルワイドコンテンツはココに入る事ができる-->
+</div><!--contents_END-->

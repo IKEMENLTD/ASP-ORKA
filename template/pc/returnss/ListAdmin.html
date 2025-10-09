@@ -1,0 +1,19 @@
+<tr>
+<td><!--# value regist #--></td>
+<td><a href="info.php?type=nUser&id=(!--# value owner #--)"><!--# value owner #--></a></td>
+<td><!--# code comma (!--# value cost #--) #-->円</td>
+<td class="form_type">
+<!--# ifbegin not equal state 入金済み #-->
+<!--# ifbegin not equal state 差し戻し #-->
+	<form name="form" method="post" style="margin: 0px 0px;"><input type="hidden" name="id" value="(!--# value id #--)"><!--# form option state (!--# value state #--) 管理者確認待ち/入金待ち/入金済み 管理者確認待ち/入金待ち/入金済み #-->　<input type="submit" name="submit" value="データを更新する"></form><hr />
+	<form name="form" method="post" style="margin: 0px 0px;"><input type="hidden" name="id" value="(!--# value id #--)"><input type="hidden" name="state" value="差し戻し">　<input type="submit" name="submit" value="差し戻す" onclick="return confirm('差し戻してよろしいですか？')"></form><span class="info">この申請を削除し、換金可能額をユーザーに返還します。</span>
+<!--# endif #-->
+<!--# endif #-->
+<!--# ifbegin equal state 入金済み #-->
+	入金済み
+<!--# endif #-->
+<!--# ifbegin equal state 差し戻し #-->
+	差し戻し
+<!--# endif #-->
+</td>
+</tr>

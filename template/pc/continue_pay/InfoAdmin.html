@@ -1,0 +1,74 @@
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 継続課金履歴 &gt; 検索結果一覧 &gt; <span>詳細</span> </div>
+
+
+<div class="search_list">
+<dl>
+<dt>詳細</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>発生日時</th>
+    <td><!--# value regist #--></td>
+</tr>
+<tr>
+    <th>成果のID（ハッシュ）</th>
+    <td><!--# value id #--></td>
+</tr>
+<tr>
+    <th>成果元ID（ハッシュ）</th>
+    <td><a href="info.php?type=pay&id=<!--# value pay_id #-->"><!--# value pay_id #--></a></td>
+</tr>
+<tr>
+    <th>成果元IPアドレス</th>
+    <td><!--# valueAlias pay (!--# value pay_id #--) id ipaddress #--></td>
+</tr>
+<tr>
+    <th>広告名</th>
+    <!--# ifbegin equal adwares_type secretAdwares #-->
+    <td><a href="info.php?type=secretAdwares&id=<!--# value adwares #-->"><!--# alias secretAdwares adwares id name #-->(&nbsp;<!--# value adwares #-->&nbsp;)</a></td>
+    <!--# else #-->
+    <td><a href="info.php?type=adwares&id=<!--# value adwares #-->"><!--# alias adwares adwares id name #-->(&nbsp;<!--# value adwares #-->&nbsp;)</a></td>
+    <!--# endif #-->
+</tr>
+<tr>
+    <th>紹介者（アフィリエイトIID）</th>
+    <td><!--# code getName (!--# value owner #--) true #--></td>
+</tr>
+<tr>
+    <th>コスト</th>
+    <td>
+    <!--# value cost #-->
+    &nbsp;&nbsp;※トラッキングコードに渡された、(cost)の値です。
+    </td>
+</tr>
+<tr>
+    <th>報酬金額</th>
+    <td><!--# value sales #-->円</td>
+</tr>
+<tr>
+    <th>状態</th>
+    <td><!--# valueReplace state 1/2 非認証/認証 #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<a href="edit.php?type=continue_pay&id=(!--# value id #--)" class="input_base">編集する</a>
+<a href="search.php?type=log_pay&run=true&pay_type=(!--# value type #--)&pay_type_PAL[]=match+comp&pay_id=(!--# value id #--)&pay_id_PAL[]=match+comp" class="input_base">報酬変動ログ</a>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->
+

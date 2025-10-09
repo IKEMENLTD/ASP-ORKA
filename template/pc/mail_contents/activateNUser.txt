@@ -1,0 +1,13 @@
+<!--# readhead subject #-->
+【<!--# ecode getSiteProfile site_title #-->】ご登録ありがとうございます。
+<!--# readend #-->
+<!--# readhead main #-->
+
+メールアドレスを認証するために、下記URLをクリックしてください。
+
+<!--# code activate #-->
+
+<!--# ecode getSiteProfile site_title #-->
+<!--# ecode getSiteProfile home #-->
+
+<!--# readend #-->

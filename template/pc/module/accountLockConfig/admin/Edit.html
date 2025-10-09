@@ -1,0 +1,44 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>アカウントロック設定の変更</span></div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>アカウントロック設定</dt>
+<dd>
+<p class="mb10">同じアカウントに対し、連続でログインに失敗した場合に、一時的にログイン出来ないようにする設定です。</p>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>対象ユーザー種別</th>
+    <td><!--# valueReplace user_type admin/nUser/cUser 管理者/アフィリエイター/広告主 #--></td>
+</tr>
+<tr>
+    <th>ロックの使用</th>
+    <td><!--# form radio is_use   TRUE/FALSE ロックする/ロックしない #--></td>
+</tr>
+<tr>
+    <th>ロック条件</th>
+    <td>過去、<!--# form text max_try_time 5 5 #-->秒の間に<!--# form text max_try_count 3 3 #-->回の失敗履歴がある場合、そのアカウントにログイン出来ないようにする。</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="確認画面へ" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

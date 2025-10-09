@@ -1,0 +1,20 @@
+<center>
+<form name="form" method="get" action="search.php">
+<input name="type" type="hidden" value="(!--# get type #--)" />
+<input name="run" type="hidden" value="true" />
+<input name="id" type="hidden" value="(!--# get id #--)" />
+<input name="id_PAL[]" type="hidden" id="id_PAL[]" value="match like" />
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 換金申請ﾘｽﾄ 】</div>
+<br />
+<!--# form text y 4 4 (!--# code now y #--) (!--# code getInputMode 4 #--) #-->年
+<!--# form option m (!--# code now m #--) 1/2/3/4/5/6/7/8/9/10/11/12 1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->
+<p><input type="submit" value="検索する"></p>
+</form>
+
+<!--# syscode searchResult setResultNum 100 #-->
+<!--# syscode searchResult setPagejumpNum 7 #-->
+<!--# syscode searchResult info #-->
+<span style="color:#336;">換金申請額合計:<!--# variable SUM #-->円</span><br />
+<!--# syscode searchResult pageChange #-->
+<!--# syscode searchResult result #-->
+<!--# syscode searchResult pageChange #-->

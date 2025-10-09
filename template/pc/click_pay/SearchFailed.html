@@ -1,0 +1,56 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 広告クリック履歴 &gt; <span>検索結果一覧</span></div>
+
+<form name="form" method="get" action="search.php" style="margin: 0px 0px;">
+<input name="type" type="hidden" value="(!--# get type #--)">
+<input name="run" type="hidden" value="true">
+<input name="id" type="hidden" value="(!--# get id #--)">
+<input name="id_PAL[]" type="hidden" id="id_PAL[]" value="match like">
+
+<div class="cs">
+	<table class="search_table" summary="検索用テーブル">
+    <tr>
+    	<th>成果発生月</th>
+        <td><!--# form text y 4 4 #-->&nbsp;年&nbsp;<!--# form option m (!--# code now m #--) 1/2/3/4/5/6/7/8/9/10/11/12 1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->
+		<!--# code num_option d 31 1 1 #-->日 〜<!--# code num_option d2 31 31 1 #-->日
+        </td>
+    </tr>
+    <tr>
+    	<th>認証状態</th>
+        <td><!--# form checkbox state   2/1/0 認証/非認証/確認中 #-->
+		<input type="hidden" name="state_PAL[]" value="match or">
+        </td>
+    </tr>
+    </table>
+    <div class="input_box">
+	<input type="submit" value="検索する" class="input_base">
+    <input type="reset" value="リセット" class="input_base">
+    </div>
+</div>
+
+</form>
+
+    <div class="comp_list">
+    <dl>
+    <dt>[ COMPLETE - 検索完了 ]</dt>
+    <dd>
+    <p>その条件に一致する情報はありませんでした。</p>
+        <ul>
+        <li>条件を変更して下さい。</li>
+        </ul>
+    </dd>
+    </dl>
+    </div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

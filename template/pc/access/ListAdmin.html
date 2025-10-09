@@ -1,0 +1,13 @@
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+<tr>
+<td><a href="info.php?type=access&id=<!--# value id #-->"><!--# value regist #--></a></td>
+<td><!--# value ipaddress #--></td>
+
+<!--# ifbegin equal adwares_type secretAdwares #-->
+<td class="t_left"><a href="info.php?type=secretAdwares&id=<!--# value adwares #-->"><!--# alias secretAdwares adwares id name #--></a></td>
+<!--# else #-->
+<td class="t_left"><a href="info.php?type=adwares&id=<!--# value adwares #-->"><!--# alias adwares adwares id name #--></a></td>
+<!--# endif #-->
+
+<td class="t_left"><!--# code getName (!--# value owner #--) true #--></td>
+</tr>

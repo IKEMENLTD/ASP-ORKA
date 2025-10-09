@@ -1,0 +1,36 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>成果レポート出力</span></div>
+
+    <div class="comp_list">
+    <dl>
+    <dt>[ 成果レポート出力 ]</dt>
+    <dd>
+    <p>広告単位　成果レポート</p>
+<form method="POST" action="report_api.php" >
+	<!--# form text yearA 4 4  #-->&nbsp;年&nbsp;
+	<!--# form option monthA  /1/2/3/4/5/6/7/8/9/10/11/12 --/1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->&nbsp;
+	<!--# form text dayA 2 2 #-->&nbsp;日&nbsp;
+	〜
+	<!--# form text yearB 4 4  #-->&nbsp;年&nbsp;
+	<!--# form option monthB  /1/2/3/4/5/6/7/8/9/10/11/12 --/1月/2月/3月/4月/5月/6月/7月/8月/9月/10月/11月/12月 #-->&nbsp;
+	<!--# form text dayB 2 2 #-->&nbsp;日&nbsp;
+の広告単位　成果レポートを<input type="submit" value="取得">
+<input type="hidden" name="run" value="true" />
+<input type="hidden" name="case" value="adwaresNUser" />
+</form>
+    </dd>
+    </dl>
+    </div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

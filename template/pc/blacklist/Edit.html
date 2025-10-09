@@ -1,0 +1,52 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; ブラックリスト管理 &gt; <span>設定の編集</span> &gt; 入力内容の確認 &gt; 編集完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>制限するIPアドレスもしくはユーザーエージェントを設定してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>制限条件</th>
+    <td>
+		<!--# form radio blacklist_mode ipaddress  ipaddress/user_agent IPアドレス/ユーザーエージェント #-->
+	</td>
+</tr>
+<tr>
+    <th>比較値</th>
+    <td>
+		次の値と部分一致する：<!--# form text blacklist_value 50 128 #-->
+		<span class="info">例：「bot」と入力するとIP/UAのどこかにbotが含まれるすべてのアクセスが制限されます。</span>
+	</td>
+</tr>
+<tr>
+    <th>メモ</th>
+    <td>
+		<!--# form textarea memo 80 5 #-->
+		<span class="info">この設定に関するメモがあれば入力してください。</span>
+	</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

@@ -1,0 +1,11 @@
+<!--# readhead subject #-->
+パスワードの再発行
+<!--# readend #-->
+<!--# readhead main #-->
+<!--# value name #-->　様
+
+以下のURLからパスワードの再設定が可能です。
+<!--# ecode getSiteProfile home #-->reminder.php?token=<!--# safeVariable token #-->
+
+これからも『<!--# ecode getSiteProfile site_title #-->』をよろしくお願いいたします。
+<!--# readend #-->

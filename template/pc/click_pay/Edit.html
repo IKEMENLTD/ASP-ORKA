@@ -1,0 +1,64 @@
+<div id="contents">
+
+<script type="text/javascript" src="js/adwares.js"></script>
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 登録情報編集 &gt; <span>入力フォーム</span> &gt; 入力内容の確認 &gt; 編集完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>広告の情報を選択してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>アフィリエイター<span>※</span></th>
+    <td><!--# code tableSelectForm owner nUser name id  未選択 #--></td>
+</tr>
+<tr>
+    <th>広告<span>※</span></th>
+    <td>
+		<!--# form radio adwares_type   adwares 通常 onClick="setDisable('adwares',this.form);setDisable('s_adwares',this.form);" #-->
+		<span class="adwares_span" ><!--# code tableSelectForm adwares adwares name id  未選択 (!--# code ifelse (!--# post adwares_type #--) adwares  disabled #--) #--></span>
+	    <!--# form radio adwares_type   secretAdwares クローズド onClick="setDisable('adwares',this.form);setDisable('s_adwares',this.form);" #-->
+		<span class="s_adwares_span" ><!--# code tableSelectForm adwares secretAdwares name id  未選択 (!--# code ifelse (!--# post adwares_type #--) secretAdwares  disabled #--) #--></span>
+	</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="search_list">
+<dl>
+<dt>成果情報を入力してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>成果報酬<span>※</span></th>
+    <td><!--# form text cost 8 6 #-->円</td>
+</tr>
+<tr>
+    <th>成果の認証<span>※</span></th>
+    <td><!--# form radio state 2  2/1 認証/非認証 #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

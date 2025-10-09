@@ -1,0 +1,138 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 広告情報削除 &gt; <span>削除内容の確認</span> &gt; 削除完了</div>
+
+<div class="search_list">
+<dl>
+<dt>削除内容を確認してください。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>成果表示名</th>
+    <td><!--# value name #--></td>
+</tr>
+<tr>
+    <th>カテゴリー</th>
+    <td><!--# alias category category id name #--></td>
+</tr>
+<tr>
+    <th>広告説明文</th>
+    <td><!--# value comment #--></td>
+</tr>
+<tr>
+    <th>テキスト広告文</th>
+    <td><!--# value ad_text #--></td>
+</tr>
+<tr>
+    <th>ジャンプ先URL</th>
+    <td>
+<!--# ifbegin bool url_users #-->
+        アフィリエイターの自由入力
+<!--# else #-->
+        <!--# value url #-->
+<!--# endif #-->
+    </td>
+</tr>
+<!--# ifbegin enableMobile #-->
+<tr>
+    <th>ジャンプ先URL(携帯用)</th>
+    <td><!--# value url_m #--></td>
+</tr>
+<!--# endif #-->
+<tr>
+    <th>獲得単価</th>
+    <td><!--# code comma (!--# ecode getCostType money (!--# value money #--) (!--# value ad_type #--) #--) #--></td>
+</tr>
+<tr>
+    <th>クリック単価</th>
+    <td><!--# code comma (!--# value click_money #--) #-->円</td>
+</tr>
+<tr>
+    <th>継続課金</th>
+    <td><!--# value continue_money #--><!--# valueReplace continue_type yen/per 円/％ #--></td>
+</tr>
+<tr>
+    <th>予算上限</th>
+    <td>
+<!--# ifbegin equal limit_type 0 #-->
+	予算上限なし
+<!--# else #-->
+	<!--# code comma (!--# value limits #--) #--><!--# valueReplace limit_type 1/2/3/4 円/件(獲得)/件(クリック)/件(継続) #-->
+    <div class="in_clip">
+    予算オーバー時のジャンプ先URL　<!--# value url_over #-->
+        <span class="info">予算オーバー時には上記で設定したURLに遷移します。</span>
+    </div>
+<!--# endif #-->
+	</td>
+</tr>
+<tr>
+    <th>クリック成果の認証<span>※</span></th>
+    <td><!--# valueReplace click_auto 1/0 自動認証/手動認証 #--></td>
+</tr>
+<tr>
+    <th>アフィリエイト成果の認証</th>
+    <td><!--# valueReplace auto 1/0 自動認証/手動認証 #--></td>
+</tr>
+<tr>
+    <th>継続成果の認証<span>※</span></th>
+    <td><!--# valueReplace continue_auto 1/0 自動認証/手動認証 #--></td>
+</tr>
+<tr>
+    <th>クリック間隔</th>
+    <td>不正防止の為、最後のクリックから [<!--# value span #--><!--# valueReplace span_type s/m/h/d 秒/分/時/日 #-->] 間のクリックを無効にする。(<!--# code ifelse (!--# value use_cookie_interval #--) TRUE COOKIE発行 同一IP #-->)</td>
+</tr>
+<tr>
+    <th>報酬成果間隔<span>※</span></th>
+    <td>不正防止の為、最後の成果発生から <!--# value pay_span #--><!--# valueReplace pay_span_type s/m/h/d 秒/分/時/日 #--> 間の成果発生を無効にする。(同一IP)</td>
+</tr>
+<tr>
+    <th>広告バナー</th>
+    <td>
+		<!--# object image banner #--><br />
+		<!--# object image banner2 #--><br />
+		<!--# object image banner3 #-->
+	</td>
+</tr>
+<!--# ifbegin enableMobile #-->
+<tr>
+    <th>広告バナー(携帯用)</th>
+    <td>
+		<!--# object image banner_m #--><br />
+		<!--# object image banner_m2 #--><br />
+		<!--# object image banner_m3 #-->
+	</td>
+</tr>
+<!--# endif #-->
+<tr>
+    <th>広告認証形式<span>※</span></th>
+    <td><!--# valueReplace check_type ip/aid/cookie IPアドレス/Cookie(1st)/Cookie(3rd) #--></td>
+</tr>
+<tr>
+    <th>広告の公開/非公開</th>
+    <td><!--# valueReplace open TRUE/FALSE 公開/非公開 #--></td>
+</tr>
+<tr>
+    <th>対象ユーザー</th>
+    <td><!--# value open_user #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="削除を完了する" class="input_base">
+<input type="submit" value="入力画面に戻る" class="input_base" name="back">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

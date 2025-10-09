@@ -1,0 +1,76 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; ユーザーランク &gt; <span>検索結果一覧</span></div>
+
+<!--角丸-->
+<div class="cc">
+<dl>
+<dt><span>検索</span></dt>
+<dd>
+<!---->
+  <form name="form" method="get" action="search.php" style="margin: 0px 0px;">
+  <INPUT type="hidden" name="type" value="nUser">
+  <INPUT type="hidden" name="run" value="true">
+	<table class="search_table" summary="検索用テーブル">
+    <tr>
+    	<th>ＩＤ</th>
+        <td><!--# form text id 10 8 #-->
+	  <input name="id_PAL[]" type="hidden" id="id_PAL[]" value="match like"></td>
+	</tr>
+    <tr>
+    	<th>名前</th>
+        <td>
+          <!--# form text name 25 25 #-->
+          <input name="name_PAL[]" type="hidden" id="name_PAL[]" value="match like">
+        </td>
+	</tr>
+    <tr>
+    	<th>住所</th>
+        <td>
+          <!--# code tableSelectForm adds prefectures name id  未選択 (!--# code getTabindex #--) #-->
+          <input name="adds_PAL[]" type="hidden" id="adds_PAL[]" value="group table area prefectures area_id">
+        </td>
+    </tr>
+    <tr>
+    	<th>認証状態</th>
+        <td>
+        <!--# form checkbox activate   1/2/4/8 未アクティベート/アクティベート済み/認証済み/認証拒否 #-->
+          <input name="activate_PAL[]" type="hidden" id="name_PAL[]" value="match in">
+        </td>
+    </tr>
+    </table>
+    <div class="input_box">
+	<input type="submit" value="検索する" class="input_base">
+    <input type="reset" value="リセット" class="input_base">
+    </div>
+  </form>
+<!---->
+</dd>
+</dl>
+</div>
+<!--角丸終わり-->
+
+
+    <div class="comp_list">
+    <dl>
+    <dt>[ SEARCH - 検索が完了しました ]</dt>
+    <dd>
+    <p>その条件に一致する情報はありませんでした。</p>
+        <ul>
+        <li>条件を変更して、継続して検索がご利用いただけます。</li>
+        </ul>
+    </dd>
+    </dl>
+    </div>
+    
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

@@ -1,0 +1,107 @@
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 会員登録・商品購入リスト &gt; 検索結果一覧 &gt; <span>詳細</span> </div>
+
+
+<div class="search_list">
+<dl>
+<dt>詳細</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>発生日時</th>
+    <td><!--# value regist #--></td>
+</tr>
+<th>アクセス日時</th>
+<td>
+	<!--# ifbegin val_equal (!--# valueAlias access (!--# value access_id #--) id regist #--)  #-->
+    ※この報酬へのアクセスが発生していません。（状態異常）
+    <!--# else #-->
+	<a href="info.php?type=access&id=(!--# value access_id #--)"><!--# valueAlias access (!--# value access_id #--) id regist #--></a>
+	&nbsp;&nbsp;※広告へのアクセス日時です。
+	<!--# endif #-->
+</td>
+<tr>
+    <th>成果のID（ハッシュ）</th>
+    <td><!--# value id #--></td>
+</tr>
+<tr>
+    <th>アクセスID（ハッシュ）</th>
+    <td>
+    <a href="info.php?type=access&id=(!--# value access_id #--)"><!--# value access_id #--></a>
+    &nbsp;&nbsp;※広告へのアクセスIDです。
+    </td>
+</tr>
+<tr>
+    <th>広告名（広告ID）</th>
+    <!--# ifbegin equal adwares_type secretAdwares #-->
+    <td><a href="info.php?type=secretAdwares&id=(!--# value adwares #--)"><!--# alias secretAdwares adwares id name #-->(&nbsp;<!--# value adwares #-->&nbsp;)</a></td>
+    <!--# else #-->
+    <td><a href="info.php?type=adwares&id=(!--# value adwares #--)"><!--# alias adwares adwares id name #-->(&nbsp;<!--# value adwares #-->&nbsp;)</a></td>
+    <!--# endif #-->
+</tr>
+<tr>
+    <th>紹介者（アフィリエイトID）</th>
+    <td><!--# code getName (!--# value owner #--) true #--></td>
+</tr>
+<tr>
+    <th>購入者のIPアドレス</th>
+    <td><!--# value ipaddress #-->&nbsp;&nbsp;※成果確定時のIPアドレスです。
+</td>
+</tr>
+<tr>
+    <th>アクセス元のIPアドレス</th>
+    <td><!--# valueAlias access (!--# value access_id #--) id ipaddress #-->&nbsp;&nbsp;※広告アクセス時のIPアドレスです。</td>
+</tr>
+<tr>
+    <th>報酬金額</th>
+    <td>
+    <!--# value cost #-->円
+    </td>
+</tr>
+<tr>
+    <th>売り上げ</th>
+    <td><!--# value sales #-->&nbsp;&nbsp;※トラッキングコードに渡された、(salese/cost)の値です。
+</td>
+</tr>
+<tr>
+    <th>付属データ（from）</th>
+    <td><!--# value froms #--></td>
+</tr>
+<tr>
+    <th>付属データ（from_sub）</th>
+    <td><!--# value froms_sub #--></td>
+</tr>
+<tr>
+    <th>状態</th>
+    <td><!--# valueReplace state 1/2 非認証/認証 #--></td>
+</tr>
+<tr>
+    <th>継続成果ユーザーID</th>
+    <td><!--# value continue_uid #--></td>
+</tr>
+<tr>
+    <th>固体識別番号（携帯）</th>
+    <td><!--# value utn #--></td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<a href="edit.php?type=pay&id=(!--# value id #--)" class="input_base">編集する</a>
+<a href="search.php?type=log_pay&run=true&pay_type=(!--# value type #--)&pay_type_PAL[]=match+comp&pay_id=(!--# value id #--)&pay_id_PAL[]=match+comp" class="input_base">報酬変動ログ</a>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->
+

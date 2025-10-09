@@ -1,0 +1,1460 @@
+*	{
+	margin: 0px;
+	padding: 0px;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+br.clear	{
+	clear: both;
+	visibility: hidden;
+	line-height: 0px;	/* IE6 */
+}
+
+body	{
+	background: #DDD url(../../../img/body_repeat.gif) repeat-x;
+	height: 100%;
+	min-height: 100%;
+	text-align: center;	/* IE6以前のセンタリング */
+}
+
+body > #container	{ height: auto; }
+
+div#container	{
+	width: 1020px;
+	background: #FFF url(../../../img/head_bg.gif) repeat-x;
+	margin: 0px auto;
+	position: relative;
+}
+
+div#contents	{
+	width: 1000px;
+	margin: 0px auto;
+	text-align: left;	/* IE6以前のセンタリング-文字を左寄せに戻す */
+}
+
+div#header	{
+	height: 150px;
+	margin-bottom: 5px;
+	position: relative;
+}
+
+div#header_in	{
+	color: #FFF;
+	position: absolute;
+	top: 30px;
+	right: 0;
+}
+
+div#home	{
+	width: 195px;
+	height: 40px;
+	position: absolute;
+	bottom: 20px;
+	left: 0;
+}
+
+div#home a	{
+	display: block;
+	width: 195px;
+	height: 40px;
+}
+
+div#home a span	{ display: none; }
+
+div#header_bottom	{
+	position: absolute;
+	width: 790px;
+	height: 25px;
+	line-height: 25px;
+	border-bottom: 1px solid #AAA;
+	bottom: 25px;
+	right: 0;
+}
+
+div#side_bar	{
+	width: 195px;
+	float: left;
+}
+
+div#inc_side_body	{
+	width: 795px;
+	float: right;
+}
+
+div.textbox	{
+	border: 1px solid black;
+}
+
+div#footer	{
+	height: 50px;
+	line-height: 50px;
+	background: #DDD url(../../../img/foot_bg.gif) no-repeat;
+}
+
+div#footer_body	{
+	text-align: center;
+}
+
+
+/* ヘッダーメニュー */
+div#header_in ul	{
+	background: #FFF;
+	list-style: none;
+}
+
+div#header_in ul li	{
+	float: left;
+	margin-left: 10px;
+	color: #CCC;
+}
+
+div#header_in ul li a	{
+	color: #FFF;
+	text-decoration: none;
+}
+
+div#header_in ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* サイドバー */
+
+div.side_menu ul	{
+	list-style: none;
+	padding-bottom: 10px;
+}
+
+div.side_menu li.title1	{
+	background: url(../../../img/splite.gif) no-repeat 0px 0px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li.title2	{
+	background: url(../../../img/splite.gif) no-repeat 0px -30px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li.title3	{
+	background: url(../../../img/splite.gif) no-repeat 0px -60px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li.title4	{
+	background: url(../../../img/splite.gif) no-repeat 0px -90px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li.title5	{
+	background: url(../../../img/splite.gif) no-repeat 0px -120px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li.title6	{
+	background: url(../../../img/splite.gif) no-repeat 0px -150px;
+	height: 30px;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFF;
+	padding-left: 14px;
+}
+
+div.side_menu li	{
+	line-height: 30px;
+	height: 30px;
+	margin-bottom: 5px;
+}
+
+div.side_menu ul li a	{
+	background: url(../../../img/splite.gif) no-repeat -200px -210px;
+	display: block;
+	height: 30px;
+	padding-left: 35px;
+	color: #039;
+	text-decoration: none;
+}
+
+div.side_menu ul li a:hover	{
+	background: url(../../../img/splite.gif) no-repeat -200px -180px;
+	color: #900;
+}
+
+/* ログインテーブル */
+
+table.login_table	{
+	width: 500px;
+	margin: 20px auto;
+	border: 1px solid #CCC;
+}
+
+table.login_table th	{
+	width: 100px;
+	font-size: 14px;
+}
+
+table.login_table td input	{
+	border: 1px solid #CCC;
+	padding: 3px;
+	font-size: 14px;
+	width: 320px;
+}
+
+/* ログイン挨拶 パンくずリスト */
+div.topics	{
+	background: url(../../../img/splite.gif) no-repeat -200px 0px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #DDD;
+	margin-bottom: 10px;
+}
+
+div.topics span	{
+	color: #FFF;
+	font-weight: bold;
+}
+
+/* インフォメーション */
+div.topics_info	{
+	background: url(../../../img/splite.gif) -200px -60px;
+	height: 30px;
+	line-height: 30px;
+}	div.topics_info span	{ display: none; }
+
+/* インフォメーション(アクセス) */
+div.topics_accs	{
+	background: url(../../../img/splite.gif) no-repeat -200px -300px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 30px;
+}
+
+/* インフォメーション　リスト */
+
+div.topics_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.topics_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.topics_list dl dt	{
+	background: url(../../../img/glowbg.gif) 0px -180px;
+	border: 2px solid #FFF;
+	padding: 6px 0px 6px 12px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+div.topics_list dl dd	{
+	border-top: 1px solid #AAA;
+	padding: 2px 0px;
+}
+
+div.topics_list dl dd ul	{
+	list-style: none;
+}
+
+div.topics_list dl dd ul li	{
+	color: #000;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -210px;
+	padding-left: 40px;
+}
+
+div.topics_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.topics_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+div.topics_list dl dd ul li span	{
+	color: #009;
+	font-size: 16px;
+	padding: 0px 5px;	/* IE5はspanにパッディングが無効？ */
+	margin: 0px 5px;	/* IE5はspanにパッディングが無効？ */
+}
+
+div.topics_list dl dd ul li span a	{
+	font-size: 16px;
+}
+
+/* 入力エラー　リスト */
+
+div.error_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.error_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.error_list dl dt	{
+	background: url(../../../img/splite.gif) -200px -120px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 40px;
+	font-weight: bold;
+	color: red;
+	letter-spacing: 1px;
+}
+
+div.error_list dl dd	{
+	border-top: 1px solid #AAA;
+	padding: 2px 0px;
+}
+
+div.error_list dl dd p	{
+	line-height: 35px;
+	height: 35px;
+	padding-left: 10px;
+	font-size: 14px;
+	color: red;
+}
+
+div.error_list dl dd ul	{
+	list-style: none;
+}
+
+div.error_list dl dd ul li	{
+	color: #900;
+	height: 24px;
+	line-height: 24px;
+	background: url(../../../img/splite.gif) no-repeat -200px -184px;
+	padding-left: 40px;
+}
+
+div.error_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.error_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* 登録完了等　成功リスト */
+
+div.comp_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.comp_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.comp_list dl dt	{
+	background: url(../../../img/splite.gif) -200px -300px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 40px;
+	font-weight: bold;
+	color: #090;
+	letter-spacing: 1px;
+}
+
+div.comp_list dl dd	{
+	padding: 10px 0px;
+}
+
+div.comp_list dl dd p	{
+	line-height: 30px;
+	height: 30px;
+	font-size: 14px;
+	padding-left: 10px;
+}
+
+div.comp_list dl dd ul	{
+	list-style: none;
+}
+
+div.comp_list dl dd ul li	{
+	color: #090;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -151px;
+	padding-left: 40px;
+}
+
+div.comp_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.comp_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* ログイン画面　灰色リスト */
+
+div.login_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.login_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.login_list dl dt	{
+	background: url(../../../img/splite.gif) -200px -390px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 40px;
+	font-weight: bold;
+	color: #000;
+	letter-spacing: 1px;
+}
+
+div.login_list dl dd	{
+	padding: 10px 0px;
+}
+
+div.login_list dl dd p	{
+	line-height: 30px;
+	height: 30px;
+	font-size: 14px;
+	padding-left: 10px;
+}
+
+div.login_list dl dd ul	{
+	list-style: none;
+}
+
+div.login_list dl dd ul li	{
+	color: #090;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -151px;
+	padding-left: 40px;
+}
+
+div.login_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.login_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* お友達紹介等、オレンジ色のリスト */
+
+div.orange_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.orange_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.orange_list dl dt	{
+	background: url(../../../img/splite.gif) -200px -360px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 40px;
+	font-weight: bold;
+	color: #F93;
+	letter-spacing: 1px;
+}
+
+div.orange_list dl dd	{
+	padding: 10px 0px;
+}
+
+div.orange_list dl dd p	{
+	line-height: 30px;
+	padding-left: 40px;
+}
+
+div.orange_list dl dd ul	{
+	list-style: none;
+}
+
+div.orange_list dl dd ul li	{
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -271px;
+	padding-left: 40px;
+}
+
+div.orange_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.orange_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* バナーリスト、青色のリスト */
+
+div.blue_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.blue_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.blue_list dl dt	{
+	background: url(../../../img/glowbg.gif) 0px -150px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 10px;
+	font-weight: bold;
+	color: #009;
+	letter-spacing: 1px;
+}
+
+div.blue_list dl dt a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.blue_list dl dt a:hover	{
+	text-decoration: underline;
+}
+
+div.blue_list dl dd	{
+	padding: 3px;
+	border-top: 1px solid #CCC;
+	background-color:#FFFFFF;
+}
+
+div.blue_list dl dd p	{
+	padding-left: 40px;
+}
+
+div.blue_list dl dd ul	{
+	list-style: none;
+}
+
+div.blue_list dl dd ul li	{
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -211px;
+	padding-left: 40px;
+}
+
+div.blue_list dl dd ul li a	{
+	text-decoration: none;
+	color: #009;
+}
+
+div.blue_list dl dd ul li a:hover	{
+	text-decoration: underline;
+}
+
+/* インフォメーション　アクセスリスト検索 */
+
+div.topics_accs_list	{
+	margin-bottom: 15px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	background: url(../../../img/glowbg.gif);
+}
+
+div.topics_accs_list dl	{
+	background: #FFF;
+	border: 1px solid #CCC;
+	padding: 3px;
+}
+
+div.topics_accs_list dl dt	{
+	background: url(../../../img/glowbg.gif) 0px -180px;
+	border: 2px solid #FFF;
+	padding: 6px 0px 6px 12px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+div.topics_accs_list dl dd	{
+	padding: 5px 0px 5px 14px;
+}
+
+/* サーチテーブル */
+
+div.search	{
+	background: #777;
+	border: 1px solid #AAA;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+table.search_table	{
+	width: 100%;	/* IE6以前無理 */
+	color: #000;
+	background: #EEE;
+
+}
+
+table.search_table th,
+table.search_table td,
+table.search_table	{
+	border-collapse: collapse;
+	border-bottom: 1px solid #999;
+}
+
+table.search_table	{
+	border: 2px solid #666;
+}
+
+table.search_table th	{
+	width: 23%;
+	line-height: 30px;
+	padding-left: 12px;
+	background: #DDD;
+	letter-spacing: 2px;
+}
+
+table.search_table td	{
+	padding-left: 5px;
+	line-height: 30px;
+}
+
+/* サーチ結果テーブル(アクセス) */
+
+div.search_accs	{
+	background: url(../../../img/glowbg.gif) 0px -200px;
+	border: 1px solid #AAA;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+table.search_accs_table	{
+	width: 100%;
+	background: #FFF;
+}
+
+table.search_accs_table th	{
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -270px;
+	text-indent: 30px;
+	font-weight: normal;
+}
+
+table.search_accs_table,
+table.search_accs_table th	{
+	border-collapse: collapse;
+	border: 1px solid #AAA;
+}
+
+table.search_accs_table td	{
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #CCC;
+	padding: 0 5px;
+}
+
+table.search_accs_table td a	{
+	color: #009;
+	text-decoration: none;
+}
+
+table.search_accs_table td a:hover	{
+	text-decoration: underline;
+	color: #900;
+}
+
+table.search_accs_table tr:hover	{
+	background: url(../../../img/splite.gif) -200px -30px;
+}
+
+/* サーチ結果テーブル　2 */
+
+table.search_accs_table2	{
+	width: 100%;
+	background: #FFF;
+}
+
+table.search_accs_table2 th	{
+	width: 19%;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -270px;
+	text-indent: 30px;
+	font-weight: bold;
+}
+
+table.search_accs_table2 th.form_type	{
+	width: 38%;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat -200px -270px;
+	text-indent: 30px;
+	font-weight: bold;
+}
+
+table.search_accs_table2,
+table.search_accs_table2 th	{
+	border-collapse: collapse;
+	border: 1px solid #AAA;
+}
+
+table.search_accs_table2 td	{
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #CCC;
+}
+
+table.search_accs_table2 td a	{
+	color: #009;
+	text-decoration: none;
+}
+
+table.search_accs_table2 td a:hover	{
+	text-decoration: underline;
+	color: #900;
+}
+
+table.search_accs_table2 tr:hover	{
+	background: url(../../../img/tr_hover_bg.gif) no-repeat 0px 0px #ededed;
+}
+
+/* サーチ結果テーブル */
+div.search_list	{
+	background: url(../../../img/glowbg.gif) 0px -250px;
+	padding: 5px;
+	margin-bottom: 10px;
+	color: #666;
+}
+
+div.search_list dl	{
+}
+
+div.search_list dl dt	{
+	background: url(../../../img/splite.gif) no-repeat -200px -180px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 30px;
+	font-size: 12px;
+	color: red;
+}
+
+div.search_list dl dt span	{
+	float: right;
+	margin-right: 5px;
+}
+
+div.search_list dl dt a	{
+	text-decoration: none;
+	font-size: 14px;
+	color: #009;
+}
+
+div.search_list dl dt a:hover	{
+	text-decoration: underline;
+}
+
+div.search_list dl dd	{
+	padding-top: 5px;
+}
+
+table.search_list_table	{
+	width: 100%;
+	background: #FFF;
+}
+
+table.search_list_table th	{
+	width: 20%;
+	padding: 10px 0px;
+	text-indent: 10px;
+	vertical-align: top;
+}
+
+table.search_list_table,
+table.search_list_table th,
+table.search_list_table td	{
+	border-collapse: collapse;
+	border: 1px solid #DDD;
+}
+
+table.search_list_table td	{
+	padding: 10px 0px 10px 10px;
+}
+
+table.search_list_table th span	{
+	color: red;
+}
+
+/* 幅795　角丸枠 */
+div.cc	{
+	background: #EEE;
+	margin-bottom: 10px;
+}
+
+div.cc dl	{
+	background: url(../../../img/cc_bottom.gif) no-repeat bottom;
+	padding-bottom: 15px;
+}
+
+div.cc dt	{
+	background: url(../../../img/cc_top.gif) no-repeat top;
+	height: 15px;
+}	div.cc dt span	{ display: none; }
+
+div.cc dd	{
+	background: url(../../../img/cc_body.gif) repeat-y center;
+	padding: 5px 10px 0px 10px;
+}
+
+/* 幅795　枠 */
+div.cs	{
+	background: #666;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+
+/* 送信　リセットボタン */
+
+div.input_single	{
+	width: 150px;
+	height: 30px;
+	margin: 0px auto 0px auto;
+}
+
+
+div.input_box	{
+	width: 310px;
+	height: 30px;
+	margin: 10px auto 0px auto;
+}
+
+div.input_box_f	{
+	width: 310px;
+	height: 30px;
+	margin: 10px auto 10px auto;
+}
+
+input.input_base	{
+	border: 0;
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px !important;
+	background: url(../../../img/splite.gif) no-repeat 0px -300px;
+	color: #FFF;
+}
+
+input.input_base:hover	{
+	border: 0;
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px !important;
+	background: url(../../../img/splite.gif) no-repeat 0px -330px;
+	color: #FFF;
+}
+
+a.input_base	{
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px auto 10px auto;
+	background: url(../../../img/splite.gif) no-repeat 0px -300px;
+	color: #FFF;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+}
+
+a.input_base_f	{
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	background: url(../../../img/splite.gif) no-repeat 0px -300px;
+	color: #FFF;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	float: left;
+	margin-right: 5px;
+}
+
+a.input_base_f:hover,
+a.input_base:hover	{
+	background: url(../../../img/splite.gif) no-repeat 0px -330px;
+}
+
+/* ページャー */
+
+div.pager_info	{
+	
+}
+
+div.pager_info p	{
+	height: 25px;
+}
+
+div.pager_info p span	{
+	height: 25px;
+	line-height: 25px;
+	padding: 0px 10px;
+	font-weight: bold;
+}
+
+
+div.pager	{
+	padding: 10px 0px 20px 0px;
+}
+
+p.pagination	{
+	height: 25px;
+}
+
+p.pagination span	{
+	display: block;
+	float: left;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	margin-right: 5px;
+	border: 1px solid #AAA;;
+}
+
+p.pagination span.previous	{
+	display: block;
+	float: left;
+	width: 120px;
+	height: 25px;
+	line-height: 25px;
+	background: #EEE;
+}
+
+p.pagination span.previous a	{
+	text-decoration: none;
+	display: block;
+	width: 120px;
+	height: 25px;
+	color: #000;
+}
+
+p.pagination span.next	{
+	display: block;
+	float: left;
+	width: 120px;
+	height: 25px;
+	line-height: 25px;
+	background: #EEE;
+}
+
+p.pagination span.next a	{
+	text-decoration: none;
+	display: block;
+	width: 120px;
+	height: 25px;
+	color: #000;
+}
+
+p.pagination span.active	{
+	background: #888;
+	color: #FFF;
+	font-weight: bold;
+}
+
+p.pagination span a	{
+	text-decoration: none;
+	display: block;
+	width: 25px;
+	height: 25px;
+	color: #000;
+}
+
+p.pagination span a:hover	{
+	background: #666;
+	color: #FFF;
+	font-weight: bold;
+}
+
+
+/*  */
+input	{
+	margin-right: 3px;
+	padding: 1px;
+}
+option	{
+	padding: 0px 3px;
+}
+
+textarea.url	{
+	width: 600px;
+	height: 2em;
+	line-height: 2em;
+	text-indent: 5px;
+	border: 0;
+	border: 1px solid #CCC;
+	color: #009;
+}
+
+textarea.info_url	{
+	width: 600px;
+	height: 25px;
+	border: 0;
+	border: 1px solid #CCC;
+	color: #009;
+	padding: 3px;
+}
+
+textarea.textarea	{
+	width: 95%;
+	height: 50px;
+	color: #000;
+	padding: 3px;
+}
+
+/*
+	追加
+*/
+
+.fee	{ background: #FEE !important; }
+.ffe	{ background: #FFE !important; }
+.efe	{ background: #EFE !important; }
+.eff	{ background: #EFF !important; }
+.red	{ color: red !important; }
+.bold	{ font-weight: bold; font-size: 14px; }
+span.num	{ font-size: 14px; color: #000; }
+span.num a	{ font-size: 14px; }
+
+.t_right	{ text-align: right !important; }
+.t_left		{ text-align: left !important; }
+p.right	{ text-align: right; margin-right: 5px; }
+.center	{ text-align: center !important; }
+.mb5	{ margin-bottom: 5px !important; }
+.mb10	{ margin-bottom: 10px !important; }
+.i_right input	{ text-align: right; }
+.p10	{ padding: 10px; }
+
+span.info	{
+	display: block;
+	color: #070;
+	margin-top: 5px;
+	font-size: 10px;
+	letter-spacing: 1px;
+}
+
+div.in_clip	{
+	margin: 10px 10px 5px 0;
+	padding: 5px;
+	background: #F5F5F5;
+	color: #555;
+}
+
+div.list_in	{
+	padding: 10px;
+}
+
+div.list_in div.code_area	{ margin-bottom: 10px; background: #F5F5F5; padding: 5px; }
+
+div.list_in p	{
+	line-height: 150%;
+}
+
+/* common talbe */
+
+div.common_black	{
+	background: #555;
+	border: 1px solid #CCC;
+	padding: 5px;
+}
+
+table.common_table_black	{
+	width: 100%;	/* IE6以前無理 */
+	color: #555;
+	background: #EEE;
+}
+
+table.common_table_black th,
+table.common_table_black td,
+table.common_table_black	{
+	border-collapse: collapse;
+	border: 1px solid #BBB;
+}
+
+table.common_table_black	{
+	border: 2px solid #FFF;
+}
+
+table.common_table_black th	{
+	line-height: 30px;
+	padding-left: 12px;
+	background: #FFF;
+}
+
+table.common_table_black th.common_info	{
+	background: #555;
+	color: #EEE;
+}
+
+table.common_table_black td	{
+	padding: 5px 0;
+	padding-left: 5px;
+	background: #FFF;
+}
+
+/* pay talbe */
+
+div.pay_list	{
+	background: url(../../../img/glowbg.gif) 0 -150px;
+	border: 1px solid #CCC;
+	padding: 5px;
+	margin-bottom: 15px;
+}
+
+table.pay_table	{
+	width: 100%;	/* IE6以前無理 */
+}
+
+table.pay_table th,
+table.pay_table td,
+table.pay_table	{
+	border-collapse: collapse;
+	border: 1px solid #777;
+	vertical-align: top;
+}
+
+table.pay_table	{
+	border: 2px solid #999;
+}
+
+table.pay_table th	{
+	line-height: 30px;
+	padding-left: 12px;
+	background: #555;
+	color: #FFF;
+}
+
+table.pay_table th a	{
+	color: #daf;
+}
+
+
+table.pay_table th.regist	{
+	text-align: center;
+	background: #666;
+	color: #FFF;
+}
+
+table.pay_table th.common_info	{
+	background: #DDD;
+	color: #EEE;
+}
+
+table.pay_table td	{
+	line-height: 22px;
+	padding: 5px 5px 3px;
+	background: #F5F5F5;
+	color: #555;
+}
+
+table.pay_table td label 	{
+	color: #070;
+}
+
+table.pay_table td input 	{
+	color: #700;
+}
+
+table.pay_table td input.normal 	{
+	color: #000;
+}
+
+table.pay_table td a	{
+	color: #039;
+	text-decoration: none;
+}
+
+table.pay_table td a:hover	{
+	text-decoration: underline;
+}
+
+table.pay_table td div.pay_info	{
+	background: #FFF;
+	border-bottom: 1px solid #CCC;
+	color: #000;
+	font-size: 10px;
+	letter-spacing: 1px;
+	margin: 0 0 5px 0;
+	text-align: center;
+}
+
+/* adwares table */
+
+div.as	{
+	background: #F5F5F5;
+	padding: 10px;
+	border: 1px solid #CCC;
+	margin-bottom: 15px;
+}
+
+div.adwares_list	{
+	border: 1px solid #CCC;
+	padding: 10px 10px 20px;
+	background: #FFF;
+	margin-top: 5px;
+}
+
+table.adwares_list_table	{
+	width: 100%;	/* IE6以前無理 */
+	color: #555;
+	background: #FFF;
+}
+
+table.adwares_list_table th,
+table.adwares_list_table td,
+table.adwares_list_table	{
+	border-collapse: collapse;
+	border: 1px solid #DDD;
+	padding: 3px 5px;
+	vertical-align: top;
+}
+
+table.adwares_list_table	{
+
+}
+
+table.adwares_list_table th	{
+	text-align: right;
+	color: #888;
+}
+
+table.adwares_list_table th.list_head	{
+	text-align: right;
+	color: #000;
+	padding: 5px 5px 3px 5px;
+	background: #DDD;
+}
+
+table.adwares_list_table th.common_info	{
+
+}
+
+table.adwares_list_table td	{
+	color: #000;
+}
+
+div.ad_image	{
+	width: 585px;
+	overflow: hidden;
+}
+
+/* calendar
+---------------------------------------*/
+div.calendar	{
+	padding: 10px;
+}
+
+div.calendar a	{
+	color: #039;
+}
+
+div.calendar a:hover	{
+	text-decoration: none;
+}
+
+div.calendar_go	{
+	background: #eee;
+	line-height: 30px;
+	text-align: center;
+	font-size: 14px;
+	margin: 0 0 10px 0;
+}
+
+div.calendar_back	{
+	background: #eee;
+	line-height: 30px;
+	text-align: center;
+}
+
+table.calendar	{
+	width: 100%;
+	margin: 0 0 10px 0;
+	table-layout: fixed;
+}
+
+table.calendar,
+table.calendar th,
+table.calendar td	{
+	border-collapse: collapse;
+	border: 1px solid #CCC;
+}
+
+table.calendar th	{
+	background: url(../../../img/250grad.gif) repeat-x top;
+	color: #555;
+	text-align: left;
+	padding: 5px;
+	border-bottom: 1px solid #FFF;
+}
+
+table.calendar td	{
+	background: url(../../../img/250grad3.gif) no-repeat bottom right;
+	line-height: 150%;
+	text-align: right;
+	padding: 15px 5px 5px 5px;
+}
+
+table.calendar th.calendar_day	{
+	font-size: 10px;
+	color: #555;
+}
+
+table.calendar td.tier_cnt	{
+	padding: 5px;
+	line-height: 125%;
+	font-size: 12px;
+	color: #888;
+}
+
+table.calendar td div.tier_cnt	{
+	border-bottom: 1px dashed #AAA;
+	margin: 0 0 3px 0;
+	padding: 0 0 3px 0;
+}
+
+table.calendar td.tier_cnt span	{
+	color: #000;
+	margin: 0 2px 0 0;
+}
+
+/* 平日 */
+table.calendar th.day	{
+	background: #DDD;
+	color: #000;
+}
+
+/* 土曜 */
+table.calendar th.day_sat	{
+	color: blue;
+	background: #DDD;
+}
+
+/* 日曜 */
+table.calendar th.day_sun	{
+	color: red;
+	background: #DDD;
+}
+
+/* super_user */
+
+div#super_user	{
+	position: absolute;
+	left: 10px;
+	top: 40px;
+	z-index: 100;
+}
+
+div#super_user ul	{
+	list-style: none;
+}
+
+div#super_user ul li	{
+}
+
+div#super_user ul li a	{
+	display: block;
+	height: 24px;
+	width: 120px;
+	background: #FFF;
+	color: #000;
+	line-height: 24px;
+	border: 1px solid #000;
+}
+
+div#super_user ul li a:hover	{
+	background: #DDD;
+	text-decoration: none;
+}
+
+tr.validate td div.error_list {
+	background:none;
+	border:0px;
+	margin-bottom:0px;
+	padding:0px;
+}
+tr.validate td {
+	background:none repeat scroll 0 0 #FFEEEE !important;
+}
+tr.validate td div.error_list dl dd	{
+	border-top:none;
+	padding:0px 0;
+}
+tr.validate td div.error_list dl dd ul li	{
+	background:none;
+	color: #F00;
+	padding: 0 0 0 5px;
+	margin: 5px 0 0 0;
+	border-left: 5px solid red;
+	height: 16px;
+	line-height: 16px;
+}
+
+tr.validate td div.error_list dl {
+background:none;
+border:0px;
+padding:0px;
+}

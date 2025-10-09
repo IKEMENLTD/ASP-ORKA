@@ -1,0 +1,43 @@
+<div id="side_bar">
+	<div class="side_menu">
+    <ul>
+    <li class="title1">ユーザー管理</li>
+    <li><a href="search.php?type=nUser">ユーザー検索</a></li>
+    <li><a href="regist.php?type=multimail">一括メール送信</a></li>
+    <li><a href="regist.php?type=sales">ユーザーランク追加</a></li>
+    <li><a href="search.php?type=sales&sort=rate&sort_PAL[]=desc&run=true">ユーザーランク管理</a></li>
+    <li class="title2">掲載広告</li>
+    <li><a href="regist.php?type=adwares">広告の登録</a></li>
+    <li><a href="search.php?type=adwares&run=true">登録されている広告</a></li>
+    <li><a href="regist.php?type=pay">成果の登録</a></li>
+    <li><a href="search.php?type=category&run=true">広告カテゴリの管理</a></li>
+<!--# ifbegin mod_on secretAdwares #-->
+    <li class="title2">クローズド広告</li>
+    <li><a href="regist.php?type=secretAdwares">広告の登録</a></li>
+    <li><a href="search.php?type=secretAdwares&run=true">登録されている広告</a></li>
+<!--# endif #-->
+    <li class="title3">リスト</li>
+    <li><a href="search.php?type=access&run=true">アクセスリスト</a></li>
+    <li><a href="search.php?type=pay&run=true">会員登録・商品の購入履歴</a></li>
+    <li><a href="search.php?type=click_pay&run=true">広告クリック履歴</a></li>
+    <li><a href="search.php?type=continue_pay&run=true">継続課金履歴</a></li>
+    <li><a href="search.php?type=log_pay&run=true">報酬の変動ログ</a></li>
+    <li><a href="search.php?type=blacklist&run=true" >ブラックリスト管理</a></li>
+    <li class="title4">換金</li>
+	<li><a href="search.php?type=returnss&run=true">換金申請履歴</a></li>
+	<li><a href="return.php">一括換金処理</a></li>
+    <li class="title5">レポート</li>
+    <li><a href="other.php?key=pay_report">成果レポート出力</a></li>
+    <li><a href="other.php?key=access4month">アクセス集計</a></li>
+    <li><a href="other.php?key=tier4month">ティア集計</a></li>
+    <li class="title6">サイト設定</li>
+    <li><a href="edit.php?type=system&id=ADMIN" >サイト設定の変更</a></li>
+    <li><a href="edit.php?type=admin&id=ADMIN" >ログイン情報の変更</a></li>
+    <li><a href="regist.php?type=page" >ページの追加</a></li>
+    <li><a href="search.php?type=page&run=true" >ページの検索</a></li>
+	<!--# ifbegin mod_on accountLock #-->
+    <li><a href="search.php?type=accountLockConfig&run=true" >アカウントロック設定</a></li>
+	<!--# endif #-->
+    </ul>
+    </div>
+</div><!--side_bar_END-->

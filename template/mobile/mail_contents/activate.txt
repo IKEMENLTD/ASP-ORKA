@@ -1,0 +1,13 @@
+<!--# readhead subject #-->
+【アフィリエイトシステムＰＲＯ２】ご登録ありがとうございます。
+<!--# readend #-->
+<!--# readhead main #-->
+
+メールアドレスを認証するために、下記URLをクリックしてください。
+
+<!--# code activate #-->
+
+アフィリエイトシステムＰＲＯ２
+http://www.sample.com/
+
+<!--# readend #-->

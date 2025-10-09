@@ -1,0 +1,43 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; <span>ERROR</span></div>
+
+    <div class="error_list">
+    <dl>
+    <dt>ERROR - [ エラー ] ログインできません。</dt>
+    <dd>
+    <p>メールアドレスとパスワードを確認してください。</p>
+        <ul>
+        <li>パスワードを忘れてしまった場合は、<a href="index.php">トップページ</a>からパスワードリマインダを使ってパスワードの再発行ができます。</li>
+        <li>正しいログイン情報を入力してもログインできない場合は、管理者までお問い合わせください。</li>
+        </ul>
+
+    <form action="login.php" method="post" >
+        <table cellspacing="20" class="login_table" summary="ログインテーブル">
+        <tr>
+            <th>メールアドレス</th>
+            <td><input type="text" name="mail"></td>
+        </tr>
+        <tr>
+            <th>パスワード</th>
+            <td><input type="password" name="passwd" ></td>
+        </tr>
+        </table>
+        <div class="input_single"><input type="submit" value="ログイン" class="input_base"></div>
+	</form>
+
+    </dd>
+    </dl>
+    </div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

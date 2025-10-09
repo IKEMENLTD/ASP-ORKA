@@ -1,0 +1,12 @@
+<tr>
+<td><!--# value regist #--></td>
+<!--# ifbegin idcheck (!--# value pay_id #--) (!--# value pay_type #--) #-->
+<td><a href="info.php?type=(!--# value pay_type #--)&id=(!--# value pay_id #--)" ><!--# valueReplace pay_type pay/click_pay/continue_pay 登録・購入/広告クリック/継続課金 #--></a></td>
+<!--# else #-->
+<td><!--# valueReplace pay_type pay/click_pay/continue_pay 登録・購入/広告クリック/継続課金 #-->(削除済み)</td>
+<!--# endif #-->
+<td><a href="info.php?type=nUser&id=(!--# value nuser_id #--)" ><!--# value nuser_id #--></a></td>
+<td><!--# valueReplace action edit/delete 編集/削除 #--></td>
+<td><!--# value cost #-->円</td>
+<td><!--# valueReplace state 1/2 非認証/認証 #--></td>
+</tr>

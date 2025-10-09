@@ -1,0 +1,16 @@
+<!--# readhead subject #-->
+【<!--# ecode getSiteProfile site_title #-->】広告の自動取り下げ処理が実行されました
+<!--# readend #-->
+<!--# readhead main #-->
+
+以下の広告の成果が予算設定額に達しましたので、自動取り下げ処理を実行しました。
+
+<!--# value name #-->
+<!--# ecode getSiteProfile home #-->info.php?type=adwares&id=(!--# value id #--)
+
+この広告を再度掲載する場合は、予算設定を引き上げた上で公開してください。
+
+<!--# ecode getSiteProfile site_title #-->
+<!--# ecode getSiteProfile home #-->
+
+<!--# readend #-->

@@ -1,0 +1,59 @@
+<!--blocks-->
+<!--# setTimeFormat Y/m/d/¥ G:i:s #-->
+
+<div class="as">
+    <div class="adwares_list">
+    <table class="adwares_list_table">	
+        <tr>
+            <th colspan="2" class="list_head">広告ID：<!--# value id #--></th>
+        </tr>
+        <tr>
+        	<th>広告名</th>
+            <td><a href="edit.php?type=secretAdwares&id=(!--# value id #--)"><!--# value name #--></a></td>
+        </tr>
+        <tr>
+            <th width="20%">広告カテゴリー</th>
+            <td><!--# alias category category id name #--></td>
+        </tr>
+        <tr>
+            <th>成果報酬</th>
+            <td><!--# ecode getCostType money (!--# value money #--) (!--# value ad_type #--) #--></td>
+        </tr>
+        <tr>
+            <th>クリック報酬</th>
+            <td><!--# value click_money #-->円</td>
+        </tr>
+        <tr>
+            <th>継続課金</th>
+            <td><!--# value continue_money #--><!--# valueReplace continue_type yen/per 円/％ #--></td>
+        </tr>
+<!--# ifbegin ! bool url_users #-->
+        <tr>
+            <th>URL(PC用)</th>
+            <td><!--# value url #--></td>
+        </tr>
+		<!--# ifbegin enableMobile #-->
+        <tr>
+            <th>URL(携帯用)</th>
+            <td><!--# value url_m #--></td>
+        </tr>
+		<!--# endif #-->
+<!--# else #-->
+        <tr>
+            <th>URL</th>
+            <td>アフィリエイターの自由入力</td>
+        </tr>
+<!--# endif #-->
+        <tr>
+        	<th>広告バナー画像</th>
+            <td><div class="ad_image"><!--# object image banner #--></div></td>
+        </tr>
+        <tr>
+        	<th>広告の説明</th>
+            <td class="adwares_info"><!--# value comment #--></td>
+        </tr>
+    </table>
+    </div>
+
+</div>
+<!--blocks_END-->

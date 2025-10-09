@@ -1,0 +1,162 @@
+<div id="contents">
+
+<!--# include head #-->
+
+<!--# include side_bar #-->
+
+<div id="inc_side_body">
+
+<div class="topics">HOME &gt; 広告の登録 &gt; <span>入力フォーム</span> &gt; 入力内容の確認 &gt; 登録完了</div>
+
+<!--# variable error_msg #-->
+
+<div class="search_list">
+<dl>
+<dt>※印が付いている項目は必須です。</dt>
+<dd>
+<table class="search_list_table" summary="詳細テーブル">
+<tr>
+    <th>成果表示名<span>※</span></th>
+    <td><!--# form text name 50 128 #--></td>
+</tr>
+<tr>
+    <th>カテゴリーの選択<span>※</span></th>
+    <td>
+      <script type="text/javascript">
+          function changeCategory(elm){
+              if( $(elm).val() == "add")
+                  window.open( "regist.php?type=category&hfnull=true","_blank","width=400, height=300, menubar=no, toolbar=no, scrollbars=yes");
+          }
+      </script>
+      <!--# ecode addCategorySelectForm #-->
+      <span class="info">「カテゴリーを追加する」から新しいカテゴリを追加できます。(別ウィンドウが開きます)</span>
+    </td>
+</tr>
+<tr>
+    <th>広告説明文<span>※</span></th>
+    <td><!--# form textarea comment    class="textarea" #--></td>
+</tr>
+<tr>
+    <th>テキスト広告文<span>※</span></th>
+    <td><!--# form text ad_text 50 128 #--></td>
+</tr>
+<tr>
+    <th>ジャンプ先URL(PC用)<span>※</span></th>
+    <td>
+    	<!--# form text url 50 256 #-->
+	<!--# form radio url_users FALSE  FALSE/TRUE 固定/アフィリエイターの自由入力 #-->
+    </td>
+</tr>
+<!--# ifbegin enableMobile #-->
+<tr>
+    <th>ジャンプ先URL(携帯用)</th>
+    <td><!--# form text url_m 50 256 #--></td>
+</tr>
+<!--# endif #-->
+<tr>
+    <th>獲得単価<span>※</span></th>
+    <td><!--# form text money 15 10 #--><!--# form option ad_type yen yen/per/rank/personal 円/％/会員ランク適用/パーソナルレート適用 #-->
+		<span class="info">※「会員ランク適用」「パーソナルレート適用」を選択された場合には、獲得単価は「0」と入力下さい。</span>
+    </td>
+</tr>
+<tr>
+    <th>クリック単価<span>※</span></th>
+    <td><!--# form text click_money 15 10 #-->円</td>
+</tr>
+<tr>
+    <th>継続課金</th>
+    <td><!--# form text continue_money 15 10 #--><!--# form option continue_type yen yen/per 円/％ #--></td>
+</tr>
+<tr>
+    <th>予算上限<span>※</span></th>
+    <td><!--# form text limits 15 10 #--><!--# form option limit_type 0 0/1/2/3/4 予算上限なし/円/件(獲得)/件(クリック)/件(継続) #-->
+    	<div class="in_clip">
+        予算オーバー時のジャンプ先URL　<!--# form text url_over 50 256 #-->
+        	<span class="info">予算オーバー時には上記で設定したURLに遷移します。</span>
+        </div>
+    </td>
+</tr>
+<tr>
+    <th>クリック間隔<span>※</span></th>
+    <td>
+		不正防止の為、最後のクリックから <!--# form text span 15 10 #--><!--# form option span_type s s/m/h/d 秒/分/時/日 #--> 間のクリックを無効にする。
+        <div class="in_clip">
+        同一ユーザーかどうかを　「　<!--# form radio use_cookie_interval FALSE  TRUE/FALSE COOKIEで判別/IPで判別 #-->　」する
+        </div>
+	</td>
+</tr>
+<tr>
+    <th>報酬成果間隔<span>※</span></th>
+    <td>不正防止の為、最後の成果発生から <!--# form text pay_span 15 10 #--><!--# form option pay_span_type s s/m/h/d 秒/分/時/日 #--> 間の成果発生を無効にする。(同一IP)</td>
+</tr>
+<tr>
+    <th>クリック成果の認証<span>※</span></th>
+    <td><!--# form radio click_auto 1  1/0 自動/手動 #--></td>
+</tr>
+<tr>
+    <th>アフィリエイト成果の認証<span>※</span></th>
+    <td><!--# form radio auto 1  1/0 自動/手動 #--></td>
+</tr>
+<tr>
+    <th>継続成果の認証<span>※</span></th>
+    <td><!--# form radio continue_auto 1  1/0 自動/手動 #--></td>
+</tr>
+<tr>
+    <th>広告バナー(PC用)</th>
+    <td>
+		<!--# form image banner #--><br />
+		<!--# form image banner2 #--><br />
+		<!--# form image banner3 #-->
+	</td>
+</tr>
+<!--# ifbegin enableMobile #-->
+<tr>
+    <th>広告バナー(携帯用)</th>
+    <td>
+		<!--# form image banner_m #--><br />
+		<!--# form image banner_m2 #--><br />
+		<!--# form image banner_m3 #-->
+	</td>
+</tr>
+<!--# endif #-->
+<tr>
+    <th>広告認証形式<span>※</span></th>
+    <td><!--# form radio check_type ip  ip/aid/cookie IPアドレス/Cookie(1st)/Cookie(3rd)※非推奨 #-->
+		<span class="info">広告経由情報の認証方法を選択して下さい。</span>
+		<br />
+		<span class="info">
+			各認証形式の違いについて：<br /><br />
+
+			IPアドレス…PC向け広告の認証に適した方式です。スマートフォンは接続環境によってIPが変化してしまうことがあるため、この方式は向いていません。<br />
+			<br />
+			Cookie(1st)…PC/スマートフォンのどちらも認証できる方式です。この方式を使用する場合はアクセスタグ・トラッキングタグの2つを組み込む必要があります。また2つのタグは同一ドメイン上になければいけません。Apple ITPにも対応しています。<br />
+			<br />
+			Cookie(3rd)…PC/スマートフォンのどちらも認証できる方式です(旧式)　この方式は各ブラウザ共に制限または廃止される方向にあるため、使用は推奨されません。Cookie(1st)を使用してください。<br />
+		</span>
+	</td>
+</tr>
+<tr>
+    <th>広告の公開/非公開<span>※</span></th>
+    <td><!--# form radio open TRUE  TRUE/FALSE 公開/非公開 #--></td>
+</tr>
+<tr>
+    <th>対象ユーザー<span>※</span></th>
+    <td><!--# form textarea open_user 20 25  readonly="readonly" #-->
+		<iframe src="(!--# ecode getActiveHome #--)search.php?type=nUser&run=true&exstyle=salist&hfnull=true&sa=(!--# value id #--)&ssl_out=off" width="250" height="300"></iframe>
+	</td>
+</tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<div class="input_box">
+<input type="submit" value="入力内容の確認" class="input_base">
+<input type="reset" value="リセット" class="input_base">
+</div>
+
+</div><!--inc_side_body_END-->
+
+<br class="clear">
+
+</div><!--contents_END-->

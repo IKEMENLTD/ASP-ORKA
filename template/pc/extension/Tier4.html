@@ -1,0 +1,56 @@
+
+<!--# readhead list_month_head #-->
+                    <div class="calendar">
+                    
+                    <div class="calendar_go"><!--# variable year #-->年のティア集計</div>
+                    
+                    <table class="calendar">
+                    <tr>
+<!--# readend #-->
+<!--# readhead list_day_head #-->
+                    <th (!--# variable class #--) ><!--# variable day #-->日</th>
+<!--# readend #-->
+<!--# readhead list_day_body #-->
+                    <td class="tier_cnt">
+                    <!--# ifbegin not val_equal (!--# int value cnt #--) 0 #-->
+                    <div class="tier_cnt">
+                    1tier: <span><!--# int value tier1 #--></span>件<br>
+                    2tier: <span><!--# int value tier2 #--></span>件<br>
+                    3tier: <span><!--# int value tier3 #--></span>件<br>
+                    all: <span><!--# int value cnt #--></span>件
+                    </div>
+                    <span><!--# code comma (!--# value sum #--) #--></span>円
+                    
+                    <!--# else #-->
+                    <br><br><br>
+                    <!--# endif #-->
+                    </td>
+<!--# readend #-->
+<!--# readhead list_day_return #-->
+                    </tr>
+                    <tr>
+<!--# readend #-->
+<!--# readhead list_month_row_head #-->
+                    <th><!--# variable month #-->月</th>
+<!--# readend #-->
+<!--# readhead list_month_row_body #-->
+                    <td>
+                    <!--# int value cnt #-->件<br />
+                    <a href="other.php?key=tier4day&registA=(!--# ecode createEpochTime4ymd mt (!--# variable year #--) (!--# variable month #--) #--)&registB=(!--# ecode createEpochTime4ymd me (!--# variable year #--) (!--# variable month #--) #--)(!--# ecode getParam & a c n #--)"><!--# code comma (!--# value sum #--) #-->円</a>
+                    </td>
+<!--# readend #-->
+<!--# readhead list_month_return #-->
+                    </tr>
+                    <tr>
+<!--# readend #-->
+<!--# readhead blank_head #-->
+                    <th>&nbsp;</th>
+<!--# readend #-->
+<!--# readhead blank_body #-->
+                      <td>&nbsp;</td>
+<!--# readend #-->
+<!--# readhead list_month_foot #-->
+                    </tr>
+                    </table>
+                    </div><!--calendar-->
+<!--# readend #-->
