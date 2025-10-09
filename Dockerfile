@@ -52,7 +52,12 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN echo "upload_max_filesize = 10M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size = 10M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/memory.ini \
-    && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/execution.ini
+    && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/execution.ini \
+    && echo "display_errors = On" >> /usr/local/etc/php/conf.d/error.ini \
+    && echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/error.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/error.ini \
+    && echo "log_errors = On" >> /usr/local/etc/php/conf.d/error.ini \
+    && echo "error_log = /var/log/apache2/php_error.log" >> /usr/local/etc/php/conf.d/error.ini
 
 # ポート設定（Renderの環境変数$PORTを使用）
 ENV PORT 10000
@@ -62,20 +67,73 @@ EXPOSE $PORT
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
+echo "========================================"\n\
+echo "  ASP-ORKA Starting..."\n\
+echo "========================================"\n\
+\n\
 # Renderのポート番号に合わせてApache設定を更新\n\
 if [ ! -z "$PORT" ]; then\n\
     echo "Listen $PORT" > /etc/apache2/ports.conf\n\
     sed -i "s/<VirtualHost \*:80>/<VirtualHost *:$PORT>/g" /etc/apache2/sites-available/000-default.conf\n\
+    echo "✓ Apache configured for port: $PORT"\n\
 fi\n\
 \n\
-# 環境変数確認\n\
-echo "=== Environment Check ==="\n\
-echo "SUPABASE_DB_HOST: ${SUPABASE_DB_HOST}"\n\
-echo "SENDGRID_API_KEY: $([ ! -z "$SENDGRID_API_KEY" ] && echo "Set" || echo "Not set")"\n\
-echo "PORT: $PORT"\n\
-echo "========================"\n\
+# 詳細な環境変数確認\n\
+echo ""\n\
+echo "=== Environment Variables ==="\n\
+echo "APP_ENV: ${APP_ENV:-NOT SET}"\n\
+echo "APP_DEBUG: ${APP_DEBUG:-NOT SET}"\n\
+echo ""\n\
+echo "--- Database ---"\n\
+echo "SUPABASE_DB_HOST: ${SUPABASE_DB_HOST:-NOT SET}"\n\
+echo "SUPABASE_DB_PORT: ${SUPABASE_DB_PORT:-NOT SET}"\n\
+echo "SUPABASE_DB_NAME: ${SUPABASE_DB_NAME:-NOT SET}"\n\
+echo "SUPABASE_DB_USER: ${SUPABASE_DB_USER:-NOT SET}"\n\
+echo "SUPABASE_DB_PASS: $([ ! -z "$SUPABASE_DB_PASS" ] && echo "Set (${#SUPABASE_DB_PASS} chars)" || echo "NOT SET")"\n\
+echo ""\n\
+echo "--- SendGrid ---"\n\
+echo "SENDGRID_API_KEY: $([ ! -z "$SENDGRID_API_KEY" ] && echo "Set (${#SENDGRID_API_KEY} chars)" || echo "NOT SET")"\n\
+echo "USE_SENDGRID: ${USE_SENDGRID:-NOT SET}"\n\
+echo "MAIL_FROM: ${MAIL_FROM:-NOT SET}"\n\
+echo ""\n\
+echo "--- Storage ---"\n\
+echo "USE_SUPABASE_STORAGE: ${USE_SUPABASE_STORAGE:-NOT SET}"\n\
+echo "SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-NOT SET}"\n\
+echo ""\n\
+echo "--- Security ---"\n\
+echo "SQL_PASSWORD_KEY: $([ ! -z "$SQL_PASSWORD_KEY" ] && echo "Set" || echo "NOT SET")"\n\
+echo "SESSION_SECRET: $([ ! -z "$SESSION_SECRET" ] && echo "Set" || echo "NOT SET")"\n\
+echo "================================"\n\
+echo ""\n\
+\n\
+# 環境変数チェック\n\
+MISSING_VARS=0\n\
+if [ -z "$SUPABASE_DB_HOST" ]; then\n\
+    echo "⚠️  WARNING: SUPABASE_DB_HOST is not set!"\n\
+    MISSING_VARS=1\n\
+fi\n\
+if [ -z "$SENDGRID_API_KEY" ]; then\n\
+    echo "⚠️  WARNING: SENDGRID_API_KEY is not set!"\n\
+    MISSING_VARS=1\n\
+fi\n\
+\n\
+if [ $MISSING_VARS -eq 1 ]; then\n\
+    echo ""\n\
+    echo "❌ ERROR: Critical environment variables are missing!"\n\
+    echo "Please configure environment variables in Render Dashboard:"\n\
+    echo "Settings → Environment → Add Key"\n\
+    echo ""\n\
+    echo "Continuing anyway... (errors may occur)"\n\
+    echo ""\n\
+fi\n\
+\n\
+# PHPエラーログの場所を表示\n\
+echo "PHP Error Log: /var/log/apache2/php_error.log"\n\
+echo "Apache Error Log: /var/log/apache2/error.log"\n\
+echo ""\n\
 \n\
 # Apache起動\n\
+echo "Starting Apache..."\n\
 exec apache2-foreground\n\
 ' > /usr/local/bin/start.sh \
     && chmod +x /usr/local/bin/start.sh
