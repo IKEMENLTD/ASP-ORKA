@@ -71,6 +71,50 @@ echo "========================================"\n\
 echo "  ASP-ORKA Starting..."\n\
 echo "========================================"\n\
 \n\
+# .envファイルを環境変数から生成\n\
+echo ""\n\
+echo "📝 Generating .env file from environment variables..."\n\
+cat > /var/www/html/.env <<EOF\n\
+# Auto-generated from Render environment variables\n\
+# Generated at: $(date)\n\
+\n\
+# アプリケーション設定\n\
+APP_ENV=${APP_ENV:-production}\n\
+APP_DEBUG=${APP_DEBUG:-false}\n\
+\n\
+# Supabase Database\n\
+SUPABASE_DB_HOST=${SUPABASE_DB_HOST}\n\
+SUPABASE_DB_PORT=${SUPABASE_DB_PORT:-5432}\n\
+SUPABASE_DB_NAME=${SUPABASE_DB_NAME:-postgres}\n\
+SUPABASE_DB_USER=${SUPABASE_DB_USER}\n\
+SUPABASE_DB_PASS=${SUPABASE_DB_PASS}\n\
+\n\
+# Supabase API\n\
+SUPABASE_URL=${SUPABASE_URL}\n\
+SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}\n\
+\n\
+# SendGrid\n\
+SENDGRID_API_KEY=${SENDGRID_API_KEY}\n\
+USE_SENDGRID=${USE_SENDGRID:-true}\n\
+MAIL_FROM=${MAIL_FROM:-noreply@orkaasp.com}\n\
+MAIL_FROM_NAME=${MAIL_FROM_NAME:-ASP-ORKA}\n\
+\n\
+# Storage\n\
+USE_SUPABASE_STORAGE=${USE_SUPABASE_STORAGE:-true}\n\
+SUPABASE_STORAGE_BUCKET=${SUPABASE_STORAGE_BUCKET:-affiliate-images}\n\
+\n\
+# Security\n\
+SQL_PASSWORD_KEY=${SQL_PASSWORD_KEY}\n\
+SESSION_SECRET=${SESSION_SECRET}\n\
+\n\
+# PHP Settings\n\
+PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME:-300}\n\
+PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}\n\
+EOF\n\
+\n\
+echo "✓ .env file created at /var/www/html/.env"\n\
+echo ""\n\
+\n\
 # Renderのポート番号に合わせてApache設定を更新\n\
 if [ ! -z "$PORT" ]; then\n\
     echo "Listen $PORT" > /etc/apache2/ports.conf\n\
@@ -78,9 +122,9 @@ if [ ! -z "$PORT" ]; then\n\
     echo "✓ Apache configured for port: $PORT"\n\
 fi\n\
 \n\
-# 詳細な環境変数確認\n\
+# .envファイルの内容確認（デバッグ用）\n\
 echo ""\n\
-echo "=== Environment Variables ==="\n\
+echo "=== .env File Contents ==="\n\
 echo "APP_ENV: ${APP_ENV:-NOT SET}"\n\
 echo "APP_DEBUG: ${APP_DEBUG:-NOT SET}"\n\
 echo ""\n\
