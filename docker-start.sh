@@ -105,12 +105,29 @@ if [ $MISSING_VARS -eq 1 ]; then
     echo ""
 fi
 
-# エラーログを標準エラー出力にリダイレクト
-ln -sf /dev/stderr /var/log/apache2/php_error.log
-ln -sf /dev/stderr /var/log/apache2/error.log
+# ログファイルを作成
+touch /var/log/apache2/php_error.log
+touch /var/log/apache2/error.log
+
+# エラーログを標準エラー出力にリダイレクト（強制）
+ln -sf /proc/self/fd/2 /var/log/apache2/php_error.log
+ln -sf /proc/self/fd/2 /var/log/apache2/error.log
 
 echo "PHP errors will be logged to stderr"
 echo ""
+
+# PHPエラーログ設定を確認
+echo "=== PHP Error Log Configuration ==="
+php -i | grep -i "error"
+echo ""
+
+# テストスクリプトを実行してデバッグ情報を出力
+echo "=== Running Test Script ==="
+php /var/www/html/test-error.php
+echo ""
+
+# エラーログを監視（バックグラウンド）
+tail -f /var/log/apache2/php_error.log /var/log/apache2/error.log 2>/dev/null &
 
 # Apache起動
 echo "Starting Apache..."

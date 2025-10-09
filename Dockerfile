@@ -34,7 +34,7 @@ RUN { \
     echo 'display_startup_errors = On'; \
     echo 'error_reporting = E_ALL'; \
     echo 'log_errors = On'; \
-    echo 'error_log = /dev/stderr'; \
+    echo 'error_log = /var/log/apache2/php_error.log'; \
 } > /usr/local/etc/php/conf.d/custom.ini
 
 # Apache設定を更新
