@@ -1,0 +1,89 @@
+# Git関連
+.git
+.gitignore
+.gitattributes
+
+# 環境変数ファイル
+.env
+.env.*
+!.env.example
+
+# ログファイル
+logs/*.log
+*.log
+debug.log
+dbaccess.log
+
+# 一時ファイル
+*.tmp
+*~
+.DS_Store
+Thumbs.db
+
+# ドキュメント・メモ
+*.md
+!README.md
+RENDER_*.md
+RENDER_*.txt
+ENV_COMPARISON.md
+DEPLOYMENT_STATUS.md
+*.csv.bak
+
+# デプロイ関連スクリプト
+setup_git.sh
+verify-deployment.sh
+render-env-variables.csv
+push.bat
+direct-push.bat
+auto-deploy.sh
+test-cron.sh
+deploy-to-github.sh
+render-deploy-guide.sh
+
+# バックアップ
+backup/
+*.backup
+*.bak
+
+# ツール
+tools/
+
+# 開発用ファイル
+OLD_DEVELOPMENT_FILES/
+
+# IDE設定
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules（もしあれば）
+node_modules/
+npm-debug.log
+
+# Composer（もしあれば）
+vendor/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# テストファイル
+tests/
+test/
+*.test.php
+
+# 空のディレクトリ内容（実行時に作成される）
+file/image/*
+file/tmp/*
+file/page/*
+file/reminder/*
+!file/image/.gitkeep
+!file/tmp/.gitkeep
+!file/page/.gitkeep
+!file/reminder/.gitkeep
