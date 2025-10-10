@@ -217,8 +217,20 @@ class MobileUtil{
 	}
 
 	static function ipConversion($ip){
+		// Handle IPv6 addresses (like ::1) - return 0 as they won't match IPv4 ranges
+		if (strpos($ip, ':') !== false) {
+			return 0;
+		}
+
 		$ips = explode('.', $ip);
-		return ($ips[0] << 24) | ($ips[1] << 16) | ($ips[2] << 8) | $ips[3];
+
+		// Ensure we have exactly 4 octets for IPv4
+		if (count($ips) !== 4) {
+			return 0;
+		}
+
+		// Cast to int to fix PHP 8 compatibility (can't bitshift strings)
+		return ((int)$ips[0] << 24) | ((int)$ips[1] << 16) | ((int)$ips[2] << 8) | (int)$ips[3];
 	}
 
 	static function getMobileID(){
