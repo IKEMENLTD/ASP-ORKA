@@ -1,10 +1,4 @@
 <?php
-	// 緊急デバッグモード
-	ini_set('display_errors', '1');
-	ini_set('display_startup_errors', '1');
-	error_reporting(E_ALL);
-
-	echo "<!-- DEBUG: index.php started -->\n";
 
 	/*******************************************************************************************************
 	 * <PRE>
@@ -16,14 +10,9 @@
 	 *******************************************************************************************************/
 
 	ob_start();
-
-	echo "<!-- DEBUG: Before try block -->\n";
-
 	try
 	{
-		echo "<!-- DEBUG: Before include head_main.php -->\n";
 		include_once 'custom/head_main.php';
-		echo "<!-- DEBUG: After include head_main.php -->\n";
 
 		//紹介コード処理
 		friendProc();
