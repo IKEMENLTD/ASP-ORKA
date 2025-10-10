@@ -39,9 +39,6 @@ RUN { \
     echo '; Character encoding settings (UTF-8)'; \
     echo 'default_charset = "UTF-8"'; \
     echo 'mbstring.language = Japanese'; \
-    echo 'mbstring.internal_encoding = UTF-8'; \
-    echo 'mbstring.http_input = auto'; \
-    echo 'mbstring.http_output = UTF-8'; \
     echo 'mbstring.encoding_translation = Off'; \
     echo 'mbstring.detect_order = auto'; \
     echo 'mbstring.substitute_character = none'; \
