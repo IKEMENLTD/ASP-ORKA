@@ -35,7 +35,8 @@
 			@exception Exception      例外変換が有効で、ErrorExceptionクラスが存在しない場合。
 			@details   エラーメッセージが発生した場合の処理を記述します。
 		*/
-		function ErrorHandler( $errNo_ , $errStr_ , $errFile_ , $errLine_ , $errContext_ )
+		// PHP 8 compatibility: $errContext_ is deprecated and no longer passed, make it optional
+		function ErrorHandler( $errNo_ , $errStr_ , $errFile_ , $errLine_ , $errContext_ = [] )
 		{
 			if( class_exists( 'ErrorException' ) )
 				$exception = new ErrorException( $errStr_ );
@@ -204,7 +205,8 @@
 	}
 
 	//ハンドラ登録
-	function ErrorManager_ErrorHandler( $errNo_ , $errStr_ , $errFile_ , $errLine_ , $errContext_ )
+	// PHP 8 compatibility: $errContext_ is deprecated and no longer passed, make it optional
+	function ErrorManager_ErrorHandler( $errNo_ , $errStr_ , $errFile_ , $errLine_ , $errContext_ = [] )
 	{
 		$object = new ErrorManager();
 		$object->ErrorHandler( $errNo_ , $errStr_ , $errFile_ , $errLine_ , $errContext_ );
