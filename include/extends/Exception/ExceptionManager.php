@@ -56,10 +56,13 @@
 					System::$foot = false;
 				}
 
-				if( $_GET[ 'type' ] && !is_array( $_GET[ 'type' ] ) && $gm[ $_GET[ 'type' ] ] )
+				// PHP 8 compatibility: Check if SystemUtil and globals exist
+				if( $_GET[ 'type' ] && !is_array( $_GET[ 'type' ] ) && isset($gm) && isset($gm[ $_GET[ 'type' ] ]) && class_exists('SystemUtil') )
 					$tGM = SystemUtil::getGMforType( $_GET[ 'type' ] );
-				else
+				else if (class_exists('SystemUtil'))
 					$tGM = SystemUtil::getGMforType( 'system' );
+				else
+					$tGM = null;
 
 				// PHP 8 compatibility: Check if System class and globals exist
 				if (class_exists('System') && isset($gm, $loginUserType, $loginUserRank))
@@ -72,7 +75,7 @@
 				$template = $template_path . 'other/exception/' . $className . '.html';
 				
 				if( !file_exists( $template ) ){
-					$template = Template::getTemplate( $loginUserType , $loginUserRank , $className , 'EXCEPTION_DESIGN' );
+					$template = class_exists('Template') ? Template::getTemplate( $loginUserType , $loginUserRank , $className , 'EXCEPTION_DESIGN' ) : null;
 				}
 	
 				if( $template && file_exists( $template ) )
@@ -86,7 +89,10 @@
 					if( $template && file_exists( $template ) )
 						print $tGM->getString( $template );
 					else
+						if (class_exists('Template'))
 						Template::drawErrorTemplate();
+					else
+						echo "<p>An error occurred. Please contact the administrator.</p>";
 				}
 
 				// PHP 8 compatibility: Check if System class exists before using it
