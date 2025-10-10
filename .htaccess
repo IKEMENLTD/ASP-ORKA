@@ -1,5 +1,8 @@
 # アフィリエイトシステムプロ - Apache設定
 
+# ディレクトリインデックス設定
+DirectoryIndex index.php index.html
+
 # PHP設定は Dockerfile の php.ini で設定済み
 # .htaccess内のphp_valueディレクティブはApache Module Modeでのみ動作するためコメントアウト
 # php_value upload_max_filesize 10M
