@@ -10,15 +10,25 @@ require_once __DIR__ . '/../load_env.php';
 	$SQL											 = true;				// SQLを用いるかどうかのフラグ
 
 	// 環境変数からデータベース設定を取得（Session Pooler使用）
-	$SQL_SERVER										 = getenv('SUPABASE_DB_HOST') ?: 'localhost';
+	// フォールバック値なし - 環境変数が設定されていない場合はエラー
+	$SQL_SERVER										 = getenv('SUPABASE_DB_HOST');
 	$SQL_PORT										 = getenv('SUPABASE_DB_PORT') ?: '5432';
 
 	// SQLデーモンのクラス名 (PostgreSQL使用)
 	$SQL_MASTER										 = 'PostgreSQLDatabase';
 
 	$DB_NAME										 = getenv('SUPABASE_DB_NAME') ?: 'postgres';
-	$SQL_ID	 										 = getenv('SUPABASE_DB_USER') ?: 'postgres';
-	$SQL_PASS  										 = getenv('SUPABASE_DB_PASS') ?: '';
+	$SQL_ID	 										 = getenv('SUPABASE_DB_USER');
+	$SQL_PASS  										 = getenv('SUPABASE_DB_PASS');
+
+	// 必須環境変数のチェック
+	if (!$SQL_SERVER || !$SQL_ID || !$SQL_PASS) {
+		error_log('CRITICAL: Required database environment variables not set');
+		error_log('SUPABASE_DB_HOST: ' . ($SQL_SERVER ? 'set' : 'NOT SET'));
+		error_log('SUPABASE_DB_USER: ' . ($SQL_ID ? 'set' : 'NOT SET'));
+		error_log('SUPABASE_DB_PASS: ' . ($SQL_PASS ? 'set' : 'NOT SET'));
+		throw new Exception('Database configuration error: Required environment variables not set');
+	}
 
 	$TABLE_PREFIX									 = '';
 
@@ -27,5 +37,9 @@ require_once __DIR__ . '/../load_env.php';
 	$CONFIG_SQL_DATABASE_SESSION = false;
 
 	//the 128 bit key value for crypting
-	$CONFIG_SQL_PASSWORD_KEY = getenv('SQL_PASSWORD_KEY') ?: 'derhymqadbrheng';
+	$CONFIG_SQL_PASSWORD_KEY = getenv('SQL_PASSWORD_KEY');
+	if (!$CONFIG_SQL_PASSWORD_KEY) {
+		error_log('WARNING: SQL_PASSWORD_KEY not set, using default');
+		$CONFIG_SQL_PASSWORD_KEY = 'derhymqadbrheng';
+	}
 ?>

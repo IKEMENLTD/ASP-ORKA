@@ -1,10 +1,10 @@
 <?PHP
 	header( 'P3P: CP="NOI DSP COR NID CURa OUR IND STA"' );
 	$mobile_flag = true;
-	$charcode_flag = true;
+	$charcode_flag = false;  // UTF-8環境ではfalseに設定（Shift_JIS設定を無効化）
 	$euc_garble = false;
-	include_once "./custom/extends/debugConf.php";
-	include_once "./custom/conf.php";
+	include_once "custom/extends/debugConf.php";
+	include_once "custom/conf.php";
 	include_once "custom/extends/initConf.php";
 
 
@@ -67,23 +67,23 @@
 	}
 
 	include_once 'include/base/ccProcBase.php';
-	include_once "./include/ccProc.php";
-	include_once "./include/IncludeObject.php";
-	include_once "./include/GUIManager.php";
-	include_once "./include/Search.php";
-	include_once "./include/Mail.php";
-	include_once "./include/Template.php";
+	include_once "include/ccProc.php";
+	include_once "include/IncludeObject.php";
+	include_once "include/GUIManager.php";
+	include_once "include/Search.php";
+	include_once "include/Mail.php";
+	include_once "include/Template.php";
 	include_once 'include/templateCache.php';
-	include_once "./include/Command.php";
-	include_once "./include/GMList.php";
-	include_once "./custom/checkData.php";
-	include_once "./custom/extension.php";
-	include_once "./custom/global.php";
-	include_once "./module/module.inc";
+	include_once "include/Command.php";
+	include_once "include/GMList.php";
+	include_once "custom/checkData.php";
+	include_once "custom/extension.php";
+	include_once "custom/global.php";
+	include_once "module/module.inc";
 	include_once $system_path."System.php";
 
-	include_once "./custom/extends/modelConf.php";
-	include_once "./custom/extends/logicConf.php";
+	include_once "custom/extends/modelConf.php";
+	include_once "custom/extends/logicConf.php";
 
 	CleanGlobal::action();
 

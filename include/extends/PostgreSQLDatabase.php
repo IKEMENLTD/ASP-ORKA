@@ -29,13 +29,21 @@ class SQLDatabase extends SQLDatabaseBase
 		global $SQL_ID;
 		global $SQL_PASS;
 		global $SQL_PORT;
-		
-		if($SQL_PORT != "")
-			$this->connect  = pg_connect( 'host=' . $SQL_SERVER . ' port=' . $SQL_PORT . ' dbname=' . $dbName . ' user=' . $SQL_ID . ' password=' . $SQL_PASS );
-		else
-			$this->connect  = pg_connect( 'host=' . $SQL_SERVER . ' dbname=' . $dbName . ' user=' . $SQL_ID . ' password=' . $SQL_PASS );
 
-		if( !$this->connect ) { throw new InternalErrorException("DB CONNECT ERROR. -> dbname=". $dbName. " host=".$SQL_SERVER."¥n"); }
+		// 接続タイムアウトとオプション設定
+		$connect_timeout = 5;
+		$options = "connect_timeout={$connect_timeout}";
+
+		if($SQL_PORT != "")
+			$this->connect  = @pg_connect( 'host=' . $SQL_SERVER . ' port=' . $SQL_PORT . ' dbname=' . $dbName . ' user=' . $SQL_ID . ' password=' . $SQL_PASS . ' options=\'' . $options . '\'' );
+		else
+			$this->connect  = @pg_connect( 'host=' . $SQL_SERVER . ' dbname=' . $dbName . ' user=' . $SQL_ID . ' password=' . $SQL_PASS . ' options=\'' . $options . '\'' );
+
+		if( !$this->connect ) {
+			$error_msg = pg_last_error() ?: 'Unknown connection error';
+			error_log("PostgreSQL connection failed: dbname={$dbName}, host={$SQL_SERVER}, port={$SQL_PORT}, error={$error_msg}");
+			throw new InternalErrorException("DB CONNECT ERROR. -> dbname=". $dbName. " host=".$SQL_SERVER." port=".$SQL_PORT." error=".$error_msg);
+		}
 
 		$this->init($dbName, $tableName, $colName, $colType, $colSize, $colExtend);
 			

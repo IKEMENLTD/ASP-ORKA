@@ -8,6 +8,26 @@ echo "  ASP-ORKA Starting..."
 echo "========================================"
 echo ""
 
+# PHP設定を環境変数に基づいて動的に調整
+echo "=== Configuring PHP Settings Based on Environment ==="
+if [ "${APP_DEBUG:-false}" = "false" ]; then
+    echo "Production mode: Disabling error display"
+    cat > /usr/local/etc/php/conf.d/environment.ini <<'EOF'
+display_errors = Off
+display_startup_errors = Off
+error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
+EOF
+else
+    echo "Debug mode: Error display enabled"
+    cat > /usr/local/etc/php/conf.d/environment.ini <<'EOF'
+display_errors = On
+display_startup_errors = On
+error_reporting = E_ALL
+EOF
+fi
+echo "✓ PHP environment settings configured"
+echo ""
+
 # .envファイルを環境変数から生成
 echo "📝 Generating .env file from environment variables..."
 cat > /var/www/html/.env <<'EOF_MARKER'
@@ -102,6 +122,27 @@ fi
 echo "=== Configuring AllowOverride ==="
 sed -i '/<VirtualHost/a\    <Directory /var/www/html>\n        AllowOverride All\n        Require all granted\n    </Directory>' /etc/apache2/sites-available/000-default.conf
 echo "✓ AllowOverride All configured"
+
+# ServerName設定を追加（警告を抑制）
+echo "=== Configuring ServerName ==="
+echo "ServerName asp-orka.onrender.com" >> /etc/apache2/apache2.conf
+echo "✓ ServerName configured"
+
+# Apache性能最適化設定
+echo "=== Configuring Apache Performance ==="
+cat >> /etc/apache2/apache2.conf <<'EOF'
+
+# Performance optimizations
+KeepAlive On
+KeepAliveTimeout 5
+MaxKeepAliveRequests 100
+
+# Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+EOF
+echo "✓ Apache performance settings configured"
 
 # .envファイルの内容確認（デバッグ用）
 echo ""

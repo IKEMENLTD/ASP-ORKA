@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gd \
         exif \
         mbstring \
-    && a2enmod rewrite headers \
+    && a2enmod rewrite headers deflate expires \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP設定（1つのファイルにまとめて高速化）
@@ -35,6 +35,28 @@ RUN { \
     echo 'error_reporting = E_ALL'; \
     echo 'log_errors = On'; \
     echo 'error_log = /var/log/apache2/php_error.log'; \
+    echo ''; \
+    echo '; Character encoding settings (UTF-8)'; \
+    echo 'default_charset = "UTF-8"'; \
+    echo 'mbstring.language = Japanese'; \
+    echo 'mbstring.internal_encoding = UTF-8'; \
+    echo 'mbstring.http_input = auto'; \
+    echo 'mbstring.http_output = UTF-8'; \
+    echo 'mbstring.encoding_translation = Off'; \
+    echo 'mbstring.detect_order = auto'; \
+    echo 'mbstring.substitute_character = none'; \
+    echo ''; \
+    echo '; Date and timezone settings'; \
+    echo 'date.timezone = Asia/Tokyo'; \
+    echo ''; \
+    echo '; Session security settings'; \
+    echo 'session.cookie_httponly = 1'; \
+    echo 'session.cookie_secure = 0'; \
+    echo 'session.cookie_samesite = Lax'; \
+    echo 'session.use_strict_mode = 1'; \
+    echo 'session.use_only_cookies = 1'; \
+    echo 'session.cookie_lifetime = 0'; \
+    echo 'session.gc_maxlifetime = 3600'; \
     echo ''; \
     echo '; OPcache settings for performance'; \
     echo 'opcache.enable=1'; \
