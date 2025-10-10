@@ -1,5 +1,6 @@
 <?PHP
-	header( 'P3P: CP="NOI DSP COR NID CURa OUR IND STA"' );
+	// P3P header commented out to avoid header warnings
+	// header( 'P3P: CP="NOI DSP COR NID CURa OUR IND STA"' );
 	$mobile_flag = true;
 	$charcode_flag = false;  // UTF-8環境ではfalseに設定（Shift_JIS設定を無効化）
 	$euc_garble = false;
