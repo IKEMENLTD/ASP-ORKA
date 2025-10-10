@@ -31,6 +31,10 @@ DirectoryIndex index.php index.html
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    # 本番環境でHTTPS有効時に以下をアンコメント
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
 
 # URL Rewrite（必要に応じて有効化）

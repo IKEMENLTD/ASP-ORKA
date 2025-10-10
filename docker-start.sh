@@ -98,6 +98,11 @@ if [ ! -z "${PORT:-}" ]; then
     echo "✓ Apache configured for port: $PORT"
 fi
 
+# AllowOverride設定を追加（.htaccessを有効にするため）
+echo "=== Configuring AllowOverride ==="
+sed -i '/<VirtualHost/a\    <Directory /var/www/html>\n        AllowOverride All\n        Require all granted\n    </Directory>' /etc/apache2/sites-available/000-default.conf
+echo "✓ AllowOverride All configured"
+
 # .envファイルの内容確認（デバッグ用）
 echo ""
 echo "=== .env File Contents ==="

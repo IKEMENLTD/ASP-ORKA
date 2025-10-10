@@ -35,6 +35,14 @@ RUN { \
     echo 'error_reporting = E_ALL'; \
     echo 'log_errors = On'; \
     echo 'error_log = /var/log/apache2/php_error.log'; \
+    echo ''; \
+    echo '; OPcache settings for performance'; \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.memory_consumption=128'; \
+    echo 'opcache.interned_strings_buffer=8'; \
+    echo 'opcache.max_accelerated_files=10000'; \
+    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.fast_shutdown=1'; \
 } > /usr/local/etc/php/conf.d/custom.ini
 
 # Apache設定を更新
@@ -53,10 +61,14 @@ COPY .htaccess /var/www/html/.htaccess
 
 # 必要なディレクトリを作成
 RUN mkdir -p file/image file/tmp file/page file/reminder logs tdb \
-    && chmod -R 755 file/ logs/ tdb/
+    && chmod -R 755 file/ logs/ tdb/ \
+    && chown -R www-data:www-data file/ logs/ tdb/
 
 # プロジェクトファイルをコピー（最後にして、コード変更時のみ再ビルド）
 COPY . /var/www/html/
+
+# ファイル所有権をApacheユーザーに設定
+RUN chown -R www-data:www-data /var/www/html
 
 # ポート設定
 ENV PORT=10000
