@@ -1,30 +1,50 @@
 <?php
-// 段階的デバッグ用index.php
-ob_start();
 
-echo "<!DOCTYPE html>\n";
-echo "<html><head><meta charset='UTF-8'><title>ASP-ORKA</title></head><body>\n";
-echo "<h1>ASP-ORKA System</h1>\n";
-echo "<p>PHP Version: " . PHP_VERSION . "</p>\n";
-echo "<p>System is initializing...</p>\n";
+	/*******************************************************************************************************
+	 * <PRE>
+	 *
+	 * index.php - 専用プログラム
+	 * インデックスページを出力します。
+	 *
+	 * </PRE>
+	 *******************************************************************************************************/
 
-// ここでhead_main.phpをincludeしてみる
-echo "<hr><p>Loading head_main.php...</p>\n";
-ob_flush();
-flush();
+	ob_start();
+	try
+	{
+		include_once 'custom/head_main.php';
 
-try {
-    include_once 'custom/head_main.php';
-    echo "<p>✓ head_main.php loaded</p>\n";
+		//紹介コード処理
+		friendProc();
 
-    // 簡単なテスト
-    echo "<p>Database host: " . getenv('SUPABASE_DB_HOST') . "</p>\n";
+		switch($loginUserType)
+		{
+		default:
+			print System::getHead($gm,$loginUserType,$loginUserRank);
+			
+			if( $loginUserType != $NOT_LOGIN_USER_TYPE )
+				Template::drawTemplate( $gm[ $loginUserType ] , $rec , $loginUserType , $loginUserRank , '' , 'TOP_PAGE_DESIGN' );
+			else
+				Template::drawTemplate( $gm[ 'system' ] , $rec , $loginUserType , $loginUserRank , '' , 'TOP_PAGE_DESIGN' );
+			
+			print System::getFoot($gm,$loginUserType,$loginUserRank);
+			break;
+		}
+	}
+	catch( Exception $e_ )
+	{
+		ob_end_clean();
 
-} catch (Exception $e) {
-    echo "<p style='color:red'>✗ Error: " . htmlspecialchars($e->getMessage()) . "</p>\n";
-    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>\n";
-}
+		//エラーメッセージをログに出力
+		$errorManager = new ErrorManager();
+		$errorMessage = $errorManager->GetExceptionStr( $e_ );
 
-echo "</body></html>\n";
-ob_end_flush();
+		$errorManager->OutputErrorLog( $errorMessage );
+
+		//例外に応じてエラーページを出力
+		$className = get_class( $e_ );
+		ExceptionManager::DrawErrorPage($className );
+	}
+
+	ob_end_flush();
 ?>
