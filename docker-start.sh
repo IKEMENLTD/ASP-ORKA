@@ -10,22 +10,14 @@ echo ""
 
 # PHP設定を環境変数に基づいて動的に調整
 echo "=== Configuring PHP Settings Based on Environment ==="
-if [ "${APP_DEBUG:-false}" = "false" ]; then
-    echo "Production mode: Disabling error display"
-    cat > /usr/local/etc/php/conf.d/environment.ini <<'EOF'
-display_errors = Off
-display_startup_errors = Off
-error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
-EOF
-else
-    echo "Debug mode: Error display enabled"
-    cat > /usr/local/etc/php/conf.d/environment.ini <<'EOF'
+# デバッグのため、一時的に常にエラー表示を有効化
+echo "Forcing debug mode for troubleshooting"
+cat > /usr/local/etc/php/conf.d/environment.ini <<'EOF'
 display_errors = On
 display_startup_errors = On
 error_reporting = E_ALL
 EOF
-fi
-echo "✓ PHP environment settings configured"
+echo "✓ PHP error display enabled for debugging"
 echo ""
 
 # .envファイルを環境変数から生成

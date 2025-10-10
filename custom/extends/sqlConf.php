@@ -21,13 +21,13 @@ require_once __DIR__ . '/../load_env.php';
 	$SQL_ID	 										 = getenv('SUPABASE_DB_USER');
 	$SQL_PASS  										 = getenv('SUPABASE_DB_PASS');
 
-	// 必須環境変数のチェック
+	// 必須環境変数のチェック（警告のみ、起動は継続）
 	if (!$SQL_SERVER || !$SQL_ID || !$SQL_PASS) {
-		error_log('CRITICAL: Required database environment variables not set');
+		error_log('WARNING: Some database environment variables not set');
 		error_log('SUPABASE_DB_HOST: ' . ($SQL_SERVER ? 'set' : 'NOT SET'));
 		error_log('SUPABASE_DB_USER: ' . ($SQL_ID ? 'set' : 'NOT SET'));
 		error_log('SUPABASE_DB_PASS: ' . ($SQL_PASS ? 'set' : 'NOT SET'));
-		throw new Exception('Database configuration error: Required environment variables not set');
+		// 起動は継続（データベース接続時にエラーになる）
 	}
 
 	$TABLE_PREFIX									 = '';
