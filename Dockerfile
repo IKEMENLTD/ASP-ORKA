@@ -75,8 +75,8 @@ WORKDIR /var/www/html
 COPY docker-start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-# .htaccessをコピー（これも変更が少ない）
-COPY .htaccess /var/www/html/.htaccess
+# .htaccessのコピー（現在は無効化中のためコメントアウト）
+# COPY .htaccess /var/www/html/.htaccess
 
 # 必要なディレクトリを作成
 RUN mkdir -p file/image file/tmp file/page file/reminder logs tdb \
