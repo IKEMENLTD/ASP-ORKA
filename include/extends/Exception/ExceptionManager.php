@@ -50,15 +50,22 @@
 			{
 				ob_start();
 
-				System::$head = false;
-				System::$foot = false;
+				// PHP 8 compatibility: Check if System class exists
+				if (class_exists('System')) {
+					System::$head = false;
+					System::$foot = false;
+				}
 
 				if( $_GET[ 'type' ] && !is_array( $_GET[ 'type' ] ) && $gm[ $_GET[ 'type' ] ] )
 					$tGM = SystemUtil::getGMforType( $_GET[ 'type' ] );
 				else
 					$tGM = SystemUtil::getGMforType( 'system' );
 
-				print System::getHead( $gm , $loginUserType , $loginUserRank );
+				// PHP 8 compatibility: Check if System class and globals exist
+				if (class_exists('System') && isset($gm, $loginUserType, $loginUserRank))
+					print System::getHead( $gm , $loginUserType , $loginUserRank );
+				else
+					echo "<!DOCTYPE html><html><head><title>System Error</title></head><body><h1>System Error</h1>";
 
 				//例外オブジェクトのテンプレートを検索する
 				
@@ -82,15 +89,23 @@
 						Template::drawErrorTemplate();
 				}
 
-				print System::getFoot( $gm , $loginUserType , $loginUserRank );
-
-				System::flush();
+				// PHP 8 compatibility: Check if System class exists before using it
+				if (class_exists('System') && isset($gm, $loginUserType, $loginUserRank)) {
+					print System::getFoot( $gm , $loginUserType , $loginUserRank );
+					System::flush();
+				} else {
+					echo "</body></html>";
+				}
 			}
 			catch( Exception $e_ )
 			{
 				ob_end_clean();
 
-				print System::getHead( $gm , $loginUserType , $loginUserRank );
+				// PHP 8 compatibility: Check if System class and globals exist
+				if (class_exists('System') && isset($gm, $loginUserType, $loginUserRank))
+					print System::getHead( $gm , $loginUserType , $loginUserRank );
+				else
+					echo "<!DOCTYPE html><html><head><title>System Error</title></head><body><h1>System Error</h1>";
 				Template::drawErrorTemplate();
 				print System::getFoot( $gm , $loginUserType , $loginUserRank );
 				System::flush();
