@@ -31,12 +31,48 @@
 		}
 		//パラメータチェックここまで
 
-		// WORKAROUND MOVED: Template must exist BEFORE System::getHead() is called
-	// (Original workaround code moved here from after System::getSystem)
+		// WORKAROUND: Ensure templates exist for nUser registration
 	if ($_GET['type'] == 'nUser' && ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE)) {
 		$tgm = SystemUtil::getGMforType("template");
 		$tdb = $tgm->getDB();
 
+		// Add HEAD_DESIGN template for nobody users
+		$check_head = $tdb->getTable();
+		$check_head = $tdb->searchTable($check_head, 'user_type', '==', '//');
+		$check_head = $tdb->searchTable($check_head, 'label', '==', 'HEAD_DESIGN');
+
+		if ($tdb->getRow($check_head) == 0) {
+			$new_head = $tdb->getNewRecord();
+			$tdb->setData($new_head, 'id', '997');
+			$tdb->setData($new_head, 'user_type', '//');
+			$tdb->setData($new_head, 'target_type', '');
+			$tdb->setData($new_head, 'activate', 15);
+			$tdb->setData($new_head, 'owner', 2);
+			$tdb->setData($new_head, 'label', 'HEAD_DESIGN');
+			$tdb->setData($new_head, 'file', 'pc/include/HeadNobody.html');
+			$tdb->setData($new_head, 'sort', 997);
+			$tdb->addRecord($new_head);
+		}
+
+		// Add FOOT_DESIGN template for nobody users
+		$check_foot = $tdb->getTable();
+		$check_foot = $tdb->searchTable($check_foot, 'user_type', '==', '//');
+		$check_foot = $tdb->searchTable($check_foot, 'label', '==', 'FOOT_DESIGN');
+
+		if ($tdb->getRow($check_foot) == 0) {
+			$new_foot = $tdb->getNewRecord();
+			$tdb->setData($new_foot, 'id', '998');
+			$tdb->setData($new_foot, 'user_type', '//');
+			$tdb->setData($new_foot, 'target_type', '');
+			$tdb->setData($new_foot, 'activate', 15);
+			$tdb->setData($new_foot, 'owner', 2);
+			$tdb->setData($new_foot, 'label', 'FOOT_DESIGN');
+			$tdb->setData($new_foot, 'file', 'pc/include/Foot.html');
+			$tdb->setData($new_foot, 'sort', 998);
+			$tdb->addRecord($new_foot);
+		}
+
+		// Add REGIST_FORM_PAGE_DESIGN template
 		$check_table = $tdb->getTable();
 		$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
 		$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
