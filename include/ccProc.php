@@ -53,7 +53,7 @@
 		}
 		
 		// テンプレートに関連付けられたレコードの引数で指定されたカラムの内容を出力する。
-		function value(&$gm, $rec, $cc)
+		static function value(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			if( !isset($gm) ) { throw new InternalErrorException( 'CommandComment Null Pointer Error -> $gm ( via value )' ); }
@@ -128,7 +128,7 @@
 				フル構文のtoは省略可能
 				singleを指定すると1つマッチした時点で変換を終了する
 		*/
-		function convert( &$iGM , $iRec , $iArgs ) //
+		static function convert( &$iGM , $iRec , $iArgs ) //
 		{
 			$db = $iGM->getDB();
 
@@ -153,7 +153,7 @@
 				フル構文のtoは省略可能
 				singleを指定すると1つマッチした時点で変換を終了する
 		*/
-		function convertString( &$iGM , $iRec , $iArgs ) //
+		static function convertString( &$iGM , $iRec , $iArgs ) //
 		{
 			global $TABLE_NAME;
 
@@ -270,7 +270,7 @@
 		}
 
 		// テンプレートに関連づいたレコードから指定したカラムの値を抜きだし、存在する場合はそれを画像のパスとしてimgタグに受け渡し表示する。
-		function object(&$gm, $rec, $cc)
+		static function object(&$gm, $rec, $cc)
 		{
 			global $IMAGE_NOT_FOUND;
 			global $IMAGE_NOT_FOUND_SRC;
@@ -471,7 +471,7 @@
 		}
 		
 		// formを出力する。
-		function form(&$gm, $rec, $cc)
+		static function form(&$gm, $rec, $cc)
 		{
 			global $FileBase;
 
@@ -1010,7 +1010,7 @@
 			@remarks
 				フル構文のtoは省略可能
 		*/
-		function build( &$iGM , $iRec , $iArgs ) //
+		static function build( &$iGM , $iRec , $iArgs ) //
 		{
 			global $TABLE_NAME;
 
@@ -1172,7 +1172,7 @@
 			@remarks
 				フル構文のtoは省略可能
 		*/
-		function repeat( &$iGM , $iRec , $iArgs ) //
+		static function repeat( &$iGM , $iRec , $iArgs ) //
 		{
 			global $TABLE_NAME;
 
@@ -1297,7 +1297,7 @@
 			@remarks
 				フル構文のtoは省略可能
 		*/
-		function repeatString( &$iGM , $iRec , $iArgs ) //
+		static function repeatString( &$iGM , $iRec , $iArgs ) //
 		{
 			array_shift( $iArgs );
 
@@ -1326,7 +1326,7 @@
 		}
 
 		// 初期値がエスケープされた要素と一致しないため初期値をエスケープデータにする
-		function initEscape( $str )
+		static function initEscape( $str )
 		{
 			if( !is_array($str) )
 			{
@@ -1345,7 +1345,7 @@
 		}
 		
 		// テンプレートの表示に使用されるGUIManagerのインスタンスに設定した値を出力出来る。 
-		function variable(&$gm, $rec, $cc)
+		static function variable(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			if(  is_null( $gm->variable[$cc[1]] )  ) { throw new InternalErrorException( 'CommandComment Null Pointer Error -> variable : '. $cc[1] ); }
@@ -1355,7 +1355,7 @@
 		}
 		// テンプレートの表示に使用されるGUIManagerのインスタンスに設定した値を出力出来る。 
 		// 未設定でもエラー出力がされない。
-		function safeVariable(&$gm, $rec, $cc)
+		static function safeVariable(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			if( isset($gm->variable[ $cc[1] ]) && ! is_null( $gm->variable[ $cc[1] ] )  )	{ $ret	 .= $gm->variable[ $cc[1] ]; }
@@ -1369,7 +1369,7 @@
 				書き込み : <!--# memo write 値 to 変数名 #-->
 				読み込み : <!--# memo read 変数名 #-->
 		*/
-		function memo( &$gm , $rec , $cc ) //
+		static function memo( &$gm , $rec , $cc ) //
 		{
 			array_shift( $cc );
 
@@ -1410,7 +1410,7 @@
 		}
 		
 		// テンプレートを表示しようとしているページへのリクエストで渡されたGETパラメータを表示出来る。
-		function get(&$gm, $rec, $cc)
+		static function get(&$gm, $rec, $cc)
 		{
 			array_shift( $cc );
 			List( $name , $index ) = $cc;
@@ -1438,7 +1438,7 @@
 
 		
 		// テンプレートを表示しようとしているページへのリクエストで渡されたPOSTパラメータを表示出来る。
-		function post( &$gm , $rec , $cc )
+		static function post( &$gm , $rec , $cc )
 		{
 			array_shift( $cc );
 			List( $name , $index ) = $cc;
@@ -1465,7 +1465,7 @@
 		}
 /*
 		// $_SESSIONの値を出力
-		function session(&$gm, $rec, $cc)
+		static function session(&$gm, $rec, $cc)
 		{
 			if( is_array( $_SESSION[$cc[1]] ) )
 			{
@@ -1479,7 +1479,7 @@
 */
 
 		// $_REQUESTの値を出力
-		function request(&$gm, $rec, $cc)
+		static function request(&$gm, $rec, $cc)
 		{
 			$ret = '';
 			if( is_array( $_REQUEST[$cc[1]] ) )
@@ -1493,7 +1493,7 @@
 		}
 		
 		// valueでtimestampを表示する場合に使用するformatを指定出来る。
-		function setTimeFormat(&$gm, $rec, $cc)
+		static function setTimeFormat(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$gm->setTimeFormat(  str_replace(  Array( "!CODE000;","!CODE001;"), Array("/"," ") , $cc[1]) );
@@ -1501,7 +1501,7 @@
 			return $ret;
 		}
 
-		function setTimeFormatOnce(&$gm, $rec, $cc)
+		static function setTimeFormatOnce(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$gm->setTimeFormatOnce(  str_replace(  Array( "!CODE000;","!CODE001;"), Array("/"," ") , $cc[1]) );
@@ -1510,7 +1510,7 @@
 		}
 
 		// ユーザー情報を出力
-		function login(&$gm, $rec, $cc)
+		static function login(&$gm, $rec, $cc)
 		{
 			global $NOT_LOGIN_USER_TYPE;
 			global $loginUserType;
@@ -1535,7 +1535,7 @@
 		}
 
 		// Command.phpで定義されているコメントコマンドを呼び出す事が出来る。
-		function code(&$gm, $rec, $cc)
+		static function code(&$gm, $rec, $cc)
 		{
 			$ret  = "";
 			$args = array_slice($cc,2);
@@ -1547,7 +1547,7 @@
 		}
 
 		// Extension.phpで定義されているコメントコマンドを呼び出す事が出来る。
-		function ecode(&$gm, $rec, $cc)
+		static function ecode(&$gm, $rec, $cc)
 		{
 			$ret  = "";
 			$args = array_slice($cc,2);
@@ -1560,7 +1560,7 @@
 
 		
 		// System.php内のSystemクラスで定義されているコメントコマンドを呼び出す事が出来る。
-		function syscode(&$gm, $rec, $cc)
+		static function syscode(&$gm, $rec, $cc)
 		{
 			$ret  = "";
 			$args = array_slice($cc,2);
@@ -1574,7 +1574,7 @@
 		}
 
 		// ./module/以下に設置され./module/module.phpによりincludeされたモジュールファイル内で定義されたモジュールクラス内のメソッドを呼び出す事が可能。
-		function mod(&$gm, $rec, $cc)
+		static function mod(&$gm, $rec, $cc)
 		{
 			$ret  = "";
 			$args = array_slice($cc,3);
@@ -1593,7 +1593,7 @@
 		}
 
 		// ./custom/view以下に設置されてincludeされたモジュールファイル内で定義されたモジュールクラス内のメソッドを呼び出す事が可能。
-		function view(&$gm, $rec, $cc)
+		static function view(&$gm, $rec, $cc)
 		{
 			global $view_path;
 
@@ -1627,7 +1627,7 @@
 		}
 
 		// 引数に与えられた文字を計算式として解釈し、計算結果を返す。
-		function calc(&$gm, $rec, $cc)
+		static function calc(&$gm, $rec, $cc)
 		{
 			$ret  = "";
 			$calc = join('',array_slice($cc,1));
@@ -1640,7 +1640,7 @@
 		}
 
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値に含まれる半角スペースをエスケープした結果を返す。
-		function escp(&$gm, $rec, $cc)
+		static function escp(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$cc  = array_slice($cc,1);
@@ -1649,7 +1649,7 @@
 			return $ret;
 		}
 
-		function ent(&$gm, $rec, $cc)
+		static function ent(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$cc  = array_slice($cc,1);
@@ -1658,7 +1658,7 @@
 		}
 
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値をint型にcastして返す。
-		function int(&$gm, $rec, $cc)
+		static function int(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$cc  = array_slice($cc,1);
@@ -1667,7 +1667,7 @@
 			return $ret;
 		}
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値をint型にcastして返す。
-		function bool(&$gm, $rec, $cc)
+		static function bool(&$gm, $rec, $cc)
 		{
 			$ret			 = "";
 			$cc = array_slice($cc,1);
@@ -1676,7 +1676,7 @@
 			return $ret;
 		}
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値をurlencodeして返す。
-		function urlenc(&$gm, $rec, $cc)
+		static function urlenc(&$gm, $rec, $cc)
 		{
 			$ret			 = "";
 			$cc = array_slice($cc,1);
@@ -1695,7 +1695,7 @@
 		}
 
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値の第1引数に指定された文字を第2引数に指定された文字に置換して返す。
-		function rep(&$gm, $rec, $cc)
+		static function rep(&$gm, $rec, $cc)
 		{
 			$ret			 = "";
 			$search = $cc[1];
@@ -1707,7 +1707,7 @@
 		}
 
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値の数値にカンマを付加する。
-		function comma( &$gm , $rec , $cc ) //
+		static function comma( &$gm , $rec , $cc ) //
 		{
 			$ret = '';
 			$cc  = array_slice( $cc , 1 );
@@ -1718,7 +1718,7 @@
 		}
 
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値のURLをリンクにする。
-		function urlLink( &$gm , $rec , $cc ) //
+		static function urlLink( &$gm , $rec , $cc ) //
 		{
 			$ret = '';
 			$cc  = array_slice( $cc , 1 );
@@ -1735,7 +1735,7 @@
 		 * このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値が空の場合に第一引数の値を出力する。
 		 *
 		 */
-		function sub(&$gm, $rec, $cc)
+		static function sub(&$gm, $rec, $cc)
 		{
 
 			$ret			 = "";
@@ -1750,7 +1750,7 @@
 		}
 		
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、戻り値のタグを除去する。
-		function striptag( &$gm , $rec , $cc ) //
+		static function striptag( &$gm , $rec , $cc ) //
 		{
 			$ret = '';
 			$cc = array_slice( $cc , 1 );
@@ -1761,7 +1761,7 @@
 		}
 		
 		// このコマンドは他のコマンドの前に付ける形で利用する事により、出力結果を簡易的にキャッシュする。
-		function cache( &$gm , $rec , $cc ) //
+		static function cache( &$gm , $rec , $cc ) //
 		{
 			$ret  = '';
 			$time = $cc[ 1 ];
@@ -1784,7 +1784,7 @@
 			@brief     CCの実行を非同期指定する。
 			@attention ターゲットレコード等の設定の問題で、同期実行とは異なる結果が返る可能性があります。
 		*/
-		function async( &$gm , $rec , $cc ) //
+		static function async( &$gm , $rec , $cc ) //
 		{
             global $controllerName;
 			TemplateCache::$NoCache = true;
@@ -1810,7 +1810,7 @@
 		}
 		
 		// $cc の内容を連結して出力
-		function join(&$gm, $rec, $cc)
+		static function join(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			$cc  = array_slice($cc,1);
@@ -1820,7 +1820,7 @@
 		}
 
 		// 引数に与えられた文字を変数として解釈し、中身を返す。
-		function val(&$gm, $rec, $cc)
+		static function val(&$gm, $rec, $cc)
 		{
 			$ret = "";
 			
@@ -1840,7 +1840,7 @@
 			
 		// このコマンドは他のtemplateをtemplate内に展開する事が出来る。
 		// ただし、templateテーブルに「INCLUDE_DESIGN」ラベルを設定されたものに限る。
-		function drawDesign(&$gm, $rec, $cc)
+		static function drawDesign(&$gm, $rec, $cc)
 		{
 			global $loginUserType;
 			global $NOT_LOGIN_USER_TYPE;
@@ -1867,7 +1867,7 @@
 			return $ret;
 		}
 
-		function drawAdapt(&$gm, $rec, $cc)
+		static function drawAdapt(&$gm, $rec, $cc)
 		{
 			global $loginUserType;
 			global $NOT_LOGIN_USER_TYPE;
@@ -1897,7 +1897,7 @@
 		}
 		
 		//内部変換テーブルに従って絵文字を出力する
-		function emoji(&$gm, $rec, $cc){
+		static function emoji(&$gm, $rec, $cc){
 			global $EMOJI_CHARSET_MAP;
 			global $terminal_type;
 
@@ -1923,7 +1923,7 @@
 			@attension コマンドコメントは個別にweaveに対応する必要があります。\n
 			           挿入パラメータの取得にはWeaveクラスを使用してください。
 		*/
-		function weave( &$iGM_ , $iRec_ , $iCC_ )
+		static function weave( &$iGM_ , $iRec_ , $iCC_ )
 		{
 			List( $ccName , $paramName , $paramValue , $targetName , $paramLife ) = $iCC_;
 
@@ -1961,7 +1961,7 @@
 			@param[in] $iRec_ レコードデータ。
 			@param[in] $iCC_  コマンドコメントパラメータ。
 		*/
-		function clearWeave( &$iGM_ , $iRec_ , $iCC_ )
+		static function clearWeave( &$iGM_ , $iRec_ , $iCC_ )
 		{
 			List( $ccName , $paramName , $targetName ) = $iCC_;
 
@@ -1980,7 +1980,7 @@
         //templateの条件付きパーサー
         //C言語の条件付きコンパイル(#ifdef)みたいなもの
         //@return boolean(true/false)
-        function ifbegin(&$gm, $rec, $cc)
+        static function ifbegin(&$gm, $rec, $cc)
 		{
 			global $PASSWORD_MODE;
 			global $REMINDER_MODE;
