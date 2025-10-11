@@ -9,9 +9,9 @@ echo "<pre style='background:#f5f5f5;padding:20px;'>";
 $logFile = 'logs/error.log';
 
 if (file_exists($logFile)) {
-    echo "=== Last 100 lines of error.log ===\n\n";
+    echo "=== Last 200 lines of error.log ===\n\n";
     $lines = file($logFile);
-    $lastLines = array_slice($lines, -100);
+    $lastLines = array_slice($lines, -200);
     echo htmlspecialchars(implode('', $lastLines));
 } else {
     echo "Error log file not found at: $logFile\n";
