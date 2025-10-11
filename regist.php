@@ -23,19 +23,17 @@
 
 		// ULTRA DEBUG: Check if we're handling nUser
 		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
-			error_log("===== REGIST.PHP START =====");
-			error_log("GET[type] = '" . $_GET['type'] . "'");
-			error_log("GET[type] length = " . strlen($_GET['type']));
-			error_log("Strcmp with 'nUser': " . strcmp($_GET['type'], 'nUser'));
-
-			// Output to browser for immediate feedback
+			ob_end_clean(); // Clear buffer to show debug output
+			echo "<!DOCTYPE html><html><head><title>DEBUG</title></head><body>";
 			echo "<div style='background: #ff0; padding: 20px; margin: 20px; border: 3px solid #f00;'>";
-			echo "<h2>DEBUG: regist.php nUser</h2>";
+			echo "<h2>DEBUG: regist.php nUser - LINE 25</h2>";
 			echo "<p><strong>GET[type]:</strong> '" . htmlspecialchars($_GET['type']) . "'</p>";
 			echo "<p><strong>Length:</strong> " . strlen($_GET['type']) . "</p>";
 			echo "<p><strong>Comparison (==):</strong> " . (($_GET['type'] == 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
 			echo "<p><strong>Comparison (===):</strong> " . (($_GET['type'] === 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
 			echo "</div>";
+			echo "</body></html>";
+			die(); // Stop execution here to see if we reach this point
 		}
 
 		// Skip access checks for nUser (public registration)
