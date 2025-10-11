@@ -135,7 +135,18 @@ class SQLDatabaseBase implements DatabaseBase
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("getRecord() : SQL MESSAGE ERROR. \n");
+			// PHP 8 compatibility: Enhanced error message with SQL query and actual error
+			$sql_query = isset($table) ? $table->getString() : 'unknown';
+			$last_error = '';
+			if (function_exists('pg_last_error') && isset($this->connect)) {
+				$last_error = pg_last_error($this->connect);
+			}
+			throw new InternalErrorException(
+				"getRecord() : SQL MESSAGE ERROR\n" .
+				"Table: {$this->tableName}\n" .
+				"SQL: {$sql_query}\n" .
+				"Error: {$last_error}\n"
+			);
 		}
 
 		if($this->getRow($table) != 0){
