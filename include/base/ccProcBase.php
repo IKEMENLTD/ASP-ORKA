@@ -350,9 +350,9 @@
             if( count( $param ) )
 			{
 				if( !$option )
-					{ $option = ' ' . implode( '¥ ' , $param ); }
+					{ $option = ' ' . implode( '\ ' , $param ); }
 				else
-					{ $option .= '¥ ' . implode( '¥ ' , $param ); }
+					{ $option .= '\ ' . implode( '\ ' , $param ); }
 			}
 
 
@@ -479,19 +479,19 @@
             $ptable = $pdb->getTable();
             $prow = $pdb->getRow( $ptable );
 
-            $str = '<select name="'.$args[0].'" >'."¥n";
+            $str = '<select name="'.$args[0].'" >'."\n";
 
             if( isset($args[8]) ){
-                $str .= '  <optgroup label="'.$args[8].'" >'."¥n";
+                $str .= '  <optgroup label="'.$args[8].'" >'."\n";
 
-                $str .= '    <option value="" >'.$args[8]."¥n";
-                $str .= '  </optgroup>'."¥n";
+                $str .= '    <option value="" >'.$args[8]."\n";
+                $str .= '  </optgroup>'."\n";
             }
 
             for($i=0;$i<$prow;$i++){
                 $prec = $pdb->getRecord( $ptable , $i );
 
-                $str .= '  <optgroup label="'.$pdb->getData( $prec , $args[2] ).'" >'."¥n";
+                $str .= '  <optgroup label="'.$pdb->getData( $prec , $args[2] ).'" >'."\n";
 
                 $ctable = $cdb->searchTable( $cdb->getTable() , $args[6] , '=' , $pdb->getData( $prec , 'id' ) );
                 $crow = $cdb->getRow( $ctable );
@@ -501,14 +501,14 @@
                     $option = $cdb->getData( $crec , $args[4] );
                     $value = $cdb->getData( $crec , $args[5] );
                     if( $check == $value )
-                        $str .= '    <option value="'.$value.'" selected="selected">'.$option."¥n";
+                        $str .= '    <option value="'.$value.'" selected="selected">'.$option."\n";
                     else
-                        $str .= '    <option value="'.$value.'" >'.$option."¥n";
+                        $str .= '    <option value="'.$value.'" >'.$option."\n";
                 }
-                $str .= '  </optgroup>'."¥n";
+                $str .= '  </optgroup>'."\n";
             }
 
-            $str .= '</select>'."¥n";
+            $str .= '</select>'."\n";
 
             $this->addBuffer( $str );
         }
@@ -556,16 +556,16 @@
                 $param[$i+1]['parent'] = $args[ 7 + $i*3 ];
             }
 
-            $str = '<select name="'.$args[0].'" >'."¥n";
+            $str = '<select name="'.$args[0].'" >'."\n";
 
 
             if( isset($args[2]) ){
-                $str .= '    <option value="" >'.$args[2]."¥n";
+                $str .= '    <option value="" >'.$args[2]."\n";
             }
 
             groupTableSelectFormMultiReflexive( $str, $param , $check );
 
-            $str .= '</select>'."¥n";
+            $str .= '</select>'."\n";
 
             $this->addBuffer( $str );
         }
@@ -604,17 +604,17 @@
             $ptable = $pdb->getTable();
             $prow = $pdb->getRow( $ptable );
 
-            $str = '<select name="'.$args[0].'" >'."¥n";
+            $str = '<select name="'.$args[0].'" >'."\n";
 
             if( isset($args[8]) ){
-                $str .= '    <option value="" >'.$args[8]."¥n";
+                $str .= '    <option value="" >'.$args[8]."\n";
             }
 
             for($i=0;$i<$prow;$i++){
                 $prec = $pdb->getRecord( $ptable , $i );
 
                 $pid = $pdb->getData( $prec , 'id' );
-                $str .= '  <option value="'.$pid.'" >'.$pdb->getData( $prec , $args[2] )."¥n";
+                $str .= '  <option value="'.$pid.'" >'.$pdb->getData( $prec , $args[2] )."\n";
 
                 $ctable = $cdb->searchTable( $cdb->getTable() , $args[6] , '=' , $pid );
                 $crow = $cdb->getRow( $ctable );
@@ -624,13 +624,13 @@
                     $option = "　".$cdb->getData( $crec , $args[4] );
                     $value = $cdb->getData( $crec , $args[5] );
                     if( $check == $value )
-                        $str .= '    <option value="'.$value.'" selected="selected">'.$option."¥n";
+                        $str .= '    <option value="'.$value.'" selected="selected">'.$option."\n";
                     else
-                        $str .= '    <option value="'.$value.'" >'.$option."¥n";
+                        $str .= '    <option value="'.$value.'" >'.$option."\n";
                 }
             }
 
-            $str .= '</select>'."¥n";
+            $str .= '</select>'."\n";
 
             $this->addBuffer( $str );
         }
@@ -677,16 +677,16 @@
                 $param[$i+1]['parent'] = $args[ 7 + $i*3 ];
             }
 
-            $str = '<select name="'.$args[0].'" >'."¥n";
+            $str = '<select name="'.$args[0].'" >'."\n";
 
 
             if( isset($args[2]) ){
-                $str .= '    <option value="" >'.$args[2]."¥n";
+                $str .= '    <option value="" >'.$args[2]."\n";
             }
 
             searchGroupTableFormMultiReflexive( $str, $param , $check );
 
-            $str .= '</select>'."¥n";
+            $str .= '</select>'."\n";
 
             $this->addBuffer( $str );
         }
@@ -916,7 +916,7 @@
 					$output = $gm->getCCResult( null , '<!--# adapt ' . $query[ 'listingID' ] . '_empty #-->' );
 
 					if( $output ) //出力内容がある場合
-						{ $this->addBuffer( $output . "¥n" ); }
+						{ $this->addBuffer( $output . "\n" ); }
 				}
 				else //テーブルからレコードが取れる場合
 				{
@@ -927,7 +927,7 @@
 					if( $query[ 'source_nobr' ] ) //ソースの改行無効指定がある場合
 						{ $this->addBuffer( $gm->getCCResult( $rec , '<!--# adapt ' . $query[ 'listingID' ] . ' #-->' ) ); }
 					else
-						{ $this->addBuffer( $gm->getCCResult( $rec , '<!--# adapt ' . $query[ 'listingID' ] . ' #-->' ) . "¥n" ); }
+						{ $this->addBuffer( $gm->getCCResult( $rec , '<!--# adapt ' . $query[ 'listingID' ] . ' #-->' ) . "\n" ); }
 
 					$db->cashReset();
 				}
@@ -965,7 +965,7 @@
 				if( $sourceNoBR ) //ソースの改行無効指定がある場合
 					{ $this->addBuffer( $iGM->getCCResult( $iRec , '<!--# adapt ' . $listingID . ' #-->' ) ); }
 				else
-					{ $this->addBuffer( $iGM->getCCResult( $iRec , '<!--# adapt ' . $listingID . ' #-->' ) . "¥n" ); }
+					{ $this->addBuffer( $iGM->getCCResult( $iRec , '<!--# adapt ' . $listingID . ' #-->' ) . "\n" ); }
 			}
 		}
 

@@ -49,7 +49,7 @@
 		static $CC_AND = '&AND&';
 
 		static $escape_symbol_array = array("!CODE001;","!CODE101;","!CODE000;","!CODE002;","!CODE005;","!CODE006;");
-		static $escape_chara_array = array(" ", " ", "/", "¥¥",'!--# ',' #--');
+		static $escape_chara_array = array(" ", " ", "/", "\\",'!--# ',' #--');
 
 		static $syntax_list = array( 'read', 'endif', 'else', 'ifbegin', 'case', 'switch', 'endswitch', 'default' ); //※'break'は含まない。
 		/**
@@ -144,8 +144,8 @@
 						if(  isset( $tmp[$LST_CLM_REGEX] )  )
 						{
 							$tmp[$LST_CLM_REGEX] = str_replace( '<>' , ',' , $tmp[$LST_CLM_REGEX] );
-							$tmp[$LST_CLM_REGEX] = str_replace( '¥¥<' , '<' , $tmp[$LST_CLM_REGEX] );
-							$tmp[$LST_CLM_REGEX] = str_replace( '¥¥>' , '>' , $tmp[$LST_CLM_REGEX] );
+							$tmp[$LST_CLM_REGEX] = str_replace( '\\<' , '<' , $tmp[$LST_CLM_REGEX] );
+							$tmp[$LST_CLM_REGEX] = str_replace( '\\>' , '>' , $tmp[$LST_CLM_REGEX] );
 							$this->colRegex[  trim( $tmp[$LST_CLM_NAME] )  ]	 = trim( $tmp[$LST_CLM_REGEX] );
 						}
 						else{ $this->colRegex[  trim( $tmp[$LST_CLM_NAME] )  ]	 = ""; }
@@ -361,12 +361,12 @@
 			}
 
 			$buffer	 = "";
-			if(  isset( $jump )  )	{ $buffer	 .= '<form name="sys_form" method="'.$this->form_method.'" action="'. $jump .'" '. $enctype .' style="margin: 0px 0px;">'. "¥n"; }
+			if(  isset( $jump )  )	{ $buffer	 .= '<form name="sys_form" method="'.$this->form_method.'" action="'. $jump .'" '. $enctype .' style="margin: 0px 0px;">'. "\n"; }
 
 			$buffer	 .= $this->addForm;
 			$this->addForm = "";
 			$buffer	 .= $this->getString($html, $rec, $partkey);
-			if(  isset( $jump )  )	{ $buffer	 .= '</form>'. "¥n"; }
+			if(  isset( $jump )  )	{ $buffer	 .= '</form>'. "\n"; }
 			return $buffer;
 		}
 
@@ -414,10 +414,10 @@
 		{
 			if( is_bool($val) )
 			{
-				if( $val )	{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="TRUE" />'. "¥n"; }
-				else		{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="FALSE" />'. "¥n"; }
+				if( $val )	{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="TRUE" />'. "\n"; }
+				else		{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="FALSE" />'. "\n"; }
 			}
-			else	{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="'. h( $val ) .'" />'. "¥n"; }
+			else	{ $this->addForm .= '<input name="'. $name .'" type="hidden" value="'. h( $val ) .'" />'. "\n"; }
 		}
 
 		/**
@@ -566,9 +566,9 @@
 
 				//$buffer = mb_convert_encoding( $buffer,'UTF-8','SJIS');
 
-				$buffer		 = str_replace( "¥¥¥¥", "!CODE002;", $buffer );
-				$buffer		 = str_replace( "¥/", "!CODE000;", $buffer );
-				$buffer		 = str_replace( "¥ ", "!CODE001;", $buffer );
+				$buffer		 = str_replace( "\\\\", "!CODE002;", $buffer );
+				$buffer		 = str_replace( "\/", "!CODE000;", $buffer );
+				$buffer		 = str_replace( "\ ", "!CODE001;", $buffer );
 
 				//$buffer = mb_convert_encoding( $buffer,'SJIS','UTF-8');
 
@@ -638,9 +638,9 @@
 
 		function getCCResult($rec, $command)
 		{
-			$command = str_replace( "¥¥¥¥", "!CODE002;", $command );//¥¥にマッチ
-			$command = str_replace( "¥/", "!CODE000;", $command );
-			$command = str_replace( "¥ ", "!CODE001;", $command );
+			$command = str_replace( "\\\\", "!CODE002;", $command );//\\にマッチ
+			$command = str_replace( "\/", "!CODE000;", $command );
+			$command = str_replace( "\ ", "!CODE001;", $command );
 
 		    $state = self::getDefState( true );
 			$str	 = trim(  GUIManager::commandComment( $command. " ", $this, $rec, $state , $c_part = null )  );
@@ -725,12 +725,12 @@
 					// もし このスタックが begin-end系のコメントコマンドに挟まれた下階層であり、挟まれている事により非表示である場合。
 					if( $state['no'] && $zStack[ $j ] < $i && count($current) ){
 						//この行の表示状態が非表示なら 空文字に置換する。
-						$stack[ $j ] = "¥0";
+						$stack[ $j ] = "\0";
 					}
 
 					if(  $zStack[ $j ] == $i  )
 					{
-						if( $stack[ $j ] !== "¥0" && strlen( $stack[ $j ] ) > 0  )
+						if( $stack[ $j ] !== "\0" && strlen( $stack[ $j ] ) > 0  )
 						{
 							if(   strpos(  $stack[ $j ], self::$CC_HEAD  ) !== false && strpos(  $stack[ $j ], self::$CC_FOOT  ) !== false   )
 							{ $command	 = substr(  $stack[ $j ], strlen( self::$CC_HEAD ), strlen( $stack[$j] ) - strlen( self::$CC_HEAD ) - strlen( self::$CC_FOOT )  ); }
@@ -916,7 +916,7 @@
 	                                array_pop( $current);
                                     break;
                             }
-						}//if( $stack[ $j ] !== "¥0" && strlen( $stack[ $j ] ) > 0  )
+						}//if( $stack[ $j ] !== "\0" && strlen( $stack[ $j ] ) > 0  )
 					}//if(  $zStack[ $j ] == $i  )
 				}//for( $j=0; $j<count($stack); $j++ )
 
@@ -930,7 +930,7 @@
 
 	                for( $k=0; $k<count($stack); $k++ )
 	                {
-	                    if(   trim(  $stack[ $k ], "¥n¥r"  ) == "¥0" )	{ continue; }
+	                    if(   trim(  $stack[ $k ], "\n\r"  ) == "\0" )	{ continue; }
 
 	                    if( !$draw_b )
 	                    {
@@ -948,7 +948,7 @@
                 $z	 = -1;
                 for( $k=0; $k<count($stack); $k++ )
                 {
-                    if(   trim(  $stack[ $k ], "¥n¥r"  ) == "¥0" )	{ continue; }
+                    if(   trim(  $stack[ $k ], "\n\r"  ) == "\0" )	{ continue; }
 
                     if( $z == $zStack[ $k ] )
                     {
@@ -958,7 +958,7 @@
                             $stack[ $l ]		 = isset($stack[ $l + 1 ]) ? $stack[ $l + 1 ] : '';
                             $zStack[ $l ]		 = isset($zStack[ $l + 1 ]) ? $zStack[ $l + 1 ]: '';
                         }
-                        $stack[ count($stack) - 1 ]		 = "¥0";
+                        $stack[ count($stack) - 1 ]		 = "\0";
                         $zStack[ count($stack) - 1 ]	 = 0;
                         $k--;
                     }

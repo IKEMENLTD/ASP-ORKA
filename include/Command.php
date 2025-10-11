@@ -883,7 +883,7 @@
           * 0:エスケープを行う文字列
           */
          function spaceEscape( &$gm , $rec , $args ){
-             $this->addBuffer( join( '¥ ' , $args) );
+             $this->addBuffer( join( '\ ' , $args) );
          }
 
          function urlencode( &$gm , $rec , $args ){
@@ -899,15 +899,15 @@
           */
 		function linkText( &$gm , $rec , $args )
 		{
-			$re = "¥b(?:https?|shttp):¥/¥/(?:(?:[-_.!‾*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f" .
-			      "][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?¥.)" .
-			      "*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?¥.?|[0-9]+¥.[0-9]+¥.[0-9]+¥." .
-			      "[0-9]+)(?::[0-9]*)?(?:¥/(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]" .
-			      "[0-9A-Fa-f])*(?:;(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-" .
-			      "Fa-f])*)*(?:¥/(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f" .
-			      "])*(?:;(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)" .
-			      "*)?(?:¥?(?:[-_.!‾*'()a-zA-Z0-9;¥/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])" .
-			      "*)?(?:#(?:[-_.!‾*'()a-zA-Z0-9;¥/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)?";
+			$re = "\b(?:https?|shttp):\/\/(?:(?:[-_.!~*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f" .
+			      "][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.)" .
+			      "*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.?|[0-9]+\.[0-9]+\.[0-9]+\." .
+			      "[0-9]+)(?::[0-9]*)?(?:\/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]" .
+			      "[0-9A-Fa-f])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-" .
+			      "Fa-f])*)*(?:\/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f" .
+			      "])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)" .
+			      "*)?(?:\?(?:[-_.!~*'()a-zA-Z0-9;\/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])" .
+			      "*)?(?:#(?:[-_.!~*'()a-zA-Z0-9;\/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)?";
 
 			$str = preg_replace( '/(' . $re . ')/' , '<a href="$1" ' . $args[ 1 ] . '>$1</a>' , $args[ 0 ] );
 
@@ -992,8 +992,8 @@
 			if( $args[0] != '' ) { $sort	 =  $args[0]; }
 
 			$url	 = basename($_SERVER['SCRIPT_NAME']).'?'.SystemUtil::getUrlParm($_GET);
-			$url	 = preg_replace("/&sort=¥w+/", "",$url);
-			$url	 = preg_replace("/&sort_PAL=¥w+/", "",$url);
+			$url	 = preg_replace("/&sort=\w+/", "",$url);
+			$url	 = preg_replace("/&sort_PAL=\w+/", "",$url);
 			$url	.= '&sort='.$sort.'&sort_PAL=';
             if( isset($args[1]) && strlen($args[1]) ){
                  $url	 .= $args[1];
@@ -1623,20 +1623,20 @@
         function js_load(&$gm, $rec, $cc){
             list($file) = $cc;
             if( strpos($file,'http') === 0 || strpos($file,'//') === 0 ){
-                $this->addBuffer( '<script type="text/javascript" src="'.$file.'"></script>'."¥n" );
+                $this->addBuffer( '<script type="text/javascript" src="'.$file.'"></script>'."\n" );
             }else{
                 $ts = filemtime($file);
-                $this->addBuffer( '<script type="text/javascript" src="'.$file.'?'.$ts.'"></script>'."¥n" );
+                $this->addBuffer( '<script type="text/javascript" src="'.$file.'?'.$ts.'"></script>'."\n" );
             }
         }
 
         function css_load(&$gm, $rec, $cc){
             list($file) = $cc;
             if( strpos($file,'http') === 0 || strpos($file,'//') === 0 ){
-                $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '" media="all" />' . "¥n");
+                $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '" media="all" />' . "\n");
             }else{
                 $ts = filemtime($file);
-                $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '?' . $ts. '" media="all" />' . "¥n");
+                $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '?' . $ts. '" media="all" />' . "\n");
             }
         }
 
@@ -1676,14 +1676,14 @@ function groupTableSelectFormMultiReflexive( &$str , $param , $check , $d = 0 , 
         $rec = $db->getRecord( $table , $i );
         if( isset( $param[ $d+1 ] ) ){
             $cid = $db->getData( $rec , 'id' );
-            $str .= '<option value="" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+            $str .= '<option value="" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
             groupTableSelectFormMultiReflexive($str,$param,$check,$d+1,$cid);
         }else{
             $cid = $db->getData( $rec , 'id' );
             if( $cid == $check )
-                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
             else
-                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
         }
     }
 }
@@ -1703,16 +1703,16 @@ function searchGroupTableFormMultiReflexive( &$str , $param , $check , $d = 0 , 
         if( isset( $param[ $d+1 ] ) ){
             $cid = $db->getData( $rec , 'id' );
             if( $cid == $check )
-                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
             else
-                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
             searchGroupTableFormMultiReflexive($str,$param,$check,$d+1,$cid);
         }else{
             $cid = $db->getData( $rec , 'id' );
             if( $cid == $check )
-                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" selected="selected">'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
             else
-                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."¥n";
+                $str .= '<option value="'.$cid.'" >'.$pad.$db->getData( $rec , $param[$d]['name'] )."\n";
         }
     }
 }

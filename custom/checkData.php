@@ -239,19 +239,19 @@ class CheckData
         switch($level){
             case 0: default:
             //接頭と使用文字の一致
-                if (!preg_match("/https?:¥/¥/[-_.!‾*'()a-zA-Z0-9;¥/?:@&=+$,%#]+/", $text)){ return FALSE; }
+                if (!preg_match("/https?:\/\/[-_.!~*'()a-zA-Z0-9;\/?:@&=+$,%#]+/", $text)){ return FALSE; }
                 break;
             case 1:
             //http URL の正規表現
-                $re = "/¥b(?:https?|shttp):¥/¥/(?:(?:[-_.!‾*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f" .
-                      "][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?¥.)" .
-                      "*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?¥.?|[0-9]+¥.[0-9]+¥.[0-9]+¥." .
-                      "[0-9]+)(?::[0-9]*)?(?:¥/(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]" .
-                      "[0-9A-Fa-f])*(?:;(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-" .
-                      "Fa-f])*)*(?:¥/(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f" .
-                      "])*(?:;(?:[-_.!‾*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)" .
-                      "*)?(?:¥?(?:[-_.!‾*'()a-zA-Z0-9;¥/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])" .
-                      "*)?(?:#(?:[-_.!‾*'()a-zA-Z0-9;¥/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)?/";
+                $re = "/\b(?:https?|shttp):\/\/(?:(?:[-_.!~*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f" .
+                      "][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.)" .
+                      "*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.?|[0-9]+\.[0-9]+\.[0-9]+\." .
+                      "[0-9]+)(?::[0-9]*)?(?:\/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]" .
+                      "[0-9A-Fa-f])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-" .
+                      "Fa-f])*)*(?:\/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f" .
+                      "])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)" .
+                      "*)?(?:\?(?:[-_.!~*'()a-zA-Z0-9;\/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])" .
+                      "*)?(?:#(?:[-_.!~*'()a-zA-Z0-9;\/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)?/";
                 
                 if (!preg_match($re, $text)) { return FALSE; }
                 break;
@@ -278,38 +278,38 @@ class CheckData
 	{
         switch($level){
             case 0: default:
-                if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9¥._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9¥._-]+)+$/", $text)){ return FALSE; }
+                if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $text)){ return FALSE; }
                 break;
             case 1:
-            //http://www.tt.rim.or.jp/‾canada/comp/cgi/tech/mailaddrmatch/
+            //http://www.tt.rim.or.jp/~canada/comp/cgi/tech/mailaddrmatch/
             //「なるべく」おかしなアドレスを弾く正規表現
-                if (!preg_match("/^[¥x01-¥x7F]+@(([-a-z0-9]+¥.)*[a-z]+|¥[¥d{1,3}¥.¥d{1,3}¥.¥d{1,3}¥.¥d{1,3}¥])/", $text)){ return FALSE; }
+                if (!preg_match("/^[\x01-\x7F]+@(([-a-z0-9]+\.)*[a-z]+|\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])/", $text)){ return FALSE; }
                 break;
             case 2:
             //PEAR::Mail_RFC822
-                if (!preg_match("/^([*+!.&#$|¥'¥¥%¥/0-9a-z^_`{}=??:-]+)@(([0-9a-z-]+¥.)+[0-9a-z]{2,})$/i", $text)){ return FALSE; }
+                if (!preg_match("/^([*+!.&#$|\'\\%\/0-9a-z^_`{}=??:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i", $text)){ return FALSE; }
                 break;
             case 3:
             //CakePHP
-                if (!preg_match("/¥¥A(?:^([a-z0-9][a-z0-9_¥¥-¥¥.¥¥+]*)@([a-z0-9][a-z0-9¥¥.¥¥-]{0,63}¥¥.(com|org|net|biz|info|name|net|pro|aero|coop|museum|[a-z]{2,}))$)¥¥z/i", $text)){ return FALSE; }
+                if (!preg_match("/\\A(?:^([a-z0-9][a-z0-9_\\-\\.\\+]*)@([a-z0-9][a-z0-9\\.\\-]{0,63}\\.(com|org|net|biz|info|name|net|pro|aero|coop|museum|[a-z]{2,}))$)\\z/i", $text)){ return FALSE; }
                 break;
             case 4:
             //symfony
-                if (!preg_match("/^([^@¥s]+)@((?:[-a-z0-9]+¥.)+[a-z]{2,})$/i", $text)){ return FALSE; }
+                if (!preg_match("/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i", $text)){ return FALSE; }
                 break;
             case 5:
             //Cal Henderson: http://iamcal.com/publish/articles/php/parsing_email/pdf/
             //Parsing Email Adresses in PHP
-                $re = '/^([^¥¥x00-¥¥x20¥¥x22¥¥x28¥¥x29¥¥x2c¥¥x2e¥¥x3a-¥¥x3c¥¥x3e¥¥x40¥¥x5b-'
-                   .'¥¥x5d¥¥x7f-¥¥xff]+|¥¥x22([^¥¥x0d¥¥x22¥¥x5c¥¥x80-¥¥xff]|¥¥x5c¥¥x00-'
-                   .'¥¥x7f)*¥¥x22)(¥¥x2e([^¥¥x00-¥¥x20¥¥x22¥¥x28¥¥x29¥¥x2c¥¥x2e¥¥x3a-'
-                   .'¥¥x3c¥¥x3e¥¥x40¥¥x5b-¥¥x5d¥¥x7f-¥¥xff]+|¥¥x22([^¥¥x0d¥¥x22¥¥x5c¥¥x80'
-                   .'-¥¥xff]|¥¥x5c¥¥x00-¥¥x7f)*¥¥x22))*¥¥x40([^¥¥x00-¥¥x20¥¥x22¥¥x28¥¥x29'
-                   .'¥¥x2c¥¥x2e¥¥x3a-¥¥x3c¥¥x3e¥¥x40¥¥x5b-¥¥x5d¥¥x7f-¥¥xff]+|¥¥x5b([^'
-                   .'¥¥x0d¥¥x5b-¥¥x5d¥¥x80-¥¥xff]|¥¥x5c¥¥x00-¥¥x7f)*¥¥x5d)(¥¥x2e([^¥¥x00-'
-                   .'¥¥x20¥¥x22¥¥x28¥¥x29¥¥x2c¥¥x2e¥¥x3a-¥¥x3c¥¥x3e¥¥x40¥¥x5b-¥¥x5d¥¥x7f-'
-                   .'¥¥xff]+|¥¥x5b([^¥¥x0d¥¥x5b-¥¥x5d¥¥x80-¥¥xff]|¥¥x5c¥¥x00-¥¥x7f)*'
-                   .'¥¥x5d))*$/';
+                $re = '/^([^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-'
+                   .'\\x5d\\x7f-\\xff]+|\\x22([^\\x0d\\x22\\x5c\\x80-\\xff]|\\x5c\\x00-'
+                   .'\\x7f)*\\x22)(\\x2e([^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-'
+                   .'\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+|\\x22([^\\x0d\\x22\\x5c\\x80'
+                   .'-\\xff]|\\x5c\\x00-\\x7f)*\\x22))*\\x40([^\\x00-\\x20\\x22\\x28\\x29'
+                   .'\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+|\\x5b([^'
+                   .'\\x0d\\x5b-\\x5d\\x80-\\xff]|\\x5c\\x00-\\x7f)*\\x5d)(\\x2e([^\\x00-'
+                   .'\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-'
+                   .'\\xff]+|\\x5b([^\\x0d\\x5b-\\x5d\\x80-\\xff]|\\x5c\\x00-\\x7f)*'
+                   .'\\x5d))*$/';
                 
                 if (!preg_match($re, $text)) { return FALSE; }
                 break;
@@ -576,9 +576,9 @@ class CheckData
 			
 			if(is_null($label)){
 				$is_error	 = $this->error_msg['is_error'];
-				$error		.= $is_error ."¥n";
+				$error		.= $is_error ."\n";
 				unset($this->error_msg['is_error']);
-				$error	.= join($this->error_msg,"¥n");
+				$error	.= join($this->error_msg,"\n");
 				$this->error_msg['is_error'] = $is_error;
 			}
 			else if($this->error_name[ $label ] || $label == 'is_error' )

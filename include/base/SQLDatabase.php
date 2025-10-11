@@ -117,15 +117,15 @@ class SQLDatabaseBase implements DatabaseBase
 	function getRecord($table, $index){
 		$rec = null;
 		if( $table->cashed && !is_null($table->cash) ){
-			if( $this->_DEBUG )				{ d( "getRecord() : ".$this->tableName." load table cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "getRecord() : ".$this->tableName." load table cash<br/>\n", 'sql'); }
 			$result = &$table->cash;
 		}else if( ! is_null( $this->rec_cash )){
-			if( $this->_DEBUG )				{ d( "getRecord() : ".$this->tableName." load cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "getRecord() : ".$this->tableName." load cash<br/>\n", 'sql'); }
 			$result = &$this->rec_cash;
 		}else{
 			$table = $this->addPasswordDecrypt( $table );
 
-			if( $this->_DEBUG ){ d( "getRecord() : ". $table->getString(). "<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "getRecord() : ". $table->getString(). "<br/>\n", 'sql' ); }
 			$result	 = $this->sql_query( $table->getString() );
 			$this->rec_cash = &$result;
 
@@ -135,7 +135,7 @@ class SQLDatabaseBase implements DatabaseBase
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("getRecord() : SQL MESSAGE ERROR. ¥n");
+			throw new InternalErrorException("getRecord() : SQL MESSAGE ERROR. \n");
 		}
 
 		if($this->getRow($table) != 0){
@@ -160,22 +160,22 @@ class SQLDatabaseBase implements DatabaseBase
 	function getFirstRecord($table){
 		$rec = null;
 		if( $table->cashed && !is_null($table->cash) ){
-			if( $this->_DEBUG )				{ d( "getFirstRecord() : ".$this->tableName." load table cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "getFirstRecord() : ".$this->tableName." load table cash<br/>\n", 'sql'); }
 			$result = &$table->cash;
 		}else if( ! is_null( $this->rec_cash )){
-			if( $this->_DEBUG )				{ d( "getFirstRecord() : ".$this->tableName." load cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "getFirstRecord() : ".$this->tableName." load cash<br/>\n", 'sql'); }
 			$result = &$this->rec_cash;
 		}else{
 			$table = $this->addPasswordDecrypt( $table );
 			$table = $this->limitOffset( $table, 0 , 1 );
 
 
-			if( $this->_DEBUG ){ d( "getFirstRecord() : ". $table->getString(). "<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "getFirstRecord() : ". $table->getString(). "<br/>\n", 'sql' ); }
 			$result	 = $this->sql_query( $table->getString() );
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("getFirstRecord() : SQL MESSAGE ERROR. ¥n");
+			throw new InternalErrorException("getFirstRecord() : SQL MESSAGE ERROR. \n");
 		}
 
 		if($this->getRow($table) != 0){
@@ -237,7 +237,7 @@ class SQLDatabaseBase implements DatabaseBase
 				default:
 					if(  is_string( $rec[ $name ] )  ){
 						if( !$br ){
-							return str_replace(  "¥r¥n", "¥n", $this->sql_convert( $rec[ $name ] )  );
+							return str_replace(  "\r\n", "\n", $this->sql_convert( $rec[ $name ] )  );
 						}else{
 							return brChange( $this->sql_convert( $rec[ $name ] ) );
 						}
@@ -252,11 +252,11 @@ class SQLDatabaseBase implements DatabaseBase
 
 	function getDataList($table, $name, $key = 'shadow_id' ){
 		if( ! is_null( $this->rec_cash )){
-			if( $this->_DEBUG )				{ d( "getDataList() : ".$this->tableName." load cash<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG )				{ d( "getDataList() : ".$this->tableName." load cash<br/>\n", 'sql' ); }
 			$result = &$this->rec_cash;
 		}else{
 
-			if( $this->_DEBUG ){ d( "getDataList() : ". $table->getString(). "<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "getDataList() : ". $table->getString(). "<br/>\n", 'sql' ); }
 
 			$table = $this->addPasswordDecrypt( $table );
 
@@ -265,7 +265,7 @@ class SQLDatabaseBase implements DatabaseBase
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("getDataList() : SQL MESSAGE ERROR. ¥n");
+			throw new InternalErrorException("getDataList() : SQL MESSAGE ERROR. \n");
 		}
 
 		if( $this->colType[ $name ] == 'password' ){
@@ -332,7 +332,7 @@ class SQLDatabaseBase implements DatabaseBase
 		$sql	 = "UPDATE ". strtolower($this->tableName). " SET ";
 		$sql	 .= $this->toString( $rec, "UPDATE" );
 		$sql	 .= " WHERE SHADOW_ID = ". $this->getData( $rec, 'SHADOW_ID' );
-		if( $this->_DEBUG ){ d( "updateRecord() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "updateRecord() : ". $sql. "<br/>\n", 'sql' ); }
 
 		$this->sql_query( $sql );
 			
@@ -441,7 +441,7 @@ class SQLDatabaseBase implements DatabaseBase
 		if($this->isColumn($name)) { $sql .= $name ."=" .$val; }
 		else                       { return ;} // nameがテーブルのカラムにない場合
 		$sql	 .= $table->getWhere();
-		if( $this->_DEBUG ){ d( "setTableDataUpdate() : ". $sql. "<br/>¥n", 'sql'); }
+		if( $this->_DEBUG ){ d( "setTableDataUpdate() : ". $sql. "<br/>\n", 'sql'); }
 
 		$this->sql_query( $sql );
 
@@ -488,7 +488,7 @@ class SQLDatabaseBase implements DatabaseBase
 		if(strlen($set) < 1) return $table;
 		$sql	 .= $set;
 		$sql	 .= $table->getWhere();
-		if( $this->_DEBUG ){ d( "setTableDataUpdate() : ". $sql. "<br/>¥n", 'sql'); }
+		if( $this->_DEBUG ){ d( "setTableDataUpdate() : ". $sql. "<br/>\n", 'sql'); }
 
 		$this->sql_query( $sql );
 
@@ -603,15 +603,15 @@ class SQLDatabaseBase implements DatabaseBase
 		$sql	 .= ' FROM '.$this->tableName;
 		$sql	 .= ' WHERE '.$delete_key;
 
-		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ throw new InternalErrorException("deleteTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ throw new InternalErrorException("deleteTable() : SQL MESSAGE ERROR. \n"); }
 
 		$sql	  = 'DELETE FROM '. $this->tableName;
 		$sql	 .= ' WHERE '.$delete_key;
-		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ throw new InternalErrorException("deleteTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ throw new InternalErrorException("deleteTable() : SQL MESSAGE ERROR. \n"); }
 
 		$this->cashReset();
 		TemplateCache::SetDBUpdateTime();
@@ -627,9 +627,9 @@ class SQLDatabaseBase implements DatabaseBase
 
 		$sql	  = 'DELETE FROM '. strtolower($this->tableName);
 		$sql	 .= $table->getWhere();
-		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "deleteTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ exit("deleteTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ exit("deleteTable() : SQL MESSAGE ERROR. \n"); }
 		
 		$this->cashReset();
 		return;
@@ -655,7 +655,7 @@ class SQLDatabaseBase implements DatabaseBase
 
 		$rec	 = $this->setData( $rec, 'delete_key', false );
 
-		$sql	 = "INSERT INTO ". $this->tableName. " (¥n";
+		$sql	 = "INSERT INTO ". $this->tableName. " (\n";
 		// カラム名リストを出力
 
 		$columns = Array();
@@ -668,18 +668,18 @@ class SQLDatabaseBase implements DatabaseBase
 			$columns[] = $column;
 		}
 
-		$sql .= implode( ', ' . "¥n" , $columns );
+		$sql .= implode( ', ' . "\n" , $columns );
 
 		$sql	 .= ")VALUES ( ";
 		$sql	 .= $this->toString( $rec, "INSERT" );
 		$sql	 .= " )";
-		if( $this->_DEBUG ){ d( "restoreRecord() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "restoreRecord() : ". $sql. "<br/>\n", 'sql' ); }
 
 		$result = $this->sql_query( $sql );
 
 		if( $result ){
 			$sql	 = "DELETE FROM ". $this->tableName. "_delete WHERE shadow_id = ".$this->getData( $rec, 'shadow_id' );
-			if( $this->_DEBUG ){ d( "restoreRecord() ". $sql. "<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "restoreRecord() ". $sql. "<br/>\n", 'sql' ); }
 			$result = $this->sql_query( $sql );
 		}
 
@@ -751,15 +751,15 @@ class SQLDatabaseBase implements DatabaseBase
 		$sql	 .= ' FROM '.$delete_table;
 
 		$sql	 .= ' WHERE '.$delete_key;
-		if( $this->_DEBUG )				{ d( "restoreTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "restoreTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ throw new InternalErrorException("restoreTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ throw new InternalErrorException("restoreTable() : SQL MESSAGE ERROR. \n"); }
 
 		$sql	  = 'DELETE FROM '. $delete_table;
 		$sql	 .= ' WHERE '.$delete_key;
-		if( $this->_DEBUG )				{ d( "restoreTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "restoreTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ throw new InternalErrorException("restoreTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ throw new InternalErrorException("restoreTable() : SQL MESSAGE ERROR. \n"); }
 
 		$this->cashReset();
 		TemplateCache::SetDBUpdateTime();
@@ -800,9 +800,9 @@ class SQLDatabaseBase implements DatabaseBase
 
 		//replace実行
 		$sql	 = 'UPDATE '. $table_name.' SET '.$set_str. $table->getWhere();
-		if( $this->_DEBUG )				{ d( "replaceTable() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG )				{ d( "replaceTable() : ". $sql. "<br/>\n", 'sql' ); }
 		$result	 = $this->sql_query( $sql );
-		if( !$result ){ throw new InternalErrorException("replaceTable() : SQL MESSAGE ERROR. ¥n"); }
+		if( !$result ){ throw new InternalErrorException("replaceTable() : SQL MESSAGE ERROR. \n"); }
 
 		TemplateCache::SetDBUpdateTime();
 		return;
@@ -998,7 +998,7 @@ class SQLDatabaseBase implements DatabaseBase
 			$columns[] = $column;
 		}
 
-		$sql .= implode( ', ' . "¥n" , $columns );
+		$sql .= implode( ', ' . "\n" , $columns );
 
 		// 重複を避ける為に暗黙の主キーを再設定
 
@@ -1017,7 +1017,7 @@ class SQLDatabaseBase implements DatabaseBase
 		$sql	 .= ")VALUES ( ";
 		$sql	 .= $this->toString( $rec, "INSERT" );
 		$sql	 .= " )";
-		if( $this->_DEBUG ){ d( "addRecord() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "addRecord() : ". $sql. "<br/>\n", 'sql' ); }
 
 		$return = $this->sql_query( $sql );
 // begin アフィリエイトシステムPRO2 専用 処理
@@ -1070,7 +1070,7 @@ class SQLDatabaseBase implements DatabaseBase
 			$columns[] = $column;
 		}
 
-		$sql .= implode( ', ' . "¥n" , $columns );
+		$sql .= implode( ', ' . "\n" , $columns );
 
 		// 重複を避ける為に暗黙の主キーを再設定
 
@@ -1098,7 +1098,7 @@ class SQLDatabaseBase implements DatabaseBase
 		unset($rec);
 
 		$sql .= implode( ',' , $values );
-		if( $this->_DEBUG ){ d( "addRecord() : ". $sql. "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "addRecord() : ". $sql. "<br/>\n", 'sql' ); }
 
 		$return = $this->sql_query( $sql );
 // begin アフィリエイトシステムPRO2 専用 処理
@@ -1168,24 +1168,24 @@ class SQLDatabaseBase implements DatabaseBase
 	function getRow($table){
 
 		if($this->row >= 0 && $table == $this->row_table ){
-			if( $this->_DEBUG ){ d( "getRow() : load cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG ){ d( "getRow() : load cash<br/>\n", 'sql'); }
 			return $this->row;
 		}
 		$sql = $table->getRowString();
 
-		if( $this->_DEBUG ){ d( "getRow() : ". $sql. "<br/>¥n", 'sql'); }
+		if( $this->_DEBUG ){ d( "getRow() : ". $sql. "<br/>\n", 'sql'); }
 
 		$result	 = $this->sql_query( $sql );
 
 		if( !$result ){
-			if( !$this->_DEBUG ){ d( "getRow() : ". $sql. "<br/>¥n", 'sql'); }
-			throw new InternalErrorException("getRow() : SQL MESSAGE ERROR. ¥n");
+			if( !$this->_DEBUG ){ d( "getRow() : ". $sql. "<br/>\n", 'sql'); }
+			throw new InternalErrorException("getRow() : SQL MESSAGE ERROR. \n");
 		}
 
 		$rows = $this->sql_fetch_assoc($result,0);
 		$row = $rows['cnt'];
 		if( $row == -1 ){
-			throw new InternalErrorException("getRow() : GET ROW ERROR ( RETURN -1 ).¥n");
+			throw new InternalErrorException("getRow() : GET ROW ERROR ( RETURN -1 ).\n");
 		}
 		$this->row = $row;
 		$this->row_table = $table;
@@ -1199,12 +1199,12 @@ class SQLDatabaseBase implements DatabaseBase
 	 */
 	function existsRow($tbl){
 		if($this->row >= 0 && $tbl == $this->row_table ){
-			if( $this->_DEBUG ){ d( "existsRow() : load row cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG ){ d( "existsRow() : load row cash<br/>\n", 'sql'); }
 			return $this->row > 0;
 		}
 
 		if( ! is_null( $this->rec_cash )){
-			if( $this->_DEBUG )				{ d( "existsRow() : ".$this->tableName." load recorde cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "existsRow() : ".$this->tableName." load recorde cash<br/>\n", 'sql'); }
 			$result = &$this->rec_cash;
 		}else{
 
@@ -1224,13 +1224,13 @@ class SQLDatabaseBase implements DatabaseBase
 
 			$sql = 'SELECT EXISTS('.$table->getString(true).') as exists_row_cnt';
 
-			if( $this->_DEBUG ){ d( "existsRow() : $sql<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "existsRow() : $sql<br/>\n", 'sql' ); }
 
 			$result	 = $this->sql_query( $sql );
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("existsRow() : SQL MESSAGE ERROR. ¥n");
+			throw new InternalErrorException("existsRow() : SQL MESSAGE ERROR. \n");
 		}
 		$rec =$this->sql_fetch_assoc($result,0);
 		return $rec['exists_row_cnt'];
@@ -1516,7 +1516,7 @@ class SQLDatabaseBase implements DatabaseBase
 	 * @return TableBase テーブルデータ
 	 */
 	function sortTable(&$tbl, $name, $asc, $add = false){
-		if( !preg_match( '/^[¥w¥.]+$/' , $name ) ){
+		if( !preg_match( '/^[\w\.]+$/' , $name ) ){
 			return $tbl;
 		}
 
@@ -2045,7 +2045,7 @@ class SQLDatabaseBase implements DatabaseBase
 	 */
 	function getMaxID(){
 
-		if( $this->_DEBUG ){ d( "getMaxID() : ". "select max(shadow_id) as max from ". $this->tableName. "<br/>¥n", 'sql'); }
+		if( $this->_DEBUG ){ d( "getMaxID() : ". "select max(shadow_id) as max from ". $this->tableName. "<br/>\n", 'sql'); }
 
 // begin アフィリエイトシステムPRO2 専用 処理
 /* system_tables なし
@@ -2057,8 +2057,8 @@ class SQLDatabaseBase implements DatabaseBase
 		$result	 = $this->sql_query( $sql );
 
 		if( !$result ){
-			if( !$this->_DEBUG ){ d( "getMaxID() : ".$sql. "<br/>¥n", 'sql'); }
-			throw new InternalErrorException("getMaxID() : SQL MESSAGE ERROR. ¥n");
+			if( !$this->_DEBUG ){ d( "getMaxID() : ".$sql. "<br/>\n", 'sql'); }
+			throw new InternalErrorException("getMaxID() : SQL MESSAGE ERROR. \n");
 		}
 
 		$data = $this->sql_fetch_array($result);
@@ -2073,13 +2073,13 @@ class SQLDatabaseBase implements DatabaseBase
 		
 		$sql = "select max(id) as max from ". strtolower($this->tableName). " where id like '$time%'";
 	
-		if( $this->_DEBUG ){ d( "getTimeID() : ". "$sql <br/>¥n", 'sql'); }
+		if( $this->_DEBUG ){ d( "getTimeID() : ". "$sql <br/>\n", 'sql'); }
 		
 		$result	 = $this->sql_query( $sql );
 		
 		if( !$result ){
-			if( !$this->_DEBUG ){ d( "getMaxID() : $sql <br/>¥n", 'sql'); }
-			throw new RuntimeException("getMaxID() : SQL MESSAGE ERROR. ¥n");
+			if( !$this->_DEBUG ){ d( "getMaxID() : $sql <br/>\n", 'sql'); }
+			throw new RuntimeException("getMaxID() : SQL MESSAGE ERROR. \n");
 		}
 		
 		$data = $this->sql_fetch_array($result);
@@ -2140,7 +2140,7 @@ class SQLDatabaseBase implements DatabaseBase
 			}
 
 			if( $i != count( $this->colName ) - 1 ){
-				$sql	 .= ", ¥n";
+				$sql	 .= ", \n";
 			}
 		}
 
@@ -2172,14 +2172,14 @@ class SQLDatabaseBase implements DatabaseBase
 
 		$sql = $table->toSelectFrom().$table->getWhere();
 
-		if( $this->_DEBUG ){ d( "getAggregate() : ". $sql . "<br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "getAggregate() : ". $sql . "<br/>\n", 'sql' ); }
 
 
 		$result	 = $this->sql_query( $sql );
 
 		if( !$result ){
-			if( !$this->_DEBUG ){ d( "getAggregate() : ". $sql. "<br/>¥n", 'sql'); }
-			throw new InternalErrorException("getAggregate() : SQL MESSAGE ERROR. ¥n");
+			if( !$this->_DEBUG ){ d( "getAggregate() : ". $sql. "<br/>\n", 'sql'); }
+			throw new InternalErrorException("getAggregate() : SQL MESSAGE ERROR. \n");
 		}
 
 		$data = $this->sql_fetch_array($result);
@@ -2233,7 +2233,7 @@ class SQLDatabaseBase implements DatabaseBase
 	 */
 	private function getAggregateTable( $agg, $agg_name, $group_name, $table = null, $opp = null, $val = null){
 
-		if( $this->_DEBUG ){ d( "getAggregateTable();¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "getAggregateTable();\n", 'sql' ); }
 
 		if( is_null($table) ){
 			$table = $this->getTable();
@@ -2303,7 +2303,7 @@ class SQLDatabaseBase implements DatabaseBase
 
 	function getAvgTableEx( $avg_name, $group_name, $table = null, $opp = null, $val = null){
 
-		if( $this->_DEBUG ){ d( "getAvgTable();¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "getAvgTable();\n", 'sql' ); }
 
 		if( is_null($table) ){
 			$table = $this->getTable();
@@ -2339,7 +2339,7 @@ class SQLDatabaseBase implements DatabaseBase
 	function getCountTable( $name, $tbl = null, $returnColumnAll = false, $opp = null, $val = null){
 		$name	 = strtolower( $name );
 
-		if( $this->_DEBUG ){ d( "getCountTable();¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "getCountTable();\n", 'sql' ); }
 
 		if( is_null($tbl) ){
 			$table = $this->getTable();
@@ -2496,7 +2496,7 @@ class SQLDatabaseBase implements DatabaseBase
 	 * rowとRecordのcashを削除します。
 	 */
 	function cashReset(){
-		if( $this->_DEBUG ){ d( "cashReset() : reset <br/>¥n", 'sql' ); }
+		if( $this->_DEBUG ){ d( "cashReset() : reset <br/>\n", 'sql' ); }
 		$this->row = -1;
 		$this->rec_cash = null;
 	}
@@ -2624,7 +2624,7 @@ class SQLDatabaseBase implements DatabaseBase
 
 				$sqlstr = $this->sql_escape( $val );
 
-				/*if( preg_match( '/¥¥¥¥$/' , $sqlstr ) )
+				/*if( preg_match( '/\\\\$/' , $sqlstr ) )
 					$sqlstr .= ' ';
 				*/
 				if($quots){ $sqlstr = "'".$sqlstr."'"; }
@@ -2664,7 +2664,7 @@ class SQLDatabaseBase implements DatabaseBase
 		global $model_path;
 
 		if( $THIS_TABLE_MODEL_CLASS[ $this->tableName ] ){
-			if( $this->_DEBUG )				{ d( "getModelRecord() : ".$this->tableName." Model Record.<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "getModelRecord() : ".$this->tableName." Model Record.<br/>\n", 'sql'); }
 			$class_name = $THIS_TABLE_MODEL_CLASS[ $this->tableName ].'Model';
 			include_once $model_path.$class_name.'.php';
 			$rec = new $class_name($rec);

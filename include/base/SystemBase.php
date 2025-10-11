@@ -1255,7 +1255,7 @@ class SystemBase extends command_base
 		if( $upFile['size'] > $max_size ){ return false; }
 
 		// 拡張子の取得
-		preg_match( '/(¥.¥w*$)/', $upFile['name'], $tmp );
+		preg_match( '/(\.\w*$)/', $upFile['name'], $tmp );
 		$ext		 = strtolower(str_replace( ".", "", $tmp[1] ));
 
 		// ディレクトリの指定
@@ -1341,11 +1341,11 @@ class SystemBase extends command_base
 			if( $gm[$_GET['type']]->colType[$colum] == 'image' ||  $gm[$_GET['type']]->colType[$colum] == 'file' )
 			{
 				$before	 = $db->getData( $rec, $colum );
-				$after	 = preg_replace( '/(file¥/tmp¥/|file¥/tmp¥/lock¥/)(¥w*¥.¥w*)$/', '¥2', $before );
+				$after	 = preg_replace( '/(file\/tmp\/|file\/tmp\/lock\/)(\w*\.\w*)$/', '\2', $before );
 				if( $before != $after )
 				{// ファイルのアップロードが行われていた場合データを差し替える。
 					// 拡張子の取得
-					preg_match( '/(¥.¥w*$)/', $after, $tmp );
+					preg_match( '/(\.\w*$)/', $after, $tmp );
 					$ext		 = strtolower(str_replace( ".", "", $tmp[1] ));
 					// ディレクトリの指定
 					$dirList	 = explode( '/', $this->fileDir );
@@ -1757,10 +1757,10 @@ class SystemBase extends command_base
 					elseif( is_file($CSS_PATH.'sp/standard.css') )	 { $file = $CSS_PATH.'sp/standard.css'; }
 				}
                 if( strpos($file,'http') === 0 || strpos($file,'//') === 0 ){
-                    $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '" media="all" />' . "¥n");
+                    $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '" media="all" />' . "\n");
                 }else{
                     $ts = filemtime($file);
-                    $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '?' . $ts. '" media="all" />' . "¥n");
+                    $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $file . '?' . $ts. '" media="all" />' . "\n");
                 }
 				break;
 			}
@@ -1789,10 +1789,10 @@ class SystemBase extends command_base
 				if( isset($css_root[$type]) || is_array($css_root[$type]) ){
 					foreach( $css_root[$type] as $css_file_path ){
                         if( strpos($css_file_path,'http') === 0 || strpos($css_file_path,'//') === 0 ){
-                            $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $css_file_path . '" media="all" />' . "¥n");
+                            $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $css_file_path . '" media="all" />' . "\n");
                         }else{
                             $ts = filemtime($css_file_path);
-                            $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $css_file_path . '?' . $ts. '" media="all" />' . "¥n");
+                            $this->addBuffer('<link rel="stylesheet" type="text/css" href="' . $css_file_path . '?' . $ts. '" media="all" />' . "\n");
                         }
 					}
 				}
@@ -1830,10 +1830,10 @@ class SystemBase extends command_base
 			if( isset($root_path[$type]) || is_array($root_path[$type]) ){
 				foreach( $root_path[$type] as $js_file_path ){
                     if( strpos($js_file_path,'http') === 0 || strpos($js_file_path,'//') === 0 ){
-                        $this->addBuffer( '<script type="text/javascript" src="'.$js_file_path.'"></script>'."¥n" );
+                        $this->addBuffer( '<script type="text/javascript" src="'.$js_file_path.'"></script>'."\n" );
                     }else{
                         $ts = filemtime($js_file_path);
-                        $this->addBuffer( '<script type="text/javascript" src="'.$js_file_path.'?'.$ts.'"></script>'."¥n" );
+                        $this->addBuffer( '<script type="text/javascript" src="'.$js_file_path.'?'.$ts.'"></script>'."\n" );
                     }
 				}
 			}
@@ -1864,7 +1864,7 @@ class SystemBase extends command_base
 				}else{
 					$title = $CONF_FEED_TITLES[$tableName];
 				}
-				$this->addBuffer( '<link rel="alternate" href="' . $HOME . $rssPath . '" type="application/rss+xml" title="' . $title . '" />' . "¥n" );
+				$this->addBuffer( '<link rel="alternate" href="' . $HOME . $rssPath . '" type="application/rss+xml" title="' . $title . '" />' . "\n" );
 			}
 
 			$atomPath = $CONF_FEED_OUTPUT_DIR . $tableName . '_atom.xml';
@@ -1879,7 +1879,7 @@ class SystemBase extends command_base
 					$title = $CONF_FEED_TITLES[$tableName];
 				}
 
-				$this->addBuffer( '<link rel="alternate" href="' . $HOME . $atomPath . '" type="application/atom+xml" title="' . $title . '" />' . "¥n" );
+				$this->addBuffer( '<link rel="alternate" href="' . $HOME . $atomPath . '" type="application/atom+xml" title="' . $title . '" />' . "\n" );
 			}
 		}
 	}
@@ -1891,7 +1891,7 @@ class SystemBase extends command_base
 		if( is_null($head_link_object) || !is_array($head_link_object) )
 		return;
 		foreach( $head_link_object as $head_link ){
-			$this->addBuffer( '<link rel="'.$head_link['rel'].'" type="'.$head_link['type'].'" href="'.$head_link['href'].'" />'."¥n" );
+			$this->addBuffer( '<link rel="'.$head_link['rel'].'" type="'.$head_link['type'].'" href="'.$head_link['href'].'" />'."\n" );
 		}
 	}
 
@@ -2092,31 +2092,31 @@ class SystemBase extends command_base
 
 		if( strlen(self::$title) > 0 )
 			{
-				$output = preg_replace( '/<title>(.*)<¥/title>/i', '<title>'.self::$title.'</title>', $output );
-				$output = preg_replace( '/<meta property="og:title" content="(.*)" ¥/>/', '<meta property="og:title" content="' . self::$title . '" />', $output );
+				$output = preg_replace( '/<title>(.*)<\/title>/i', '<title>'.self::$title.'</title>', $output );
+				$output = preg_replace( '/<meta property="og:title" content="(.*)" \/>/', '<meta property="og:title" content="' . self::$title . '" />', $output );
 			}
 		if( strlen(self::$description) > 0 )
 			{
 				$output = preg_replace( '/<meta name="description" content=(.*)>/', '<meta name="description" content="'.self::$description.'">', $output );
-				$output = preg_replace( '/<meta property="og:description" content="(.*)" ¥/>/', '<meta property="og:description" content="' . self::$description . '" />', $output );
+				$output = preg_replace( '/<meta property="og:description" content="(.*)" \/>/', '<meta property="og:description" content="' . self::$description . '" />', $output );
 			}
 
 		if( strlen(self::$keywords) > 0 )	 { $output = preg_replace( '/<meta name="keywords" content=(.*)>/', '<meta name="keywords" content="'.self::$keywords.'">', $output ); }
 
 		if( 0 < strlen( self::$ogTitle ) )
-			{ $output = preg_replace( '/<meta property="og:title" content="(.*)" ¥/>/', '<meta property="og:title" content="' . self::$ogTitle . '" />', $output ); }
+			{ $output = preg_replace( '/<meta property="og:title" content="(.*)" \/>/', '<meta property="og:title" content="' . self::$ogTitle . '" />', $output ); }
 
 		if( 0 < strlen( self::$ogType ) )
-			{ $output = preg_replace( '/<meta property="og:type" content="(.*)" ¥/>/', '<meta property="og:type" content="' . self::$ogType . '" />', $output ); }
+			{ $output = preg_replace( '/<meta property="og:type" content="(.*)" \/>/', '<meta property="og:type" content="' . self::$ogType . '" />', $output ); }
 
 		if( 0 < strlen( self::$ogDescription ) )
-			{ $output = preg_replace( '/<meta property="og:description" content="(.*)" ¥/>/', '<meta property="og:description" content="' . self::$ogDescription . '" />', $output ); }
+			{ $output = preg_replace( '/<meta property="og:description" content="(.*)" \/>/', '<meta property="og:description" content="' . self::$ogDescription . '" />', $output ); }
 
 		if( 0 < strlen( self::$ogURL ) )
-			{ $output = preg_replace( '/<meta property="og:url" content="(.*)" ¥/>/', '<meta property="og:url" content="' . self::$ogURL . '" />', $output ); }
+			{ $output = preg_replace( '/<meta property="og:url" content="(.*)" \/>/', '<meta property="og:url" content="' . self::$ogURL . '" />', $output ); }
 
 		if( 0 < strlen( self::$ogImage ) )
-			{ $output = preg_replace( '/<meta property="og:image" content="(.*)" ¥/>/', '<meta property="og:image" content="' . self::$ogImage . '" />', $output ); }
+			{ $output = preg_replace( '/<meta property="og:image" content="(.*)" \/>/', '<meta property="og:image" content="' . self::$ogImage . '" />', $output ); }
 
 		if( $terminal_type ){
 			if( $OUTPUT_CHARACODE != 'UTF-8' ){
@@ -2170,7 +2170,7 @@ class SystemBase extends command_base
 		if( !$design )
 			{ return $iTemplateLabel; }
 
-		if( preg_match( '/¥W/' , $design ) )
+		if( preg_match( '/\W/' , $design ) )
 			{ return $iTemplateLabel; }
 
 		return $iTemplateLabel . '_' . $design;

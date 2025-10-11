@@ -86,8 +86,8 @@
 			$array = $e_->getTrace();
 			krsort( $array );
 
-			$result  = "¥t" . $e_->getMessage() . "¥n¥t¥t" . preg_replace( '/(.*)¥¥¥¥([^¥¥¥¥]+)$/' , '($1) $2' , str_replace( getcwd() . '¥¥' , '' , $e_->getFile() ) ) . ' ' . $e_->getLine() . "¥n¥n";
-			$result .= '▽trace : ' . "¥n¥n";
+			$result  = "\t" . $e_->getMessage() . "\n\t\t" . preg_replace( '/(.*)\\\\([^\\\\]+)$/' , '($1) $2' , str_replace( getcwd() . '\\' , '' , $e_->getFile() ) ) . ' ' . $e_->getLine() . "\n\n";
+			$result .= '▽trace : ' . "\n\n";
 
 			$row = count( $array );
 
@@ -99,20 +99,20 @@
 			foreach( $array as $trace )
 			{
 				if( array_key_exists( 'file' , $trace ) ){
-					$file = sprintf( '%s %04d' , preg_replace( '/(.*)¥¥¥¥([^¥¥¥¥]+)$/' , '($1) $2' , str_replace( getcwd() . '¥¥' , '' , $trace[ 'file' ] ) ) , $trace[ 'line' ] );
+					$file = sprintf( '%s %04d' , preg_replace( '/(.*)\\\\([^\\\\]+)$/' , '($1) $2' , str_replace( getcwd() . '\\' , '' , $trace[ 'file' ] ) ) , $trace[ 'line' ] );
 				}else{
 					$file = (isset($trace[ 'args' ][2]) && isset($trace[ 'args' ][3])) ? sprintf( '%s %04d' , preg_replace( '/(.*)\\\\\\\\([^\\\\\\\\]+)$/' , '($1) $2' , str_replace( getcwd() . '\\\\' , '' , $trace[ 'args' ][2] ) ) , $trace[ 'args' ][3] ) : 'unknown 0000';
 				}
 
 				if( array_key_exists( 'function' , $trace ) )
 				{
-					$result .= "¥t" . $trace[ 'function' ] . "¥n";
-					$result .= "¥t¥t" . $file . "¥n";
+					$result .= "\t" . $trace[ 'function' ] . "\n";
+					$result .= "\t\t" . $file . "\n";
 				}
 				else
 				{
-					$result .= "¥t" . $trace[ 'line' ] . "¥n";
-					$result .= "¥t¥t" . $file . "¥n";
+					$result .= "\t" . $trace[ 'line' ] . "\n";
+					$result .= "\t\t" . $file . "\n";
 				}
 
 				//引数
@@ -121,15 +121,15 @@
 					foreach( $trace[ 'args' ] as $key => $value )
 					{
 						if( is_object( $value ) )
-							$result .= "¥t¥t¥t" . sprintf( 'object   : %s' , get_class( $value ) ) . "¥n";
+							$result .= "\t\t\t" . sprintf( 'object   : %s' , get_class( $value ) ) . "\n";
 						else if( is_array( $value ) )
-							$result .= "¥t¥t¥t" . sprintf( 'array    : %s' , count( $value ) ) . "¥n";
+							$result .= "\t\t\t" . sprintf( 'array    : %s' , count( $value ) ) . "\n";
 						else
-							$result .= "¥t¥t¥t" . sprintf( '%-8s : %s' , gettype( $value ) , $value ) . "¥n";
+							$result .= "\t\t\t" . sprintf( '%-8s : %s' , gettype( $value ) , $value ) . "\n";
 					}
 				}
 
-				$result .= "¥n";
+				$result .= "\n";
 			}
 
 			return $result;
@@ -158,8 +158,8 @@
 				case E_CORE_WARNING :
 				case E_COMPILE_ERROR :
 				case E_COMPILE_WARNING :
-					$result  = 'fatal error : ' . $error[ 'message' ] . "¥n";
-					$result .= sprintf( '%s,%04d' , $error[ 'file' ] , $error[ 'line' ] ) . "¥n";
+					$result  = 'fatal error : ' . $error[ 'message' ] . "\n";
+					$result .= sprintf( '%s,%04d' , $error[ 'file' ] , $error[ 'line' ] ) . "\n";
 
 					return $result;
 
@@ -190,9 +190,9 @@
 
 			if( $fp )
 			{
-				fputs( $fp , date( '▼Y/n/j G:i:s' . "¥n¥n" ) );
-				fputs( $fp , $str_ . "¥n" );
-				fputs( $fp , '-----------------------------------------------------' . "¥n¥n" );
+				fputs( $fp , date( '▼Y/n/j G:i:s' . "\n\n" ) );
+				fputs( $fp , $str_ . "\n" );
+				fputs( $fp , '-----------------------------------------------------' . "\n\n" );
 				fclose( $fp );
 
 				if( $this->maxlogFileSize < filesize( $this->errorLogFile ) ) //ログファイルの最大サイズを超えている場合

@@ -64,19 +64,19 @@
             }
 			
 			if(  isset( $gm )  ){
-				$sub	 = str_replace(  "¥n", "", $gm->getString($mail, $rec, 'subject') );
-				$main	 = str_replace(  "<br/>", "¥n", $gm->getString($mail, $rec, 'main') );
+				$sub	 = str_replace(  "\n", "", $gm->getString($mail, $rec, 'subject') );
+				$main	 = str_replace(  "<br/>", "\n", $gm->getString($mail, $rec, 'main') );
 			}else{
-				$sub	 = stripslashes( str_replace(  "¥n", "", GUIManager::partGetString($mail, 'subject') ) );
-				$main	 = str_replace(  "<br/>", "¥n", GUIManager::partGetString($mail, 'main') );
+				$sub	 = stripslashes( str_replace(  "\n", "", GUIManager::partGetString($mail, 'subject') ) );
+				$main	 = str_replace(  "<br/>", "\n", GUIManager::partGetString($mail, 'main') );
 			}
 			
             if( !is_null($ccs) && is_array($ccs) ){
                 foreach( $ccs as $cc ){
                     if(!isset($cc['name'])){
-                        $from_str .= "¥n".'Cc:'. trim($cc['mail']);
+                        $from_str .= "\n".'Cc:'. trim($cc['mail']);
                     }else{
-                        $from_str .= "¥n".'Cc:"'.mb_encode_mimeheader($cc['name']).'" <'. trim($cc['mail']).'>';
+                        $from_str .= "\n".'Cc:"'.mb_encode_mimeheader($cc['name']).'" <'. trim($cc['mail']).'>';
                     }
                 }
             }
@@ -84,25 +84,25 @@
             if( !is_null($bccs) && is_array($bccs) ){
                 foreach( $bccs as $bcc ){
                     if(!isset($bcc['name'])){
-                        $from_str .= "¥n".'Bcc:'. trim($bcc['mail']);
+                        $from_str .= "\n".'Bcc:'. trim($bcc['mail']);
                     }else{
-                        $from_str .= "¥n".'Bcc:"'.mb_encode_mimeheader($bcc['name']).'" <'. trim($bcc['mail']).'>';
+                        $from_str .= "\n".'Bcc:"'.mb_encode_mimeheader($bcc['name']).'" <'. trim($bcc['mail']).'>';
                     }
                 }
             }
 			
 			if($to == $MAILSEND_ADDRES){
-				$main .= '-----------------------------------'."¥n";
-				$main .= 'REMOTE_HOST：'.$_SERVER["REMOTE_ADDR"]."¥n";
-				$main .= 'HTTP_USER_AGENT：'.$_SERVER["HTTP_USER_AGENT"]."¥n";
-				$main .= '-----------------------------------'."¥n";
+				$main .= '-----------------------------------'."\n";
+				$main .= 'REMOTE_HOST：'.$_SERVER["REMOTE_ADDR"]."\n";
+				$main .= 'HTTP_USER_AGENT：'.$_SERVER["HTTP_USER_AGENT"]."\n";
+				$main .= '-----------------------------------'."\n";
 			}
 			
 			mb_language("ja");
-			$sub = str_replace("¥n", "", $sub);
-			$sub = str_replace("¥r", "", $sub);
+			$sub = str_replace("\n", "", $sub);
+			$sub = str_replace("\r", "", $sub);
 
-			$main = str_replace("¥r", "", $main);
+			$main = str_replace("\r", "", $main);
 			
 			//半角カナを全角カナへ
 			$sub = SystemUtil::hankakukana2zenkakukana($sub);
@@ -156,28 +156,28 @@
 			{// 添付ファイルがある場合
 				if(  isset( $gm ) && isset( $rec )  )
 				{
-					$sub	 = str_replace(  "¥n", "", $gm->getString($mail, $rec, 'subject') );
-					$main	 = str_replace(  "<br/>", "¥n", $gm->getString($mail, $rec, 'main') );
+					$sub	 = str_replace(  "\n", "", $gm->getString($mail, $rec, 'subject') );
+					$main	 = str_replace(  "<br/>", "\n", $gm->getString($mail, $rec, 'main') );
 				}
 				else
 				{
-					$sub	 = stripslashes( str_replace(  "¥n", "", GUIManager::partGetString($mail, 'subject') ) );
-					$main	 = str_replace(  "<br/>", "¥n", GUIManager::partGetString($mail, 'main') );
+					$sub	 = stripslashes( str_replace(  "\n", "", GUIManager::partGetString($mail, 'subject') ) );
+					$main	 = str_replace(  "<br/>", "\n", GUIManager::partGetString($mail, 'main') );
 				}
 				
 				if($to == $MAILSEND_ADDRES)
 				{
-					$main .= '-----------------------------------'."¥n";
-					$main .= 'REMOTE_HOST：'.$_SERVER["REMOTE_ADDR"]."¥n";
-					$main .= 'HTTP_USER_AGENT：'.$_SERVER["HTTP_USER_AGENT"]."¥n";
-					$main .= '-----------------------------------'."¥n";
+					$main .= '-----------------------------------'."\n";
+					$main .= 'REMOTE_HOST：'.$_SERVER["REMOTE_ADDR"]."\n";
+					$main .= 'HTTP_USER_AGENT：'.$_SERVER["HTTP_USER_AGENT"]."\n";
+					$main .= '-----------------------------------'."\n";
 				}
 	
 				mb_language("japanese");
-				$sub = str_replace("¥n", "", $sub);
-				$sub = str_replace("¥r", "", $sub);
+				$sub = str_replace("\n", "", $sub);
+				$sub = str_replace("\r", "", $sub);
 				
-				$main = str_replace("¥r", "", $main);
+				$main = str_replace("\r", "", $main);
 
 				$sub = SystemUtil::hankakukana2zenkakukana($sub);
 				$main = SystemUtil::hankakukana2zenkakukana($main);
@@ -214,12 +214,12 @@
 				
 				//ヘッダ情報
                 if(is_null($from_name))
-    				$headers  = "From:" . trim($from). "¥r¥n";
+    				$headers  = "From:" . trim($from). "\r\n";
                 else
-                    $headers  = 'From:"'.mb_encode_mimeheader($from_name).'" <'. trim($from).'>'. "¥r¥n";
+                    $headers  = 'From:"'.mb_encode_mimeheader($from_name).'" <'. trim($from).'>'. "\r\n";
                 
-				$headers .= 'MIME-Version: 1.0' . "¥r¥n";
-				$headers .= 'Content-Type: multipart/related;boundary="1000000000"' . "¥r¥n";
+				$headers .= 'MIME-Version: 1.0' . "\r\n";
+				$headers .= 'Content-Type: multipart/related;boundary="1000000000"' . "\r\n";
 			
 //テキストパート
 $message =<<<END
@@ -283,7 +283,7 @@ END;
             }
 			mb_language("ja");
 
-			$main = str_replace("¥r", "", $main);
+			$main = str_replace("\r", "", $main);
 
 			$sub = SystemUtil::hankakukana2zenkakukana($sub);
 			$main = SystemUtil::hankakukana2zenkakukana($main);
@@ -292,14 +292,14 @@ END;
             if (self::useSendGrid()) {
                 try {
                     $mailer = self::getSendGridMailer();
-                    $processedMain = str_replace( "<br/>", "¥n", stripslashes($main) );
+                    $processedMain = str_replace( "<br/>", "\n", stripslashes($main) );
                     $rcd = $mailer->send($to, stripslashes($sub), $processedMain, $from, $from_name);
                 } catch (Exception $e) {
                     error_log("SendGrid String Error: " . $e->getMessage());
                     $rcd = false;
                 }
             } else {
-                $rcd = mb_send_mail(  $to, stripslashes( $sub ), str_replace( "<br/>", "¥n", stripslashes($main) ), $from_str ,'-f ' . trim($from));
+                $rcd = mb_send_mail(  $to, stripslashes( $sub ), str_replace( "<br/>", "\n", stripslashes($main) ), $from_str ,'-f ' . trim($from));
             }
 		}
         static function onDebug(){ self::$_DEBUG = true; }

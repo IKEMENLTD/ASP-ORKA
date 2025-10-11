@@ -109,7 +109,7 @@ class SystemUtilBase{
 					{ $table = $iDB->searchTable( $table , $column , $op , $iDB->getData( $iRec , $column ) ); }
 				else
 				{
-					preg_match( '/' . strtolower( $iDB->tableName ) . '¥.(¥w+) *= *' . strtolower( $tableName ) . '¥.(¥w+)/' , $iTable->getWhere() , $match );
+					preg_match( '/' . strtolower( $iDB->tableName ) . '\.(\w+) *= *' . strtolower( $tableName ) . '\.(\w+)/' , $iTable->getWhere() , $match );
 
 					$selfColumn  = $match[ 1 ];
 					$otherColumn = $match[ 2 ];
@@ -259,7 +259,7 @@ class SystemUtilBase{
 		global $terminal_type;
 		global $sid;
 
-		preg_match( '/(.*?)([^¥/]+)$/' , $_SERVER[ 'SCRIPT_NAME' ] , $match );
+		preg_match( '/(.*?)([^\/]+)$/' , $_SERVER[ 'SCRIPT_NAME' ] , $match );
 		$path = $match[ 1 ];
 
 		self::my_session_regenerate_id( true );
@@ -309,8 +309,8 @@ class SystemUtilBase{
 		$prev_mail = $db->getData( $rec , 'mail_time' );
 
 		if( ($prev_mail + $week_sec) < time() ){
-			$str = 'REMOTE_ADDR:'.$_SERVER["REMOTE_ADDR"]."¥nREMOTE_HOST:".$_SERVER["REMOTE_HOST"]."¥nSERVER_NAME:".$_SERVER["SERVER_NAME"]."¥nHTTP_USER_AGENT:".$_SERVER["HTTP_USER_AGENT"]."¥nHOST:".$_SERVER[ 'HTTP_HOST' ].$_SERVER[ 'SCRIPT_NAME' ]."¥n";
-			if($changeLogConfFileExist){$str .= "KEY_CHECK_URL:http://www.ws-download.net/other.php?key=checkkey&sigcode=".$CHANGELOG_OUTPUT_KEY."¥n";}
+			$str = 'REMOTE_ADDR:'.$_SERVER["REMOTE_ADDR"]."\nREMOTE_HOST:".$_SERVER["REMOTE_HOST"]."\nSERVER_NAME:".$_SERVER["SERVER_NAME"]."\nHTTP_USER_AGENT:".$_SERVER["HTTP_USER_AGENT"]."\nHOST:".$_SERVER[ 'HTTP_HOST' ].$_SERVER[ 'SCRIPT_NAME' ]."\n";
+			if($changeLogConfFileExist){$str .= "KEY_CHECK_URL:http://www.ws-download.net/other.php?key=checkkey&sigcode=".$CHANGELOG_OUTPUT_KEY."\n";}
 			Mail::sendString( '【'.WS_PACKAGE_ID.'】login log', $str , $MAILSEND_ADDRES, $system.'@web'.$name.'.co.jp', $MAILSEND_NAMES );
 			$db->setData( $rec , 'mail_time' , time() );
 			$db->updateRecord( $rec );
@@ -344,7 +344,7 @@ class SystemUtilBase{
 		@brief 符号化識別子を外した上体のパスワードを返す
 	*/
 	static function decodePassword( $iPassword )
-		{ return preg_replace( '/^¥w+:/' , '' , $iPassword ); }
+		{ return preg_replace( '/^\w+:/' , '' , $iPassword ); }
 
 	/**
 		@brief 復号化されたパスワードを返す(SHAの場合はそのまま返ります)
@@ -359,7 +359,7 @@ class SystemUtilBase{
 
 	static function getPasswordEncode( $iPassword )
 	{
-		if( !preg_match( '/^(¥w+):/' , $iPassword , $matches ) )
+		if( !preg_match( '/^(\w+):/' , $iPassword , $matches ) )
 			{ return ''; }
 
 		return $matches[ 1 ];
@@ -593,7 +593,7 @@ class SystemUtilBase{
 
 		// 現在のURLを復元
 		$urlParam = SystemUtil::getUrlParm( $param );
-		$urlParam = preg_replace( '/&' . $pageName . '=¥w+/' , '' , $urlParam );
+		$urlParam = preg_replace( '/&' . $pageName . '=\w+/' , '' , $urlParam );
 
 		$gm->setVariable( 'BASE_URL' , $phpName . $join . $urlParam );
 		$gm->setVariable( 'BASE_URL_QUERY' , $urlParam );
@@ -794,7 +794,7 @@ class SystemUtilBase{
 		}else if( !preg_match( '/[^ ]/' , $HOME ) )
 		{
 			//HOMEが空の場合はグローバル変数から取得する
-			$pathInfo = preg_replace( '/[^¥/]*$/' , '' , $_SERVER[ 'SCRIPT_NAME' ] );
+			$pathInfo = preg_replace( '/[^\/]*$/' , '' , $_SERVER[ 'SCRIPT_NAME' ] );
 
 			if( $_SERVER[ 'HTTPS' ] == 'on' )
 				$home = 'https://' . $_SERVER["SERVER_NAME"] . $pathInfo;
@@ -950,7 +950,7 @@ class SystemUtilBase{
 
 	static function deleteCookieUtil( $name ){
 		global $COOKIE_PATH;
-		if( preg_match( '/(¥w+)¥[(¥d+)¥]/', $name, $matches ) && isset($_COOKIE[$matches[1]]) && is_array($_COOKIE[$matches[1]]) ){
+		if( preg_match( '/(\w+)\[(\d+)\]/', $name, $matches ) && isset($_COOKIE[$matches[1]]) && is_array($_COOKIE[$matches[1]]) ){
 			//数字が添字の場合、削除された添字より先を詰める
 			$row = count( $_COOKIE[$matches[1]] );
 			for( $i = $matches[2]; $i < $row; $i++ ){
@@ -972,7 +972,7 @@ class SystemUtilBase{
     static function setDataStak( $name ,$values ){
     global $terminal_type;
         if($terminal_type){
-        	if(preg_match('/(.*)¥[¥s*(¥d+)¥s*¥]$/i',$name,$match)){
+        	if(preg_match('/(.*)\[\s*(\d+)\s*\]$/i',$name,$match)){
         		$_SESSION[$match[1]][$match[2]] = $values;
         	}else{
 	            $_SESSION[$name] = $values;
@@ -994,7 +994,7 @@ class SystemUtilBase{
     static function deleteDataStak( $name ){
     global $terminal_type;
         if($terminal_type){
-        	if(preg_match('/(.*)¥[¥s*(¥d+)¥s*¥]$/i',$name,$match)){
+        	if(preg_match('/(.*)\[\s*(\d+)\s*\]$/i',$name,$match)){
         		unset($_SESSION[$match[1]][$match[2]]);
         		sort($_SESSION[$match[1]]);
         	}else{
@@ -1011,7 +1011,7 @@ class SystemUtilBase{
 	 */
 	static function mailReplace($text){
 	//	$text = mb_convert_encoding($text, "EUC-JP", "UTF-8");	//SJISからEUC-JP変換
-		$text = preg_replace('/([a-zA-Z0-9_¥.¥-]+?@[A-Za-z0-9_¥.¥-]+)/', '<a href="mailto:¥¥1" style="text-decoration:underline">¥¥1</a>', $text);
+		$text = preg_replace('/([a-zA-Z0-9_\.\-]+?@[A-Za-z0-9_\.\-]+)/', '<a href="mailto:\\1" style="text-decoration:underline">\\1</a>', $text);
 	//	return mb_convert_encoding($text, "UTF-8", "EUC-JP");	//EUC-JPからSJIS変換
 		return $text;
 	}
@@ -1045,7 +1045,7 @@ class SystemUtilBase{
 	static function systemArrayEscape( $str ){
 		$ret = $str;
 
-		$ret = str_replace( '¥¥' , '!CODE002;', $ret );
+		$ret = str_replace( '\\' , '!CODE002;', $ret );
 		$ret = str_replace( ' ' , '!CODE001;', $ret );
         $ret = str_replace('/','／',$ret);
         return $ret;
@@ -1217,11 +1217,11 @@ class SystemUtilBase{
 	        if ( @mb_detect_encoding( $str, 'SJIS-win,UTF-8,eucJP-win' ) === 'eucJP-win' ) {
 	            break;
 	        }
-	        $_hint = "¥xbf¥xfd" . $str; // "¥xbf¥xfd" : EUC-JP "雀"
+	        $_hint = "\xbf\xfd" . $str; // "\xbf\xfd" : EUC-JP "雀"
 
 	        // EUC-JP -> UTF-8 変換時にマッピングが変更される文字を削除( ≒ ≡ ∫ など)
 	        mb_regex_encoding( 'EUC-JP' );
-	        $_hint = mb_ereg_replace( "¥xad(?:¥xe2|¥xf5|¥xf6|¥xf7|¥xfa|¥xfb|¥xfc|¥xf0|¥xf1|¥xf2)" , '', $_hint );
+	        $_hint = mb_ereg_replace( "\xad(?:\xe2|\xf5|\xf6|\xf7|\xfa|\xfb|\xfc|\xf0|\xf1|\xf2)" , '', $_hint );
 
 	        $_tmp  = mb_convert_encoding( $_hint, 'UTF-8', 'eucJP-win' );
 	        $_tmp2 = mb_convert_encoding( $_tmp,  'eucJP-win', 'UTF-8' );
@@ -1231,17 +1231,17 @@ class SystemUtilBase{
 	            if (
 	                // SJIS と重なる範囲(2バイト|3バイト|iモード絵文字|1バイト文字)
 	                ! preg_match( '/^(?:'
-	                    . '[¥x8E¥xE0-¥xE9][¥x80-¥xFC]|¥xEA[¥x80-¥xA4]|'
-	                    . '¥x8F[¥xB0-¥xEF][¥xE0-¥xEF][¥x40-¥x7F]|'
-	                    . '¥xF8[¥x9F-¥xFC]|¥xF9[¥x40-¥x49¥x50-¥x52¥x55-¥x57¥x5B-¥x5E¥x72-¥x7E¥x80-¥xB0¥xB1-¥xFC]|'
-	                    . '[¥x00-¥x7E]'
+	                    . '[\x8E\xE0-\xE9][\x80-\xFC]|\xEA[\x80-\xA4]|'
+	                    . '\x8F[\xB0-\xEF][\xE0-\xEF][\x40-\x7F]|'
+	                    . '\xF8[\x9F-\xFC]|\xF9[\x40-\x49\x50-\x52\x55-\x57\x5B-\x5E\x72-\x7E\x80-\xB0\xB1-\xFC]|'
+	                    . '[\x00-\x7E]'
 	                    . ')+$/', $str ) &&
 
 	                // UTF-8 と重なる範囲(全角英数字|漢字|1バイト文字)
 	                ! preg_match( '/^(?:'
-	                    . '¥xEF¥xBC[¥xA1-¥xBA]|[¥x00-¥x7E]|'
-	                    . '[¥xE4-¥xE9][¥x8E-¥x8F¥xA1-¥xBF][¥x8F¥xA0-¥xEF]|'
-	                    . '[¥x00-¥x7E]'
+	                    . '\xEF\xBC[\xA1-\xBA]|[\x00-\x7E]|'
+	                    . '[\xE4-\xE9][\x8E-\x8F\xA1-\xBF][\x8F\xA0-\xEF]|'
+	                    . '[\x00-\x7E]'
 	                    . ')+$/', $str )
 	            ) {
 	                // 条件式の範囲に入らなかった場合は、eucJP-win として検出
@@ -1250,9 +1250,9 @@ class SystemUtilBase{
 	            // 例外処理2(一部の頻度の多そうな熟語は eucJP-win として判定)
 	            // (珈琲|琥珀|瑪瑙|癇癪|碼碯|耄碌|膀胱|蒟蒻|薔薇|蜻蛉)
 	            if ( mb_ereg( '^(?:'
-	                . '¥xE0¥xDD¥xE0¥xEA|¥xE0¥xE8¥xE0¥xE1|¥xE0¥xF5¥xE0¥xEF|¥xE1¥xF2¥xE1¥xFB|'
-	                . '¥xE2¥xFB¥xE2¥xF5|¥xE6¥xCE¥xE2¥xF1|¥xE7¥xAF¥xE6¥xF9|¥xE8¥xE7¥xE8¥xEA|'
-	                . '¥xE9¥xAC¥xE9¥xAF|¥xE9¥xF1¥xE9¥xD9|[¥x00-¥x7E]'
+	                . '\xE0\xDD\xE0\xEA|\xE0\xE8\xE0\xE1|\xE0\xF5\xE0\xEF|\xE1\xF2\xE1\xFB|'
+	                . '\xE2\xFB\xE2\xF5|\xE6\xCE\xE2\xF1|\xE7\xAF\xE6\xF9|\xE8\xE7\xE8\xEA|'
+	                . '\xE9\xAC\xE9\xAF|\xE9\xF1\xE9\xD9|[\x00-\x7E]'
 	                . ')+$', $str )
 	            ) {
 	                break;
@@ -1268,13 +1268,13 @@ class SystemUtilBase{
 	        // デフォルトとして SJIS-win を設定
 	        $enc   = 'SJIS-win';
 
-	        $_hint = "¥xe9¥x9b¥x80" . $str; // "¥xe9¥x9b¥x80" : UTF-8 "雀"
+	        $_hint = "\xe9\x9b\x80" . $str; // "\xe9\x9b\x80" : UTF-8 "雀"
 
 	        // 変換時にマッピングが変更される文字を調整
 	        mb_regex_encoding( 'UTF-8' );
-	        $_hint = mb_ereg_replace( "¥xe3¥x80¥x9c", "¥xef¥xbd¥x9e", $_hint );
-	        $_hint = mb_ereg_replace( "¥xe2¥x88¥x92", "¥xe3¥x83¥xbc", $_hint );
-	        $_hint = mb_ereg_replace( "¥xe2¥x80¥x96", "¥xe2¥x88¥xa5", $_hint );
+	        $_hint = mb_ereg_replace( "\xe3\x80\x9c", "\xef\xbd\x9e", $_hint );
+	        $_hint = mb_ereg_replace( "\xe2\x88\x92", "\xe3\x83\xbc", $_hint );
+	        $_hint = mb_ereg_replace( "\xe2\x80\x96", "\xe2\x88\xa5", $_hint );
 
 	        $_tmp  = mb_convert_encoding( $_hint, 'SJIS-win', 'UTF-8' );
 	        $_tmp2 = mb_convert_encoding( $_tmp,  'UTF-8', 'SJIS-win' );
@@ -1283,7 +1283,7 @@ class SystemUtilBase{
 	            $enc = 'UTF-8';
 	        }
 	        // UTF-8 と SJIS 2文字が重なる範囲への対処(SJIS を優先)
-	        if ( preg_match( '/^(?:[¥xE4-¥xE9][¥x80-¥xBF][¥x80-¥x9F][¥x00-¥x7F])+/', $str ) ) {
+	        if ( preg_match( '/^(?:[\xE4-\xE9][\x80-\xBF][\x80-\x9F][\x00-\x7F])+/', $str ) ) {
 	            $enc = 'SJIS-win';
 	        }
 	    }
@@ -1297,7 +1297,7 @@ class SystemUtilBase{
 	 * @return boolean
 	 */
 	function is_expression( $str ){
-		return (preg_match( '/[^¥d¥+¥-¥*¥/¥.%()]+/',$str ) === 0);
+		return (preg_match( '/[^\d\+\-\*\/\.%()]+/',$str ) === 0);
 	}
 
 
@@ -1341,7 +1341,7 @@ class SystemUtilBase{
 
 	function request( $url , $param = array() )
 	{
-		preg_match( '/^(¥w+):¥/¥/([^¥/]+)(.*)$/' , $url , $match );
+		preg_match( '/^(\w+):\/\/([^\/]+)(.*)$/' , $url , $match );
 
 		$protocol = $match[ 1 ];
 		$host     = $match[ 2 ];
@@ -1354,13 +1354,13 @@ class SystemUtilBase{
 
 		$param = http_build_query( $param , '' , '&' );
 
-		$string  = 'POST ' . $url . ' HTTP/1.1' . "¥r¥n";
-		$string .= 'HOST: ' . $host . "¥r¥n";
-		$string .= 'User-Agent: PHP/' . phpversion() . "¥r¥n";
-		$string .= 'Content-Type: application/x-www-form-urlencoded' . "¥r¥n";
-		$string .= 'Content-Length: ' . strlen( $param ) . "¥r¥n";
-		$string .= 'Connection: Close' . "¥r¥n¥r¥n";
-		$string .= $param . "¥r¥n";
+		$string  = 'POST ' . $url . ' HTTP/1.1' . "\r\n";
+		$string .= 'HOST: ' . $host . "\r\n";
+		$string .= 'User-Agent: PHP/' . phpversion() . "\r\n";
+		$string .= 'Content-Type: application/x-www-form-urlencoded' . "\r\n";
+		$string .= 'Content-Length: ' . strlen( $param ) . "\r\n";
+		$string .= 'Connection: Close' . "\r\n\r\n";
+		$string .= $param . "\r\n";
 
 		fwrite( $fp , $string );
 		fclose( $fp );
@@ -1400,7 +1400,7 @@ class SystemUtilBase{
 
     static function isWindows()
     {
-        if (DIRECTORY_SEPARATOR == '¥¥') {
+        if (DIRECTORY_SEPARATOR == '\\') {
             return true;
         }
         return false;
@@ -1508,16 +1508,16 @@ if(!function_exists('json_encode')){
 		return $json_str;
 	}
 	function json_encode_string($in_str) {
-		$in_str = str_replace('¥¥','¥¥¥¥',$in_str);
-		$in_str = str_replace("¥n",'¥¥n',$in_str);
-		$in_str = str_replace('"','¥¥"',$in_str);
+		$in_str = str_replace('\\','\\\\',$in_str);
+		$in_str = str_replace("\n",'\\n',$in_str);
+		$in_str = str_replace('"','\\"',$in_str);
 		mb_internal_encoding("SJIS");
 		$convmap = array(0x80, 0xFFFF, 0, 0xFFFF);
 		$str = "";
 		for($i=mb_strlen($in_str)-1; $i>=0; $i--) {
 			$mb_char = mb_substr($in_str, $i, 1);
-			if(mb_ereg("&#(¥¥d+);", mb_encode_numericentity($mb_char, $convmap, "UTF-8"), $match)) {
-				$str = sprintf("¥¥u%04x", $match[1]) . $str;
+			if(mb_ereg("&#(\\d+);", mb_encode_numericentity($mb_char, $convmap, "UTF-8"), $match)) {
+				$str = sprintf("\\u%04x", $match[1]) . $str;
 			} else {
 				$str = $mb_char . $str;
 			}
