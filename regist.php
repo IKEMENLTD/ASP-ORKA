@@ -113,15 +113,21 @@
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
 
 		// Skip NOHTML check for nUser (public registration always allowed)
-		$should_proceed = ($_GET['type'] == 'nUser') || (!$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] ));
+		// Force should_proceed to true for nUser to bypass all access checks
+		if ($_GET['type'] == 'nUser') {
+			$should_proceed = true;
+			error_log("DEBUG nUser: Forcing should_proceed to TRUE for public registration");
+		} else {
+			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
+		}
 
 		if ($_GET['type'] == 'nUser') {
-			error_log("DEBUG nUser: should_proceed=" . ($should_proceed ? 'YES' : 'NO'));
+			error_log("DEBUG nUser: Final should_proceed=" . ($should_proceed ? 'YES' : 'NO'));
 		}
 
 		if( !$should_proceed )
 		{
-			error_log("DEBUG nUser: Drawing RegistFailed");
+			error_log("DEBUG nUser: Drawing RegistFailed because should_proceed is FALSE");
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
 		else
