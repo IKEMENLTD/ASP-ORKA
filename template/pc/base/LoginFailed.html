@@ -6,35 +6,45 @@
 
 <div id="inc_side_body">
 
-<div class="topics">HOME &gt; <span>ERROR</span></div>
+<div class="login-container">
+<div class="login-card">
 
-    <div class="error_list">
-    <dl>
-    <dt>ERROR - [ エラー ] ログインできません。</dt>
-    <dd>
-    <p>メールアドレスとパスワードを確認してください。</p>
-        <ul>
-        <li>パスワードを忘れてしまった場合は、<a href="index.php">トップページ</a>からパスワードリマインダを使ってパスワードの再発行ができます。</li>
-        <li>正しいログイン情報を入力してもログインできない場合は、管理者までお問い合わせください。</li>
-        </ul>
+<div class="login-header" style="margin-bottom: 25px;">
+    <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">✕</div>
+    <h1 style="color: #e53e3e;">ログイン失敗</h1>
+    <p>メールアドレスまたはパスワードが正しくありません</p>
+</div>
 
-    <form action="login.php" method="post" >
-        <table cellspacing="20" class="login_table" summary="ログインテーブル">
-        <tr>
-            <th>メールアドレス</th>
-            <td><input type="text" name="mail"></td>
-        </tr>
-        <tr>
-            <th>パスワード</th>
-            <td><input type="password" name="passwd" ></td>
-        </tr>
-        </table>
-        <div class="input_single"><input type="submit" value="ログイン" class="input_base"></div>
-	</form>
+<div class="form-error-message" style="margin-bottom: 25px;">
+    <ul style="list-style: disc; padding-left: 20px; margin: 10px 0;">
+        <li>パスワードを忘れた場合は、下記のリンクからパスワードを再発行できます</li>
+        <li>正しい情報を入力してもログインできない場合は、管理者にお問い合わせください</li>
+    </ul>
+</div>
 
-    </dd>
-    </dl>
+<form action="login.php" method="post">
+    <div class="modern-form-group">
+        <label for="mail">メールアドレス<span class="required">*</span></label>
+        <input type="text" id="mail" name="mail" class="modern-input" placeholder="mail@example.com" required>
     </div>
+
+    <div class="modern-form-group">
+        <label for="passwd">パスワード<span class="required">*</span></label>
+        <input type="password" id="passwd" name="passwd" class="modern-input" placeholder="パスワードを入力" required>
+    </div>
+
+    <div class="modern-button-group">
+        <input type="submit" value="再度ログイン" class="modern-btn">
+    </div>
+</form>
+
+<div class="login-footer">
+    <p><a href="reminder.php?type=nUser">パスワードをお忘れの方はこちら</a></p>
+    <p style="margin-top: 15px;"><a href="index.php">トップページに戻る</a></p>
+</div>
+
+</div>
+</div>
 
 </div><!--inc_side_body_END-->
 
