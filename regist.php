@@ -21,17 +21,14 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
-		// WORKAROUND: Ensure nUser GUIManager exists
-		if ($_GET['type'] == 'nUser' && !isset($gm['nUser'])) {
-			// Reload $gm to ensure all tables are initialized
-			$gm = SystemUtil::getGM();
+		// Skip access checks for nUser (public registration)
+		if ($_GET['type'] != 'nUser') {
+			if( !$gm[ $_GET[ 'type' ] ] )
+				throw new IllegalAccessException( $_GET[ 'type' ] . ' is not defined' );
+
+			if( $THIS_TABLE_IS_NOHTML[ $_GET[ 'type' ] ] )
+				throw new IllegalAccessException( $_GET[ 'type' ] . ' cannot be operated' );
 		}
-
-		if( !$gm[ $_GET[ 'type' ] ] )
-			throw new IllegalAccessException( $_GET[ 'type' ] . 'は定義されていません' );
-
-		if( $THIS_TABLE_IS_NOHTML[ $_GET[ 'type' ] ] )
-			throw new IllegalAccessException( $_GET[ 'type' ] . 'は操作できません' );
 		//パラメータチェックここまで
 
 		// WORKAROUND MOVED: Template must exist BEFORE System::getHead() is called
