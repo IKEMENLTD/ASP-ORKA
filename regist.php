@@ -98,7 +98,8 @@
 			$tdb->setData($new_rec, 'sort', 999);
 			$tdb->addRecord($new_rec);
 		}
-	}
+		}  // Close the if ($loginUserType == 'nobody') block
+	}  // Close the if ($_GET['type'] == 'nUser') block
 
 	// DEBUG: Check what we have before rendering
 	if ($_GET['type'] == 'nUser') {
