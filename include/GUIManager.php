@@ -643,7 +643,8 @@
 			$command = str_replace( "\ ", "!CODE001;", $command );
 
 		    $state = self::getDefState( true );
-			$str	 = trim(  GUIManager::commandComment( $command. " ", $this, $rec, $state , $c_part = null )  );
+	    $c_part = null; // PHP 8: Cannot pass by-reference argument to static method inline
+			$str	 = trim(  GUIManager::commandComment( $command. " ", $this, $rec, $state , $c_part )  );
 
 			$str	 = str_replace( self::$escape_symbol_array, self::$escape_chara_array  , $str );
 
