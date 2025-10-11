@@ -818,16 +818,39 @@ div.side_menu.modern-sidebar ul li a:hover::before {
 
 /* 極小画面: 275px - 479px */
 @media (min-width: 275px) and (max-width: 479px) {
+    /* ヘッダーの高さを調整 */
+    div#header {
+        height: auto !important;
+        min-height: 90px !important;
+    }
+
+    /* コンテナを画面幅に合わせる */
+    div#container {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    div#contents {
+        width: 100% !important;
+        max-width: 100%;
+        margin: 0 auto 20px auto;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
     /* サイドバーを画面上部に配置 */
     div#side_bar {
         width: 100% !important;
         float: none !important;
+        clear: both !important;
         margin-bottom: 15px;
     }
 
     div#inc_side_body {
         width: 100% !important;
         float: none !important;
+        clear: both !important;
     }
 
     div#side_bar div.side_menu.modern-sidebar {
@@ -860,16 +883,39 @@ div.side_menu.modern-sidebar ul li a:hover::before {
 
 /* 小画面: 480px - 767px */
 @media (min-width: 480px) and (max-width: 767px) {
+    /* ヘッダーの高さを調整 */
+    div#header {
+        height: auto !important;
+        min-height: 110px !important;
+    }
+
+    /* コンテナを画面幅に合わせる */
+    div#container {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    div#contents {
+        width: 100% !important;
+        max-width: 100%;
+        margin: 0 auto 20px auto;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
     /* サイドバーを画面上部に配置 */
     div#side_bar {
         width: 100% !important;
         float: none !important;
+        clear: both !important;
         margin-bottom: 20px;
     }
 
     div#inc_side_body {
         width: 100% !important;
         float: none !important;
+        clear: both !important;
     }
 
     div#side_bar div.side_menu.modern-sidebar {
@@ -901,13 +947,37 @@ div.side_menu.modern-sidebar ul li a:hover::before {
 
 /* タブレット: 768px - 1023px */
 @media (min-width: 768px) and (max-width: 1023px) {
+    /* ヘッダーの高さを調整 */
+    div#header {
+        height: auto !important;
+        min-height: 130px !important;
+    }
+
+    /* コンテナを画面幅に合わせる */
+    div#container {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    div#contents {
+        width: 100% !important;
+        max-width: 980px;
+        margin: 0 auto 20px auto;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     /* サイドバーはそのまま左側に配置 */
     div#side_bar {
         width: 180px !important;
+        float: left !important;
     }
 
+    /* 修正：180pxに合わせて正しい幅を計算 */
     div#inc_side_body {
-        width: calc(100% - 200px) !important;
+        width: calc(100% - 195px) !important;
+        float: right !important;
     }
 
     div#side_bar div.side_menu.modern-sidebar {
@@ -932,24 +1002,58 @@ div.side_menu.modern-sidebar ul li a:hover::before {
 
 /* デスクトップ: 1024px - 1440px */
 @media (min-width: 1024px) and (max-width: 1440px) {
+    /* ヘッダーの高さを調整（ロゴ150px対応） */
+    div#header {
+        height: auto !important;
+        min-height: 180px !important;
+    }
+
+    /* コンテナは固定幅を維持 */
+    div#container {
+        width: 1020px !important;
+    }
+
+    div#contents {
+        width: 1000px !important;
+    }
+
     /* デフォルトのサイドバーレイアウト */
     div#side_bar {
         width: 195px !important;
+        float: left !important;
     }
 
     div#inc_side_body {
         width: 795px !important;
+        float: right !important;
     }
 }
 
 /* 大画面（1440px以上） */
 @media (min-width: 1441px) {
+    /* ヘッダーの高さを調整（ロゴ150px対応） */
+    div#header {
+        height: auto !important;
+        min-height: 180px !important;
+    }
+
+    /* コンテナは固定幅を維持 */
+    div#container {
+        width: 1020px !important;
+    }
+
+    div#contents {
+        width: 1000px !important;
+    }
+
     div#side_bar {
         width: 195px !important;
+        float: left !important;
     }
 
     div#inc_side_body {
         width: 795px !important;
+        float: right !important;
     }
 }
 
