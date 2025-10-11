@@ -83,8 +83,10 @@
 				else
 				{
 					//Exceptionオブジェクトのテンプレートを検索する
-					if( 'Exception' != $className )
+					if( 'Exception' != $className && class_exists('Template') )
 						$template = Template::getTemplate( $loginUserType , $loginUserRank , 'exception' , 'EXCEPTION_DESIGN' );
+					else
+						$template = null;
 
 					if( $template && file_exists( $template ) )
 						print $tGM->getString( $template );
@@ -112,9 +114,18 @@
 					print System::getHead( $gm , $loginUserType , $loginUserRank );
 				else
 					echo "<!DOCTYPE html><html><head><title>System Error</title></head><body><h1>System Error</h1>";
-				Template::drawErrorTemplate();
-				print System::getFoot( $gm , $loginUserType , $loginUserRank );
-				System::flush();
+
+				if (class_exists('Template'))
+					Template::drawErrorTemplate();
+				else
+					echo "<p>An error occurred. Please contact the administrator.</p>";
+
+				if (class_exists('System') && isset($gm, $loginUserType, $loginUserRank)) {
+					print System::getFoot( $gm , $loginUserType , $loginUserRank );
+					System::flush();
+				} else {
+					echo "</body></html>";
+				}
 			}
 		}
 
