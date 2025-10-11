@@ -1,6 +1,7 @@
 <?php
 namespace Websquare\FileBase;
 
+require_once __DIR__ . '/../base/interface/iFileBase.php';
 require_once __DIR__ . '/SupabaseStorageClient.php';
 
 /**

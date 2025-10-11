@@ -180,6 +180,12 @@
 			else
 				{ $path = $this->errorLogFile; }
 
+			// PHP 8 compatibility: Check if path is empty before fopen
+			if( empty($path) ) {
+				error_log("ErrorManager: Error log file path is empty");
+				return;
+			}
+
 			$fp = fopen( $path , 'a' );
 
 			if( $fp )

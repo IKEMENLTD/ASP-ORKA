@@ -1,5 +1,5 @@
 <?php
-namespace Websquareﾂ･FileBase;
+namespace Websquare\FileBase;
 
 interface iFileBase
 {

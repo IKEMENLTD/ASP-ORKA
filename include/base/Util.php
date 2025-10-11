@@ -890,7 +890,7 @@ class SystemUtilBase{
 	        header("Pragma: private");
 
 		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: attachment; filename*=UTF-8¥'¥''.rawurlencode($filename));
+		header('Content-Disposition: attachment; filename*=UTF-8\'\''.rawurlencode($filename));
 
 		if(file_exists($contents))
 		{
