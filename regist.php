@@ -1,13 +1,14 @@
 <?php
 	// === ULTRA-EARLY DEBUG - Before ANYTHING ===
 	if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
-		die("<html><head><title>ULTRA DEBUG</title></head><body>" .
-			"<h1 style='color: blue;'>ULTRA-EARLY DEBUG - regist.php IS EXECUTING</h1>" .
-			"<p>File: " . __FILE__ . "</p>" .
-			"<p>Line: " . __LINE__ . "</p>" .
-			"<p>GET type: " . htmlspecialchars($_GET['type']) . "</p>" .
-			"<p>This message appears BEFORE ob_start() and BEFORE any includes.</p>" .
-			"</body></html>");
+		echo "<html><head><title>ULTRA DEBUG</title></head><body>";
+		echo "<h1 style='color: blue;'>ULTRA-EARLY DEBUG - regist.php IS EXECUTING</h1>";
+		echo "<p>File: " . htmlspecialchars(__FILE__) . "</p>";
+		echo "<p>Line: " . __LINE__ . "</p>";
+		echo "<p>GET type: " . htmlspecialchars($_GET['type']) . "</p>";
+		echo "<p>This message appears BEFORE ob_start() and BEFORE any includes.</p>";
+		echo "</body></html>";
+		die();
 	}
 	// === END ULTRA DEBUG ===
 
