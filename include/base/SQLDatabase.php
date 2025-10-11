@@ -2913,7 +2913,8 @@ class TableBase{
 		foreach( $array as $key => $val ){
 			if(is_array($val)){$array[$key]=$this->getWhereReflexive($key,$val);}
 		}
-		return "(".implode($array," $conjunction ").")";
+		// PHP 8 compatibility: implode(separator, array) order is required
+	return "(".implode(" $conjunction ", $array).")";
 	}
 
 	/*
