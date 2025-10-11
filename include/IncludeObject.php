@@ -29,10 +29,11 @@
 			$fp		 = fopen ($file, 'r');
 
 		    $state = GUIManager::getDefState( true );
+		    $c_part = null; // PHP 8: Cannot pass by-reference argument to static method inline
 			while(!feof($fp))
 			{
 				$buffer	 = fgets($fp, 20480);
-				$str	 = GUIManager::commandComment($buffer, $gm, $rec, $state , $c_part = null);
+				$str	 = GUIManager::commandComment($buffer, $gm, $rec, $state , $c_part);
 
 				$str	 = str_replace( Array("!CODE000;","!CODE001;"), Array("/"," "), $str );
 
@@ -57,10 +58,11 @@
 			$fp		 = fopen ($file, 'r');
 			$ret	 = "";
 		    $state = GUIManager::getDefState( true );
+		    $c_part = null; // PHP 8: Cannot pass by-reference argument to static method inline
 			while(!feof($fp))
 			{
 				$buffer	 = fgets($fp, 20480);
-				$ret	 .= GUIManager::commandComment($buffer, $gm, $rec, $state , $c_part = null);
+				$ret	 .= GUIManager::commandComment($buffer, $gm, $rec, $state , $c_part);
 			}
 			fclose($fp);
 
