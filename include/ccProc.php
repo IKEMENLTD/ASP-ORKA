@@ -462,9 +462,9 @@
 					{ $ret .= 'width="'. $elements[ 'width' ] .'" height="'. $elements[ 'height' ] .'" '; }
 					if( isset($poster) ) { $ret .= 'poster="'.$poster.'" '; }
 					if( isset($preload) ) { $ret .= 'preload="'.$preload.'" '; }
-					$ret .= '>'."¥n";
-					$ret .= '<source src="'. $elements[ 'src' ] .'">'."¥n";
-					$ret .= '</video>'."¥n";
+					$ret .= '>'."\n";
+					$ret .= '<source src="'. $elements[ 'src' ] .'">'."\n";
+					$ret .= '</video>'."\n";
 				break;
 			}
 			return $ret;
@@ -511,7 +511,7 @@
 					if( isset($cc[5]) && strlen($cc[5]) ) {	$value = h($cc[5]); }
 					if( isset($initial) ) { $value = h($initial); }
 	
-					$ret .= '<input type="text" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "¥n";
+					$ret .= '<input type="text" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "\n";
 					break;
 					
 				case 'password':
@@ -522,7 +522,7 @@
 					if( isset($cc[3]) && strlen($cc[3]) ) { $option .= 'size="'. $cc[3] .'" '; }
 					if( isset($cc[4]) && strlen($cc[4]) ) { $option .= 'maxlength="'. $cc[4] .'" '; }
 	
-					$ret .= '<input type="password" name="'. $col .'" '.$option .' />'. "¥n";
+					$ret .= '<input type="password" name="'. $col .'" '.$option .' />'. "\n";
 					break;
 					
 				case 'textarea':
@@ -532,9 +532,9 @@
 					
 					$value = isset($cc[5])?$cc[5]:'';
 					if( isset($initial) ) { $value = $initial; }
-					if( isset($cc[ 7 ]) && 'nobr' != $cc[ 7 ] ){ $value = str_replace( '<br/>', "¥n", $value ); }
+					if( isset($cc[ 7 ]) && 'nobr' != $cc[ 7 ] ){ $value = str_replace( '<br/>', "\n", $value ); }
 	
-					$ret .= '<textarea name="'. $col .'" cols="'. $cc[3] .'" rows="'. $cc[4] .'" '. $option .'>'. h ( $value, ENT_QUOTES | ENT_HTML401 ) .'</textarea>'. "¥n";
+					$ret .= '<textarea name="'. $col .'" cols="'. $cc[3] .'" rows="'. $cc[4] .'" '. $option .'>'. h ( $value, ENT_QUOTES | ENT_HTML401 ) .'</textarea>'. "\n";
 					break;
 				
 				case 'radiobox':
@@ -556,7 +556,7 @@
 						$checked = "";
 						if( $value[$i] == $init ) { $checked = ' checked="checked" '; }
 						
-						$ret .= '<label><input type="radio" name="'. $col .'" value="'. $value[$i] .'" '. $option .''.$checked.'/>'. $index[$i]. $cc[4]. "</label>¥n"; 
+						$ret .= '<label><input type="radio" name="'. $col .'" value="'. $value[$i] .'" '. $option .''.$checked.'/>'. $index[$i]. $cc[4]. "</label>\n"; 
 					}
 					break;
 				case 'checkbox':
@@ -582,10 +582,10 @@
 						$checked = "";
 						if( array_search($value[$i],$init) !== FALSE ){ $checked = ' checked="checked" '; }
 	
-						$ret .= '<label><input type="checkbox" name="'. $col .'[]" value="'. $value[$i] .'" '. $option .$checked.'/>'. $index[$i]. $cc[4]. "</label>¥n";
+						$ret .= '<label><input type="checkbox" name="'. $col .'[]" value="'. $value[$i] .'" '. $option .$checked.'/>'. $index[$i]. $cc[4]. "</label>\n";
 					}
 				
-					if(!strlen($cc[8]) || $cc[8] != 'true' ) { $ret .= '<input type="hidden" name="'. $col .'_CHECKBOX" value="" />'."¥n"; }
+					if(!strlen($cc[8]) || $cc[8] != 'true' ) { $ret .= '<input type="hidden" name="'. $col .'_CHECKBOX" value="" />'."\n"; }
 					break;
 					
 				case 'option':
@@ -601,16 +601,16 @@
 					$init = self::initEscape($init);
 					
 					
-					$ret .= '<select name="'. $col .'" '. $option .'>'. "¥n";
+					$ret .= '<select name="'. $col .'" '. $option .'>'. "\n";
 					$count = count($value);
 					for($i=0; $i<$count; $i++)
 					{
 						$selected = "";
 						if( $value[$i] == $init ) { $selected = ' selected="selected" '; }
 						
-						$ret .= '<option value="'. $value[$i] .'"'.$selected.'>'. $index[$i] .'</option>'. "¥n";
+						$ret .= '<option value="'. $value[$i] .'"'.$selected.'>'. $index[$i] .'</option>'. "\n";
 					}
-					$ret .= '</select>'. "¥n";
+					$ret .= '</select>'. "\n";
 					
 					break;
 				case 'multiple':
@@ -629,7 +629,7 @@
 					$init = self::initEscape($init);
 					if ( !is_array($init) ) { $init = explode('/', $init); }
 					
-					$ret .= '<select name="'. $col .'[]" multiple="multiple" size="'.$cc[6].'" '. $option .'>'. "¥n";
+					$ret .= '<select name="'. $col .'[]" multiple="multiple" size="'.$cc[6].'" '. $option .'>'. "\n";
 					$count = count($value);
 					
 					for($i=0; $i<$count; $i++)
@@ -637,9 +637,9 @@
 						$selected = '';
 						if( array_search( $value[$i], $init ) !== FALSE ){ $selected = 'selected="selected"'; }
 						
-						$ret	 .= '<option value="'. $value[$i] .'" '.$selected.'>'. $index[$i] .'</option>'. "¥n";
+						$ret	 .= '<option value="'. $value[$i] .'" '.$selected.'>'. $index[$i] .'</option>'. "\n";
 					}
-					$ret	 .= '</select>'. "¥n";
+					$ret	 .= '</select>'. "\n";
 					
 					break;
 
@@ -711,12 +711,12 @@
 
                             if ($enablePosts[$i]) //ファイルの情報がある場合
                             {
-                                $ret .= '<input name="' . $col_name . '_filetmp" type="hidden" value="' . $_POST[$col_name] . '" />' . "¥n";
+                                $ret .= '<input name="' . $col_name . '_filetmp" type="hidden" value="' . $_POST[$col_name] . '" />' . "\n";
                                 $ret .= '<label><input type="checkbox" name="' . $col_name . '_DELETE" value="true" />' . $deleteText . '</label>';
 
                             } else  //引き継ぎ情報がある場合
                             {
-                                $ret .= '<input name="' . $col_name . '_filetmp" type="hidden" value="' . $_POST[$col_name . '_filetmp'] . '" />' . "¥n";
+                                $ret .= '<input name="' . $col_name . '_filetmp" type="hidden" value="' . $_POST[$col_name . '_filetmp'] . '" />' . "\n";
 
                                 if ($enableDeletes[$i]) //削除チェックの引き継ぎがある場合
                                 {
@@ -731,8 +731,8 @@
 							$fileCount++;
 						}
 					}
-					$ret = '<input name="' . $col . '[]" type="file" ' . $option . 'multiple="multiple">' . "¥n<br />¥n"
-							. ($fileCount==0?'':"現在 $fileCount 個のファイルをアップロード済みで、残り"). ($max_num-$fileCount)."個のファイルをアップロード可能です。¥n<br />¥n"
+					$ret = '<input name="' . $col . '[]" type="file" ' . $option . 'multiple="multiple">' . "\n<br />\n"
+							. ($fileCount==0?'':"現在 $fileCount 個のファイルをアップロード済みで、残り"). ($max_num-$fileCount)."個のファイルをアップロード可能です。\n<br />\n"
 							.$ret;
 
 					if( isset( $cc[ 8 ] ) && $cc[ 8 ]=='drop'  )
@@ -799,17 +799,17 @@
 					if( isset( $cc[ 4 ] ) && strlen( $cc[ 4 ] ) ) //削除チェックの文言指定がある場合
 						{ $deleteText = $cc[ 4 ]; }
 
-					$ret .= '<input name="' . $col . '" type="file" ' . $option . '>' . "¥n";
+					$ret .= '<input name="' . $col . '" type="file" ' . $option . '>' . "\n";
 
 					if( $enablePost ) //ファイルの情報がある場合
 					{
-						$ret .= '<input name="' . $col . '_filetmp" type="hidden" value="' . $_POST[ $col ] . '" />' . "¥n";
+						$ret .= '<input name="' . $col . '_filetmp" type="hidden" value="' . $_POST[ $col ] . '" />' . "\n";
 						$ret .= '<label><input type="checkbox" name="' . $col . '_DELETE" value="true" />' . $deleteText . '</label>';
 
 					}
 					else if( $enableFileTemp ) //引き継ぎ情報がある場合
 					{
-						$ret .= '<input name="' . $col . '_filetmp" type="hidden" value="' . $_POST[ $col . '_filetmp' ] . '" />'. "¥n";
+						$ret .= '<input name="' . $col . '_filetmp" type="hidden" value="' . $_POST[ $col . '_filetmp' ] . '" />'. "\n";
 
 						if( $enableDelete ) //削除チェックの引き継ぎがある場合
 							{ $ret .= '<label><input type="checkbox" name="' . $col . '_DELETE" value="true" checked="checked" />' . $deleteText . '</label>'; }
@@ -831,17 +831,17 @@
 					if( isset($initial ) ){
 						if( is_array($initial) ){
 							foreach( $initial as $val ){
-								$ret .= '<input name="'. $col .'['.$num.']" type="hidden" value="'. h($val) .'" '. $option .'/>'. "¥n";
+								$ret .= '<input name="'. $col .'['.$num.']" type="hidden" value="'. h($val) .'" '. $option .'/>'. "\n";
 							}
 						}
 						else{
-							$ret .= '<input name="'. $col .'" type="hidden" value="'. h($initial) .'" '. $option .' />'. "¥n";
+							$ret .= '<input name="'. $col .'" type="hidden" value="'. h($initial) .'" '. $option .' />'. "\n";
 						}
 					}
 					else {
 						$value = '';
 						if( isset($cc[3]) ){ $value = h($cc[3]); }
-						$ret .= '<input name="'. $col .'" type="hidden" value="'. $value .'" '. $option .'/>'. "¥n";
+						$ret .= '<input name="'. $col .'" type="hidden" value="'. $value .'" '. $option .'/>'. "\n";
 					}
 					break;
 				case 'date':
@@ -948,7 +948,7 @@
 					if( isset($cc[5]) && strlen($cc[5]) ) {	$value = h($cc[5]); }
 					if( isset($initial) ) { $value = h($initial); }
 	
-					$ret .= '<input type="tel" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "¥n";
+					$ret .= '<input type="tel" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "\n";
 					//placeholder
 					break;
 				case 'url':
@@ -963,7 +963,7 @@
 					if( isset($cc[5]) && strlen($cc[5]) ) {	$value = h($cc[5]); }
 					if( isset($initial) ) { $value = h($initial); }
 	
-					$ret .= '<input type="url" name="'. $col .'" value="'.$value.'" '.$option .' autocapitalize="off"/>'. "¥n";
+					$ret .= '<input type="url" name="'. $col .'" value="'.$value.'" '.$option .' autocapitalize="off"/>'. "\n";
 					//placeholder
 					break;
 				case 'number':
@@ -979,7 +979,7 @@
 					if( isset($cc[5]) && strlen($cc[5]) ) {	$value = h($cc[5]); }
 					if( isset($initial) ) { $value = h($initial); }
 	
-					$ret .= '<input type="number" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "¥n";
+					$ret .= '<input type="number" name="'. $col .'" value="'.$value.'" '.$option .'/>'. "\n";
 					break;
 				case 'email':
 					// emailのinputタグを出力。
@@ -993,7 +993,7 @@
 					if( isset($cc[5]) && strlen($cc[5]) ) {	$value = h($cc[5]); }
 					if( isset($initial) ) { $value = h($initial); }
 	
-					$ret .= '<input type="email" name="'. $col .'" value="'.$value.'" '.$option .' autocapitalize="off" />'. "¥n";
+					$ret .= '<input type="email" name="'. $col .'" value="'.$value.'" '.$option .' autocapitalize="off" />'. "\n";
 					
 					//multiple,placeholder
 					break;
@@ -1185,7 +1185,7 @@
 			if( '->' == $partsName || 'to' == $partsName ) //補助構文の場合
 				{ $partsName = array_shift( $iArgs ); }
 
-			if( preg_match( '/^(¥d+)‾(¥d+)$/' , $tableName , $matches ) ) //数値指定の場合
+			if( preg_match( '/^(\d+)~(\d+)$/' , $tableName , $matches ) ) //数値指定の場合
 			{
 				$begin  = ( int )( $matches[ 1 ] );
 				$end    = ( int )( $matches[ 2 ] );
@@ -1685,8 +1685,8 @@
 
 			if( FALSE !== strpos( $ret , '!CODE000;' ) || FALSE !== strpos( $ret , '!CODE001;' ) || FALSE !== strpos( $ret , '!CODE002;' ) )
 			{
-				$ret = urlencode(str_replace( array("!CODE000;","!CODE001;","!CODE002;"), array("/"," ","¥¥") , $ret ));
-				$ret = str_replace( array("/"," ","¥¥"), array("!CODE000;","!CODE001;","!CODE002;"), $ret );
+				$ret = urlencode(str_replace( array("!CODE000;","!CODE001;","!CODE002;"), array("/"," ","\\") , $ret ));
+				$ret = str_replace( array("/"," ","\\"), array("!CODE000;","!CODE001;","!CODE002;"), $ret );
 			}
 			else
 				{ $ret = urlencode( $ret ); }
@@ -1724,7 +1724,7 @@
 			$cc  = array_slice( $cc , 1 );
 			$ret = ccProc::controller( $gm , $rec , $cc );
 
-			$url = '/(?<!href=")https?:¥/¥/[-_.!‾*¥'()a-zA-Z0-9;¥/?:@&=+$,%#]+/';
+			$url = '/(?<!href=")https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:@&=+$,%#]+/';
 			$ret = preg_replace_callback( $url, function( $matches ){ return '<a href="'.$matches[0].'">'.$matches[0]."</a>"; }, $ret);
 
 			return $ret;
@@ -1824,7 +1824,7 @@
 		{
 			$ret = "";
 			
-			if( ! preg_match( '/^[a-zA-Z_¥x7f-¥xff][a-zA-Z0-9_¥x7f-¥xff]*$/', $cc[1] ) ){
+			if( ! preg_match( '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $cc[1] ) ){
 				return $ret;
 			}
 			
@@ -1920,7 +1920,7 @@
 			@param[in] $iGM_  GUIManagerオブジェクト。
 			@param[in] $iRec_ レコードデータ。
 			@param[in] $iCC_  コマンドコメントパラメータ。
-			@attension コマンドコメントは個別にweaveに対応する必要があります。¥n
+			@attension コマンドコメントは個別にweaveに対応する必要があります。\n
 			           挿入パラメータの取得にはWeaveクラスを使用してください。
 		*/
 		function weave( &$iGM_ , $iRec_ , $iCC_ )
@@ -2139,10 +2139,10 @@
                     //第二引数をGET引数の連想配列名とした値と、第三引数に指定された値が一致するかどうか。
                     return isset($_POST[$cc[2]])?($_POST[$cc[2]] == $cc[3]):''==$cc[3];
                 case 'uri_match':
-                	return (preg_match('/'.str_replace( array("!CODE001;","!CODE000;","!CODE002;"), array(" ", "/", "¥¥") , $cc[2] ).'$/',$_SERVER['REQUEST_URI']) > 0);
+                	return (preg_match('/'.str_replace( array("!CODE001;","!CODE000;","!CODE002;"), array(" ", "/", "\\") , $cc[2] ).'$/',$_SERVER['REQUEST_URI']) > 0);
                 	break;
                 case 'uri_match_like':
-                	return (preg_match('/'.str_replace( array("!CODE001;","!CODE000;","!CODE002;"), array(" ", "/", "¥¥") , $cc[2] ).'/',$_SERVER['REQUEST_URI']) > 0);
+                	return (preg_match('/'.str_replace( array("!CODE001;","!CODE000;","!CODE002;"), array(" ", "/", "\\") , $cc[2] ).'/',$_SERVER['REQUEST_URI']) > 0);
                 	break;
                 case 'val>':
                     return ($cc[2] > $cc[3]);
@@ -2240,7 +2240,7 @@
 
 					return !( ( $isRegist && $isRegistConst ) || ( $isEdit && $isEditConst ) );
 				case 'ua_match' :
-					return preg_match( '/' . str_replace( '/' , '¥¥/' , $cc[ 2 ] ) . '/' , $_SERVER[ 'HTTP_USER_AGENT' ] );
+					return preg_match( '/' . str_replace( '/' , '\\/' , $cc[ 2 ] ) . '/' , $_SERVER[ 'HTTP_USER_AGENT' ] );
                 default:
                 	global $ALL_DEBUG_FLAG;
                 	if( $ALL_DEBUG_FLAG ){ d( '['.$cc[1].'] not found.' ,'ifbegin');}

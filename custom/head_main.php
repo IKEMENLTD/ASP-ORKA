@@ -43,7 +43,8 @@
 /*	include_once "./include/Util.php";*/
 	include_once "include/base/Util.php";
 
-	if(!$CRON_SESSION_FLAG){
+	// PHP 8 compatibility: Check if variable is defined
+	if(!isset($CRON_SESSION_FLAG) || !$CRON_SESSION_FLAG){
 		session_start();
 	}
 
@@ -51,7 +52,10 @@
 		{ $sid = h( SID ); }
 	else //携帯以外の端末の場合
 	{
-		if( $_GET[ ini_get( 'session.name' ) ] == session_id() || $_POST[ ini_get( 'session.name' ) ] == session_id() ) //GET/POSTからの設定は一度強制変更する
+		// PHP 8 compatibility: Check if array keys exist before accessing
+		$sessionName = ini_get( 'session.name' );
+		if( (isset($_GET[$sessionName]) && $_GET[$sessionName] == session_id()) ||
+		    (isset($_POST[$sessionName]) && $_POST[$sessionName] == session_id()) ) //GET/POSTからの設定は一度強制変更する
 			{ session_regenerate_id(); }
 	}
 

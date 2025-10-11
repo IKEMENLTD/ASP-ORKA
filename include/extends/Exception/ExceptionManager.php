@@ -56,8 +56,8 @@
 					System::$foot = false;
 				}
 
-				// PHP 8 compatibility: Check if SystemUtil and globals exist
-				if( $_GET[ 'type' ] && !is_array( $_GET[ 'type' ] ) && isset($gm) && isset($gm[ $_GET[ 'type' ] ]) && class_exists('SystemUtil') )
+				// PHP 8 compatibility: Check if SystemUtil and globals exist, and if $_GET['type'] is set
+				if( isset($_GET['type']) && $_GET[ 'type' ] && !is_array( $_GET[ 'type' ] ) && isset($gm) && isset($gm[ $_GET[ 'type' ] ]) && class_exists('SystemUtil') )
 					$tGM = SystemUtil::getGMforType( $_GET[ 'type' ] );
 				else if (class_exists('SystemUtil'))
 					$tGM = SystemUtil::getGMforType( 'system' );
