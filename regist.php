@@ -100,6 +100,12 @@
 		}
 	}
 
+	// DEBUG: Check what we have before rendering
+	if ($_GET['type'] == 'nUser') {
+		error_log("DEBUG nUser: gm[nUser] exists=" . (isset($gm['nUser']) ? 'YES' : 'NO'));
+		error_log("DEBUG nUser: loginUserType=" . $loginUserType);
+	}
+
 	print System::getHead($gm,$loginUserType,$loginUserRank);
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
 
@@ -108,8 +114,13 @@
 		// Skip NOHTML check for nUser (public registration always allowed)
 		$should_proceed = ($_GET['type'] == 'nUser') || (!$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] ));
 
+		if ($_GET['type'] == 'nUser') {
+			error_log("DEBUG nUser: should_proceed=" . ($should_proceed ? 'YES' : 'NO'));
+		}
+
 		if( !$should_proceed )
 		{
+			error_log("DEBUG nUser: Drawing RegistFailed");
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
 		else
