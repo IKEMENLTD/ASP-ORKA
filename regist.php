@@ -28,37 +28,36 @@
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は操作できません' );
 		//パラメータチェックここまで
 
-		print System::getHead($gm,$loginUserType,$loginUserRank);
+		// WORKAROUND MOVED: Template must exist BEFORE System::getHead() is called
+	// (Original workaround code moved here from after System::getSystem)
+	if ($_GET['type'] == 'nUser' && ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE)) {
+		$tgm = SystemUtil::getGMforType("template");
+		$tdb = $tgm->getDB();
+
+		$check_table = $tdb->getTable();
+		$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
+		$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
+		$check_table = $tdb->searchTable($check_table, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
+
+		if ($tdb->getRow($check_table) == 0) {
+			$new_rec = $tdb->getNewRecord();
+			$tdb->setData($new_rec, 'id', '999');
+			$tdb->setData($new_rec, 'user_type', '//');
+			$tdb->setData($new_rec, 'target_type', 'nUser');
+			$tdb->setData($new_rec, 'activate', 15);
+			$tdb->setData($new_rec, 'owner', 3);
+			$tdb->setData($new_rec, 'label', 'REGIST_FORM_PAGE_DESIGN');
+			$tdb->setData($new_rec, 'file', 'nUser/Regist.html');
+			$tdb->setData($new_rec, 'sort', 999);
+			$tdb->addRecord($new_rec);
+		}
+	}
+
+	print System::getHead($gm,$loginUserType,$loginUserRank);
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
 
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
 
-		// WORKAROUND: For nUser registration, manually ensure template exists in database
-		if ($_GET['type'] == 'nUser' && ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE)) {
-			$tgm = SystemUtil::getGMforType("template");
-			$tdb = $tgm->getDB();
-
-			// Check if fallback template exists
-			$check_table = $tdb->getTable();
-			$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
-			$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
-			$check_table = $tdb->searchTable($check_table, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
-
-			if ($tdb->getRow($check_table) == 0) {
-				// Add fallback template on-the-fly
-				$new_rec = $tdb->getNewRecord();
-				$tdb->setData($new_rec, 'id', '999');
-				$tdb->setData($new_rec, 'user_type', '//');
-				$tdb->setData($new_rec, 'target_type', 'nUser');
-				$tdb->setData($new_rec, 'activate', 15);
-				$tdb->setData($new_rec, 'owner', 3);
-				$tdb->setData($new_rec, 'label', 'REGIST_FORM_PAGE_DESIGN');
-				$tdb->setData($new_rec, 'file', 'nUser/Regist.html');
-				$tdb->setData($new_rec, 'sort', 999);
-				$tdb->addRecord($new_rec);
-			}
-		}
-	
 		if(   $THIS_TABLE_IS_NOHTML[ $_GET['type'] ] || !isset(  $gm[ $_GET['type'] ]  )   )
 		{
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
