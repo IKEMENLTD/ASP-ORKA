@@ -1,3 +1,6 @@
 # 最小限の.htaccess
 DirectoryIndex index.php
 Options -Indexes
+
+# UTF-8 charset for JavaScript and CSS files
+AddCharset UTF-8 .js .css .html .htm
