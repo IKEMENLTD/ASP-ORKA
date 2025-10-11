@@ -12,7 +12,7 @@
 
 var Prototype = {
   Version: '1.4.0',
-  ScriptFragment: '(?:<script.*?>)((¥n|¥r|.)*?)(?:<¥/script>)',
+  ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
 
   emptyFunction: function() {},
   K: function(x) {return x}
@@ -141,7 +141,7 @@ function $() {
 }
 Object.extend(String.prototype, {
   stripTags: function() {
-    return this.replace(/<¥/?[^>]+>/gi, '');
+    return this.replace(/<\/?[^>]+>/gi, '');
   },
 
   stripScripts: function() {
@@ -174,7 +174,7 @@ Object.extend(String.prototype, {
   },
 
   toQueryParams: function() {
-    var pairs = this.match(/^¥??(.*)$/)[1].split('&');
+    var pairs = this.match(/^\??(.*)$/)[1].split('&');
     return pairs.inject({}, function(params, pairString) {
       var pair = pairString.split('=');
       params[pair[0]] = pair[1];
@@ -203,7 +203,7 @@ Object.extend(String.prototype, {
   },
 
   inspect: function() {
-    return "'" + this.replace('¥¥', '¥¥¥¥').replace("'", '¥¥¥'') + "'";
+    return "'" + this.replace('\\', '\\\\').replace("'", '\\\'') + "'";
   }
 });
 
@@ -656,7 +656,7 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     try {
       this.url = url;
       if (this.options.method == 'get' && parameters.length > 0)
-        this.url += (this.url.match(/¥?/) ? '&' : '?') + parameters;
+        this.url += (this.url.match(/\?/) ? '&' : '?') + parameters;
 
       Ajax.Responders.dispatch('onCreate', this, this.transport);
 
@@ -741,7 +741,7 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
         this.dispatchException(e);
       }
 
-      if ((this.header('Content-type') || '').match(/^text¥/javascript/i))
+      if ((this.header('Content-type') || '').match(/^text\/javascript/i))
         this.evalResponse();
     }
 
@@ -853,7 +853,7 @@ Ajax.PeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
 document.getElementsByClassName = function(className, parentElement) {
   var children = ($(parentElement) || document.body).getElementsByTagName('*');
   return $A(children).inject([], function(elements, child) {
-    if (child.className.match(new RegExp("(^|¥¥s)" + className + "(¥¥s|$)")))
+    if (child.className.match(new RegExp("(^|\\s)" + className + "(\\s|$)")))
       elements.push(child);
     return elements;
   });
@@ -930,13 +930,13 @@ Object.extend(Element, {
     element = $(element);
     for (var i = 0; i < element.childNodes.length; i++) {
       var node = element.childNodes[i];
-      if (node.nodeType == 3 && !/¥S/.test(node.nodeValue))
+      if (node.nodeType == 3 && !/\S/.test(node.nodeValue))
         Element.remove(node);
     }
   },
 
   empty: function(element) {
-    return $(element).innerHTML.match(/^¥s*$/);
+    return $(element).innerHTML.match(/^\s*$/);
   },
 
   scrollTo: function(element) {
@@ -1140,7 +1140,7 @@ Element.ClassNames.prototype = {
   },
 
   _each: function(iterator) {
-    this.element.className.split(/¥s+/).select(function(name) {
+    this.element.className.split(/\s+/).select(function(name) {
       return name.length > 0;
     })._each(iterator);
   },
