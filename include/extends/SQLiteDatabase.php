@@ -31,7 +31,7 @@ class SQLDatabase extends SQLDatabaseBase
 		$this->connect = sqlite_open( $sqlite_db_path.$dbName.".db", 0666, $SQLITE_ERROR );
 		if( !$this->connect ){
 //			die( $SQLITE_ERROR );
-			throw new InternalErrorException("SQLDatabase() : DB CONNECT ERROR. -> sqlite_open( ".$dbName." )¥n");
+			throw new InternalErrorException("SQLDatabase() : DB CONNECT ERROR. -> sqlite_open( ".$dbName." )\n");
 		}
 		sqlite_busy_timeout($this->connect, 5000); 
 		$this->init($dbName, $tableName, $colName, $colType, $colSize, $colExtend);
@@ -255,9 +255,9 @@ class SQLDatabase extends SQLDatabaseBase
 				}
 				$sql = $sql_base . join(',',$set_list) ." WHERE shadow_id = $shadow_id";
 
-				if( $this->_DEBUG )				{ d( "replaceTable() : ". $sql. "<br/>¥n", 'sql' ); }
+				if( $this->_DEBUG )				{ d( "replaceTable() : ". $sql. "<br/>\n", 'sql' ); }
 				$result	 = $this->sql_query( $sql );
-				if( !$result ){ throw new InternalErrorException("replaceTable() : SQL MESSAGE ERROR. ¥n"); }
+				if( !$result ){ throw new InternalErrorException("replaceTable() : SQL MESSAGE ERROR. \n"); }
 			}
 		}
 		return;
@@ -270,23 +270,23 @@ class SQLDatabase extends SQLDatabaseBase
 	 */
 	function existsRow($tbl){
 		if($this->row >= 0 && $tbl == $this->row_table ){
-			if( $this->_DEBUG ){ d( "existsRow() : load row cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG ){ d( "existsRow() : load row cash<br/>\n", 'sql'); }
 			return $this->row > 0;
 		}
 
 		if( ! is_null( $this->rec_cash )){
-			if( $this->_DEBUG )				{ d( "existsRow() : ".$this->tableName." load recorde cash<br/>¥n", 'sql'); }
+			if( $this->_DEBUG )				{ d( "existsRow() : ".$this->tableName." load recorde cash<br/>\n", 'sql'); }
 			$result = $this->rec_cash;
 		}else{
 			$table = $this->limitOffset( $tbl, 0, 1 );
 
-			if( $this->_DEBUG ){ d( "existsRow() : ". $table->getString(true). "<br/>¥n", 'sql' ); }
+			if( $this->_DEBUG ){ d( "existsRow() : ". $table->getString(true). "<br/>\n", 'sql' ); }
 
 			$result	 = $this->sql_query( $table->getString(true) );
 		}
 
 		if( !$result ){
-			throw new InternalErrorException("existsRow() : SQL MESSAGE ERROR. ¥n");
+			throw new InternalErrorException("existsRow() : SQL MESSAGE ERROR. \n");
 		}
 		return $this->sql_num_rows($result) > 0;
 	}

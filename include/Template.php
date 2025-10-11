@@ -27,7 +27,7 @@
             global $template_path;
             
             if(isset(self::$template_cash[$usertype.$target.$label])){
-                if(self::$_DEBUG){ d( "getTemplate() : cash load(".self::$template_cash[$usertype.$target.$label].")¥n","template"); d(func_get_args(),"args");}
+                if(self::$_DEBUG){ d( "getTemplate() : cash load(".self::$template_cash[$usertype.$target.$label].")\n","template"); d(func_get_args(),"args");}
                 return self::$template_cash[$usertype.$target.$label];
             }
             $tgm = SystemUtil::getGMforType("template");
@@ -58,14 +58,14 @@
             
             if( $rec = $tdb->getFirstRecord($table) ){
                 self::$template_cash[$usertype.$target.$label] = PathUtil::ModifyTemplateFilePath( $tdb->getData( $rec , 'file' ) );
-                if(self::$_DEBUG){ d( "getTemplate() : hit=".self::$template_cash[$usertype.$target.$label]."¥n","template"); d(func_get_args(),"args");}
+                if(self::$_DEBUG){ d( "getTemplate() : hit=".self::$template_cash[$usertype.$target.$label]."\n","template"); d(func_get_args(),"args");}
 
 				TemplateCache::Using( self::$template_cash[$usertype.$target.$label] );
 
                 return self::$template_cash[$usertype.$target.$label];
 
             }
-            if(self::$_DEBUG){ d( "getTemplate() : no hit¥n","template"); d(func_get_args(),"args");}
+            if(self::$_DEBUG){ d( "getTemplate() : no hit\n","template"); d(func_get_args(),"args");}
             return "";
         }
         
@@ -157,7 +157,7 @@
         static function onDebug(){ self::$_DEBUG = true; }
         static function offDebug(){ self::$_DEBUG = false; }
         static function setOwner($owner){
-         if(self::$_DEBUG){ d( "setOwner() : $owner¥n","template");}
+         if(self::$_DEBUG){ d( "setOwner() : $owner\n","template");}
         	self::$owner = $owner;
         }
         static function getOwner(){ return self::$owner; }

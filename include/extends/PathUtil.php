@@ -14,7 +14,7 @@
 			@details   相対パスによるinclude/requireやPathUtilによるパス修飾の際、カレントディレクトリよりも優先して使用されるディレクトリを追加します。
 			@param[in] $iPath 任意のディレクトリパス。存在しないディレクトリであった場合は無視されます。
 			@remarks   AddDeployPathを複数回実行した場合、$iPathは単に先頭に順に追加されていきます。つまり、最後に実行したAddDeployPathの$iPathが最も優先度の高いパスになります。
-			@remarks   include './foobar.php' のように明示的にカレントディレクトリからの相対パスを指定している場合、この関数で設定したパスは使用されない点に注意してください。¥n
+			@remarks   include './foobar.php' のように明示的にカレントディレクトリからの相対パスを指定している場合、この関数で設定したパスは使用されない点に注意してください。\n
 			           そのような表記は include 'foobar.php' に修正する必要があります。これはinclude/requireの仕様によるものです。
 			@remarks   この関数の設定はModifyLSTFilePath等にも反映されます。
 		*/
@@ -38,7 +38,7 @@
 			@param[in] $iPath       任意のファイルパス。
 			@param[in] $iModifyMode 'exists'を指定した場合、優先ディレクトリのファイルパスが存在しない場合は次のパスを検索するようになります。
 			@return    修飾されたファイルパス。
-			@remarks   AddDepolyPathで指定された優先ディレクトリがある場合はそのディレクトリ内のパスを返します。そうでない場合、$iPathをそのまま返します。¥n
+			@remarks   AddDepolyPathで指定された優先ディレクトリがある場合はそのディレクトリ内のパスを返します。そうでない場合、$iPathをそのまま返します。\n
 			           存在するファイルを検索して取得したい場合は$iModifyModeを指定してください。
 		*/
 		static function ModifyPath( $iPath , $iModifyMode = '' ) //
@@ -85,8 +85,8 @@
 		*/
 		static function TrimPath( $iPath ) //
 		{
-			$iPath = preg_replace( '/^¥.¥//' , '' , $iPath );
-			$iPath = preg_replace( '/¥/$/'   , '' , $iPath );
+			$iPath = preg_replace( '/^\.\//' , '' , $iPath );
+			$iPath = preg_replace( '/\/$/'   , '' , $iPath );
 
 			return $iPath;
 		}
@@ -223,7 +223,7 @@
 			@param[in] $iModifyPrefix $iPathを前置修飾するためのパス。モジュールlstなど例外的なパス展開が必要な場合に使用します。
 			@return    修飾されたファイルパス。
 			@remarks   $iPath内にモジュール変数([moduleName])が含まれる場合はモジュールパスとして展開します。ただし、モジュールファイルが存在しない場合は通常パスを返します。
-			@remarks   AddDepolyPathで指定された優先ディレクトリ内にファイルが存在する場合はそちらのパスを返します。¥n
+			@remarks   AddDepolyPathで指定された優先ディレクトリ内にファイルが存在する場合はそちらのパスを返します。\n
 			           ファイルが存在しない場合は通常パスを返す点に注意してください。
 		*/
 		private static function ModifyLoadPath( $iPath , $iModifyPrefix = '' ) //
@@ -233,7 +233,7 @@
 
 			$modifyPath = self::JoinPath( Array( $iModifyPrefix , $iPath ) );
 
-			if( preg_match( '/(.*)¥[(¥w+)¥]¥/?(.*)/' , $iPath , $matches ) ) //パス内にモジュール変数がある場合
+			if( preg_match( '/(.*)\[(\w+)\]\/?(.*)/' , $iPath , $matches ) ) //パス内にモジュール変数がある場合
 			{
 				$modulePath = self::JoinPath( Array( $matches[ 1 ] , 'module' , $matches[ 2 ] , $iModifyPrefix , $matches[ 3 ] ) );
 

@@ -353,11 +353,11 @@ class MobileUtil{
 		
 		if( $terminal_type == MobileUtil::$TYPE_NUM_DOCOMO ){
             $ua = $_SERVER["HTTP_USER_AGENT"];
-			if( preg_match('/^DoCoMo¥/1¥.0/',$ua) )
+			if( preg_match('/^DoCoMo\/1\.0/',$ua) )
             {
                 return true;
             }
-            else if( preg_match('/^DoCoMo¥/2¥.0[^¥(]+¥(c100;/',$ua) )
+            else if( preg_match('/^DoCoMo\/2\.0[^\(]+\(c100;/',$ua) )
             {
                 return true;
             }

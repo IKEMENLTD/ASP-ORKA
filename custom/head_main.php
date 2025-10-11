@@ -112,7 +112,7 @@
 	$PARENT_MAX_ROW		= $tdb->getData( $trec , 'parent_limit' );
 	$PARENT_LIMIT_URL	= $tdb->getData( $trec , 'parent_limit_url' );
 
-	preg_match( '/(.*?)([^¥/]+)$/' , $_SERVER[ 'SCRIPT_NAME' ] , $match );
+	preg_match( '/(.*?)([^\/]+)$/' , $_SERVER[ 'SCRIPT_NAME' ] , $match );
 	$path   = $match[ 1 ];
 	$script = $match[ 2 ];
 
@@ -138,7 +138,7 @@
 	}
 
 	//LOGIN_IDが不正な値な場合
-	if( preg_match( '/¥W/' , $LOGIN_ID ) ){
+	if( preg_match( '/\W/' , $LOGIN_ID ) ){
 		exit('$LOGIN_ID is illegal.');
 	}
 
