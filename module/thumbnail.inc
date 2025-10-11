@@ -120,8 +120,8 @@ include_once "custom/extends/thumbnailConf.php";
 
 			self::CreateDir( $thumbPath );
 
-			$origin    = new GDImage();
-			$thumbnail = new GDImage();
+			$origin    = new WSGDImage();
+			$thumbnail = new WSGDImage();
 
 			if( !$origin->open( $_file ) ) { return $_file; } // 画像サイズが大きすぎる場合はサムネイルは生成しない
 

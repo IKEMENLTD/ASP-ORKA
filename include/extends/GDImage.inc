@@ -3,9 +3,10 @@
 	/**
 	 * GDライブラリによるサムネイル作成クラス。
 	 * ※modコマンドからは呼び出せません。
+	 * PHP 8 compatibility: Renamed from GDImage to WSGDImage to avoid conflict with built-in class
 	 */
 
-	class GDImage
+	class WSGDImage
 	{
 		private $resource = null; ///<画像リソース
 		private $filePath = null; ///<画像パス
