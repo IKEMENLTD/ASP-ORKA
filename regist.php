@@ -21,42 +21,6 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
-		// UNCONDITIONAL DEBUG: Show all request parameters
-		ob_end_clean();
-		echo "<!DOCTYPE html><html><head><title>UNCONDITIONAL DEBUG</title></head><body>";
-		echo "<h1>UNCONDITIONAL DEBUG - regist.php LINE 24</h1>";
-		echo "<div style='background: #f00; color: #fff; padding: 20px;'>";
-		echo "<h2>GET Parameters:</h2>";
-		echo "<pre>" . print_r($_GET, true) . "</pre>";
-		echo "<h2>GET['type'] details:</h2>";
-		if (isset($_GET['type'])) {
-			echo "<p>Value: '" . htmlspecialchars($_GET['type']) . "'</p>";
-			echo "<p>Length: " . strlen($_GET['type']) . "</p>";
-			echo "<p>Type: " . gettype($_GET['type']) . "</p>";
-			echo "<p>== 'nUser': " . (($_GET['type'] == 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
-			echo "<p>== 'nUser': " . (($_GET['type'] === 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
-		} else {
-			echo "<p>NOT SET!</p>";
-		}
-		echo "</div>";
-		echo "</body></html>";
-		die();
-
-		// ULTRA DEBUG: Check if we're handling nUser
-		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
-			ob_end_clean(); // Clear buffer to show debug output
-			echo "<!DOCTYPE html><html><head><title>DEBUG</title></head><body>";
-			echo "<div style='background: #ff0; padding: 20px; margin: 20px; border: 3px solid #f00;'>";
-			echo "<h2>DEBUG: regist.php nUser - LINE 25</h2>";
-			echo "<p><strong>GET[type]:</strong> '" . htmlspecialchars($_GET['type']) . "'</p>";
-			echo "<p><strong>Length:</strong> " . strlen($_GET['type']) . "</p>";
-			echo "<p><strong>Comparison (==):</strong> " . (($_GET['type'] == 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
-			echo "<p><strong>Comparison (===):</strong> " . (($_GET['type'] === 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
-			echo "</div>";
-			echo "</body></html>";
-			die(); // Stop execution here to see if we reach this point
-		}
-
 		// Skip access checks for nUser (public registration)
 		if ($_GET['type'] != 'nUser') {
 			if( !$gm[ $_GET[ 'type' ] ] )
@@ -137,12 +101,6 @@
 			}  // Close the if ($loginUserType == 'nobody') block
 		}  // Close the if ($_GET['type'] == 'nUser') block
 
-		// DEBUG: Check what we have before rendering
-		if ($_GET['type'] == 'nUser') {
-			error_log("DEBUG nUser: gm[nUser] exists=" . (isset($gm['nUser']) ? 'YES' : 'NO'));
-			error_log("DEBUG nUser: loginUserType=" . $loginUserType);
-		}
-
 		print System::getHead($gm,$loginUserType,$loginUserRank);
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
 
@@ -152,23 +110,12 @@
 		// Force should_proceed to true for nUser to bypass all access checks
 		if ($_GET['type'] == 'nUser') {
 			$should_proceed = true;
-			error_log("DEBUG nUser: Forcing should_proceed to TRUE for public registration");
-			echo "<div style='background: #0f0; padding: 20px; margin: 20px; border: 3px solid #00f;'>";
-			echo "<h2>DEBUG: should_proceed set to TRUE</h2>";
-			echo "<p><strong>should_proceed:</strong> " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
-			echo "<p><strong>Type:</strong> " . gettype($should_proceed) . "</p>";
-			echo "</div>";
 		} else {
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
 		}
 
-		if ($_GET['type'] == 'nUser') {
-			error_log("DEBUG nUser: Final should_proceed=" . ($should_proceed ? 'YES' : 'NO'));
-		}
-
 		if( !$should_proceed )
 		{
-			error_log("DEBUG nUser: Drawing RegistFailed because should_proceed is FALSE");
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
 		else
