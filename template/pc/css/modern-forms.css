@@ -298,35 +298,432 @@
     text-decoration: underline;
 }
 
-/* レスポンシブデザイン */
-@media (max-width: 768px) {
+/* ============================================
+   レスポンシブデザイン: 275px - 1440px
+   ============================================ */
+
+/* 極小画面: 275px - 479px */
+@media (min-width: 275px) and (max-width: 479px) {
+    /* ロゴサイズを調整 */
+    #home img {
+        height: 60px !important;
+        max-width: 100%;
+    }
+
+    /* コンテナの調整 */
     .modern-form-container {
+        max-width: 100%;
+        margin: 10px auto;
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    .form-card {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .login-container {
+        max-width: 100%;
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    .login-card {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+
+    /* テキストサイズの調整 */
+    h1 {
+        font-size: 20px !important;
+    }
+
+    .login-header h1 {
+        font-size: 22px !important;
+    }
+
+    .form-section-title {
+        font-size: 16px;
+    }
+
+    /* フォームグループ */
+    .modern-form-group {
+        margin-bottom: 18px;
+    }
+
+    .modern-form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    /* 入力フィールド */
+    .modern-input,
+    .modern-select,
+    .modern-textarea,
+    .modern-form-container input[type="text"],
+    .modern-form-container input[type="password"],
+    .modern-form-container input[type="email"],
+    .modern-form-container select {
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+
+    /* テーブルをスタック表示 */
+    .modern-form-container .search_list_table,
+    .modern-form-table {
+        display: block;
+        width: 100%;
+    }
+
+    .modern-form-container .search_list_table tr,
+    .modern-form-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .modern-form-container .search_list_table th,
+    .modern-form-container .search_list_table td,
+    .modern-form-table th,
+    .modern-form-table td {
+        display: block;
+        width: 100% !important;
+        text-align: left !important;
+        padding: 10px 12px !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .modern-form-container .search_list_table th,
+    .modern-form-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: #ffffff;
+        font-weight: 600;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .modern-form-container .search_list_table td,
+    .modern-form-table td {
+        background: #ffffff;
+    }
+
+    /* search_list セクション */
+    .modern-form-container .search_list {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    .modern-form-container .search_list dt {
+        font-size: 14px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    /* ボタン */
+    .modern-btn,
+    .modern-form-container input[type="submit"],
+    .modern-form-container input[type="reset"],
+    .modern-form-container input[type="button"],
+    .modern-form-container .input_base {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: auto;
+        border-radius: 25px;
+    }
+
+    .modern-button-group,
+    .modern-form-container .input_box {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    /* 完了ページのアイコン */
+    .form-card div[style*="width: 80px"] {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 30px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .login-header div[style*="width: 60px"] {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 28px !important;
+    }
+
+    /* パンくずリスト */
+    .topics,
+    .modern-breadcrumb {
+        font-size: 11px;
+        padding: 10px 12px;
+        margin-bottom: 15px;
+    }
+
+    /* フッター */
+    .login-footer {
+        margin-top: 20px;
+        padding-top: 20px;
+        font-size: 13px;
+    }
+
+    /* 情報メッセージ */
+    .form-info-message,
+    .form-error-message,
+    .modern-form-container .search_list_table .info {
+        font-size: 12px;
+        padding: 8px 12px;
+        margin-top: 8px;
+    }
+
+    /* 完了リスト */
+    .modern-form-container .comp_list {
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .modern-form-container .comp_list dt {
+        font-size: 16px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+
+    .modern-form-container .comp_list dd p {
+        font-size: 14px;
+    }
+
+    .modern-form-container .comp_list li {
+        padding: 10px 15px;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+}
+
+/* 小画面: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    /* ロゴサイズ */
+    #home img {
+        height: 80px !important;
+    }
+
+    /* コンテナ */
+    .modern-form-container {
+        max-width: 100%;
+        margin: 15px auto;
         padding: 20px;
-        margin: 20px;
+        border-radius: 15px;
     }
 
     .form-card {
         padding: 25px;
+        border-radius: 12px;
     }
 
+    .login-container {
+        max-width: 90%;
+        margin: 30px auto;
+    }
+
+    .login-card {
+        padding: 30px 25px;
+    }
+
+    /* テキスト */
+    h1 {
+        font-size: 24px !important;
+    }
+
+    /* フォーム */
+    .modern-input,
+    .modern-select,
+    .modern-form-container input[type="text"],
+    .modern-form-container input[type="password"],
+    .modern-form-container input[type="email"],
+    .modern-form-container select {
+        padding: 11px 14px;
+        font-size: 15px;
+    }
+
+    /* テーブル - スタック表示 */
+    .modern-form-container .search_list_table,
+    .modern-form-table {
+        display: block;
+    }
+
+    .modern-form-container .search_list_table tr,
+    .modern-form-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .modern-form-container .search_list_table th,
+    .modern-form-container .search_list_table td,
     .modern-form-table th,
     .modern-form-table td {
         display: block;
-        width: 100%;
-        border: 1px solid #e2e8f0 !important;
+        width: 100% !important;
+        text-align: left !important;
+        padding: 12px 15px !important;
+        border: none !important;
+        border-radius: 0 !important;
     }
 
+    .modern-form-container .search_list_table th,
     .modern-form-table th {
-        text-align: left;
-        border-bottom: none !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
     }
 
-    .modern-button-group {
-        flex-direction: column;
-    }
-
-    .modern-btn {
+    /* ボタン */
+    .modern-btn,
+    .modern-form-container input[type="submit"],
+    .modern-form-container input[type="reset"],
+    .modern-form-container input[type="button"] {
         width: 100%;
+        padding: 13px 30px;
+        font-size: 15px;
+    }
+
+    .modern-button-group,
+    .modern-form-container .input_box {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* search_list */
+    .modern-form-container .search_list {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .modern-form-container .search_list dt {
+        font-size: 15px;
+    }
+}
+
+/* タブレット: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* ロゴサイズ */
+    #home img {
+        height: 100px !important;
+    }
+
+    /* コンテナ */
+    .modern-form-container {
+        max-width: 720px;
+        margin: 30px auto;
+        padding: 30px;
+    }
+
+    .login-container {
+        max-width: 480px;
+        margin: 50px auto;
+    }
+
+    /* テーブルを2カラム表示 */
+    .modern-form-container .search_list_table,
+    .modern-form-table {
+        width: 100%;
+    }
+
+    .modern-form-container .search_list_table th,
+    .modern-form-table th {
+        width: 35%;
+    }
+
+    .modern-form-container .search_list_table td,
+    .modern-form-table td {
+        width: 65%;
+    }
+
+    /* フォーム */
+    .modern-input,
+    .modern-select,
+    .modern-form-container input[type="text"],
+    .modern-form-container input[type="password"],
+    .modern-form-container select {
+        font-size: 15px;
+    }
+
+    /* ボタン */
+    .modern-btn,
+    .modern-form-container input[type="submit"],
+    .modern-form-container input[type="reset"] {
+        min-width: 160px;
+    }
+
+    .modern-button-group,
+    .modern-form-container .input_box {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+/* デスクトップ: 1024px - 1440px */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    /* ロゴサイズ */
+    #home img {
+        height: 150px !important;
+    }
+
+    /* コンテナ - 最適なサイズ */
+    .modern-form-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 40px;
+    }
+
+    .login-container {
+        max-width: 450px;
+        margin: 80px auto;
+    }
+
+    /* すべてのコンテンツが適切に表示されるように */
+    .form-card {
+        padding: 40px;
+    }
+
+    .login-card {
+        padding: 50px 40px;
+    }
+
+    /* テーブル - 通常の2カラム表示 */
+    .modern-form-container .search_list_table,
+    .modern-form-table {
+        width: 100%;
+    }
+
+    .modern-form-container .search_list_table th {
+        width: 32%;
+    }
+
+    .modern-form-container .search_list_table td {
+        width: 68%;
+    }
+}
+
+/* 大画面（1440px以上）- デフォルトスタイルを維持 */
+@media (min-width: 1441px) {
+    #home img {
+        height: 150px !important;
+    }
+
+    .modern-form-container {
+        max-width: 900px;
+    }
+
+    .login-container {
+        max-width: 450px;
     }
 }
 
