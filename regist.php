@@ -202,26 +202,34 @@
 	}
 	catch( Exception $e_ )
 	{
-		ob_end_clean();
+		// FORCE DEBUG OUTPUT - No buffering, no logging first
+		@ob_end_clean();
+		@ob_end_clean();  // Call twice in case of nested buffering
+		header('Content-Type: text/html; charset=UTF-8');
 
-		//エラーメッセージをログに出力
-		$errorManager = new ErrorManager();
-		$errorMessage = $errorManager->GetExceptionStr( $e_ );
-
-		$errorManager->OutputErrorLog( $errorMessage );
-
-		// TEMPORARY DEBUG: Display exception details
-		echo "<h1>DEBUG Exception Details</h1>";
+		echo "<!DOCTYPE html><html><head><title>DEBUG</title></head><body>";
+		echo "<h1 style='color: red;'>FORCED DEBUG Exception Details</h1>";
 		echo "<p><strong>Exception Class:</strong> " . get_class($e_) . "</p>";
 		echo "<p><strong>Message:</strong> " . htmlspecialchars($e_->getMessage()) . "</p>";
 		echo "<p><strong>File:</strong> " . $e_->getFile() . ":" . $e_->getLine() . "</p>";
 		echo "<pre><strong>Stack Trace:</strong>\n" . htmlspecialchars($e_->getTraceAsString()) . "</pre>";
-		echo "<p><a href='index.php'>Back to top</a></p>";
-		exit;
 
-		//例外に応じてエラーページを出力
-		$className = get_class( $e_ );
-		ExceptionManager::DrawErrorPage($className );
+		// Check if $gm exists
+		global $gm, $TABLE_NAME;
+		echo "<hr><h2>Global Variables Check</h2>";
+		echo "<p><strong>\$gm isset:</strong> " . (isset($gm) ? 'YES' : 'NO') . "</p>";
+		if (isset($gm)) {
+			echo "<p><strong>\$gm keys:</strong> " . implode(', ', array_keys($gm)) . "</p>";
+			echo "<p><strong>\$gm['nUser'] isset:</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
+		}
+		echo "<p><strong>\$TABLE_NAME isset:</strong> " . (isset($TABLE_NAME) ? 'YES' : 'NO') . "</p>";
+		if (isset($TABLE_NAME) && is_array($TABLE_NAME)) {
+			echo "<p><strong>\$TABLE_NAME:</strong> " . implode(', ', $TABLE_NAME) . "</p>";
+		}
+
+		echo "<p><a href='index.php'>Back to top</a></p>";
+		echo "</body></html>";
+		die();  // Use die() instead of exit for emphasis
 	}
 
 	ob_end_flush();
