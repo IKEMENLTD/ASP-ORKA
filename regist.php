@@ -21,6 +21,27 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
+		// UNCONDITIONAL DEBUG: Show all request parameters
+		ob_end_clean();
+		echo "<!DOCTYPE html><html><head><title>UNCONDITIONAL DEBUG</title></head><body>";
+		echo "<h1>UNCONDITIONAL DEBUG - regist.php LINE 24</h1>";
+		echo "<div style='background: #f00; color: #fff; padding: 20px;'>";
+		echo "<h2>GET Parameters:</h2>";
+		echo "<pre>" . print_r($_GET, true) . "</pre>";
+		echo "<h2>GET['type'] details:</h2>";
+		if (isset($_GET['type'])) {
+			echo "<p>Value: '" . htmlspecialchars($_GET['type']) . "'</p>";
+			echo "<p>Length: " . strlen($_GET['type']) . "</p>";
+			echo "<p>Type: " . gettype($_GET['type']) . "</p>";
+			echo "<p>== 'nUser': " . (($_GET['type'] == 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
+			echo "<p>== 'nUser': " . (($_GET['type'] === 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
+		} else {
+			echo "<p>NOT SET!</p>";
+		}
+		echo "</div>";
+		echo "</body></html>";
+		die();
+
 		// ULTRA DEBUG: Check if we're handling nUser
 		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
 			ob_end_clean(); // Clear buffer to show debug output
