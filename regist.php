@@ -14,22 +14,35 @@
 	try
 	{
 		include_once 'custom/head_main.php';
+		error_log("DEBUG: After head_main include");
 
 		//パラメータチェック
 		ConceptCheck::IsEssential( $_GET , Array( 'type' ) );
+		error_log("DEBUG: After IsEssential check");
 		ConceptCheck::IsNotNull( $_GET , Array( 'type' ) );
+		error_log("DEBUG: After IsNotNull check");
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
+		error_log("DEBUG: After IsScalar checks");
+
+		error_log("DEBUG: Type=" . $_GET['type'] . ", gm_isset=" . (isset($gm[$_GET['type']]) ? 'yes' : 'no') . ", gm_value=" . ($gm[$_GET['type']] ? 'truthy' : 'falsy'));
+		error_log("DEBUG: NOHTML=" . ($THIS_TABLE_IS_NOHTML[$_GET['type']] ? 'true' : 'false'));
 
 		if( !$gm[ $_GET[ 'type' ] ] )
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は定義されていません' );
+
+		error_log("DEBUG: After gm check - passed");
 
 		if( $THIS_TABLE_IS_NOHTML[ $_GET[ 'type' ] ] )
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は操作できません' );
 		//パラメータチェックここまで
 
+		error_log("DEBUG: After NOHTML check - passed");
+
 		print System::getHead($gm,$loginUserType,$loginUserRank);
+		error_log("DEBUG: After System::getHead");
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
+		error_log("DEBUG: After CheckData creation");
 	
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
 	
