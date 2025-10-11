@@ -1023,10 +1023,10 @@ class SystemUtilBase{
 	 */
 	static function urlReplace($text, $mode = NULL){
 		if(is_null($mode)){
-			return  preg_replace('/(https?|ftp)(:¥/¥/[-_.!‾*¥'()a-zA-Z0-9;¥/?:¥@&=+¥$,%#]+)/', '<a href="¥¥1¥¥2" style="text-decoration:underline">¥¥1¥¥2</a>', $text);
+			return  preg_replace('/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/', '<a href="\\1\\2" style="text-decoration:underline">\\1\\2</a>', $text);
 		}else{
 			if($mode == "blank"){
-				return  preg_replace('/(https?|ftp)(:¥/¥/[-_.!‾*¥'()a-zA-Z0-9;¥/?:¥@&=+¥$,%#]+)/', '<a href="¥¥1¥¥2" target="_blank" style="text-decoration:underline">¥¥1¥¥2</a>', $text);
+				return  preg_replace('/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/', '<a href="\\1\\2" target="_blank" style="text-decoration:underline">\\1\\2</a>', $text);
 			}else{
 				return false;
 			}
