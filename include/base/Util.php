@@ -1442,19 +1442,20 @@ function h($str, $style = null, $charset = null) {
 
 class CleanGlobal
 {
-	private function escape($array)
+	// PHP 8 compatibility: Changed to static methods
+	private static function escape($array)
 	{
 		$array = self::nullbyte($array);
 		return $array;
 	}
 
-	private function nullbyte($array)
+	private static function nullbyte($array)
 	{
 		if(is_array($array)) return array_map( array('CleanGlobal', 'nullbyte'), $array );
-		return str_replace( "¥0", "", $array );
+		return str_replace( "\0", "", $array );
 	}
 
-	function action()
+	static function action()
 	{
 		$_GET = self::escape($_GET);
 		$_POST = self::escape($_POST);

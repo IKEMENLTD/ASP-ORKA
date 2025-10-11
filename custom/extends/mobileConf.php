@@ -40,7 +40,8 @@
 		//$IMAGE_NOT_FOUND = '<img src="common/img/no_img_120x90.gif" />';
     }
 
-	if($sp_flag)
+	// PHP 8 compatibility: Check if $sp_flag is defined
+	if(isset($sp_flag) && $sp_flag)
 	{// スマートフォン分岐
 		if(file_exists("include/extends/SmartPhoneUtil.php"))
 		{
