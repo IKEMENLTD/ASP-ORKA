@@ -1,16 +1,4 @@
 <?php
-	// === ULTRA-EARLY DEBUG - Before ANYTHING ===
-	if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
-		echo "<html><head><title>ULTRA DEBUG</title></head><body>";
-		echo "<h1 style='color: blue;'>ULTRA-EARLY DEBUG - regist.php IS EXECUTING</h1>";
-		echo "<p>File: " . htmlspecialchars(__FILE__) . "</p>";
-		echo "<p>Line: " . __LINE__ . "</p>";
-		echo "<p>GET type: " . htmlspecialchars($_GET['type']) . "</p>";
-		echo "<p>This message appears BEFORE ob_start() and BEFORE any includes.</p>";
-		echo "</body></html>";
-		die();
-	}
-	// === END ULTRA DEBUG ===
 
 	/*******************************************************************************************************
 	 * <PRE>
@@ -27,29 +15,17 @@
 	{
 		include_once 'custom/head_main.php';
 
-		// === AGGRESSIVE DEBUG: Check $gm array ===
-		if ($_GET['type'] == 'nUser') {
-			ob_end_clean();
-			echo "<h1>DEBUG: $gm Array Status for nUser</h1>";
-			echo "<p><strong>$_GET['type']:</strong> " . htmlspecialchars($_GET['type']) . "</p>";
-			echo "<p><strong>isset(\$gm['nUser']):</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
-			echo "<p><strong>empty(\$gm['nUser']):</strong> " . (empty($gm['nUser']) ? 'YES' : 'NO') . "</p>";
-			echo "<p><strong>\$gm['nUser'] type:</strong> " . (isset($gm['nUser']) ? gettype($gm['nUser']) : 'NOT SET') . "</p>";
-			if (isset($gm['nUser'])) {
-				echo "<p><strong>\$gm['nUser'] class:</strong> " . get_class($gm['nUser']) . "</p>";
-			}
-			echo "<p><strong>All \$gm keys:</strong> " . implode(', ', array_keys($gm)) . "</p>";
-			echo "<p><strong>\$TABLE_NAME array:</strong> " . (isset($TABLE_NAME) ? implode(', ', $TABLE_NAME) : 'NOT SET') . "</p>";
-			echo "<p><a href='index.php'>Back to top</a></p>";
-			exit;
-		}
-		// === END DEBUG ===
-
 		//パラメータチェック
 		ConceptCheck::IsEssential( $_GET , Array( 'type' ) );
 		ConceptCheck::IsNotNull( $_GET , Array( 'type' ) );
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
+
+		// WORKAROUND: Ensure nUser GUIManager exists
+		if ($_GET['type'] == 'nUser' && !isset($gm['nUser'])) {
+			// Reload $gm to ensure all tables are initialized
+			$gm = SystemUtil::getGM();
+		}
 
 		if( !$gm[ $_GET[ 'type' ] ] )
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は定義されていません' );
@@ -214,34 +190,26 @@
 	}
 	catch( Exception $e_ )
 	{
-		// FORCE DEBUG OUTPUT - No buffering, no logging first
-		@ob_end_clean();
-		@ob_end_clean();  // Call twice in case of nested buffering
-		header('Content-Type: text/html; charset=UTF-8');
+		ob_end_clean();
 
-		echo "<!DOCTYPE html><html><head><title>DEBUG</title></head><body>";
-		echo "<h1 style='color: red;'>FORCED DEBUG Exception Details</h1>";
+		//エラーメッセージをログに出力
+		$errorManager = new ErrorManager();
+		$errorMessage = $errorManager->GetExceptionStr( $e_ );
+
+		$errorManager->OutputErrorLog( $errorMessage );
+
+		// TEMPORARY DEBUG: Display exception details
+		echo "<h1>DEBUG Exception Details</h1>";
 		echo "<p><strong>Exception Class:</strong> " . get_class($e_) . "</p>";
 		echo "<p><strong>Message:</strong> " . htmlspecialchars($e_->getMessage()) . "</p>";
 		echo "<p><strong>File:</strong> " . $e_->getFile() . ":" . $e_->getLine() . "</p>";
 		echo "<pre><strong>Stack Trace:</strong>\n" . htmlspecialchars($e_->getTraceAsString()) . "</pre>";
-
-		// Check if $gm exists
-		global $gm, $TABLE_NAME;
-		echo "<hr><h2>Global Variables Check</h2>";
-		echo "<p><strong>\$gm isset:</strong> " . (isset($gm) ? 'YES' : 'NO') . "</p>";
-		if (isset($gm)) {
-			echo "<p><strong>\$gm keys:</strong> " . implode(', ', array_keys($gm)) . "</p>";
-			echo "<p><strong>\$gm['nUser'] isset:</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
-		}
-		echo "<p><strong>\$TABLE_NAME isset:</strong> " . (isset($TABLE_NAME) ? 'YES' : 'NO') . "</p>";
-		if (isset($TABLE_NAME) && is_array($TABLE_NAME)) {
-			echo "<p><strong>\$TABLE_NAME:</strong> " . implode(', ', $TABLE_NAME) . "</p>";
-		}
-
 		echo "<p><a href='index.php'>Back to top</a></p>";
-		echo "</body></html>";
-		die();  // Use die() instead of exit for emphasis
+		exit;
+
+		//例外に応じてエラーページを出力
+		$className = get_class( $e_ );
+		ExceptionManager::DrawErrorPage($className );
 	}
 
 	ob_end_flush();

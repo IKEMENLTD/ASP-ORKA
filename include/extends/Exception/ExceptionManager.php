@@ -157,7 +157,6 @@
 		$object->ExceptionHandler( $e );
 	}
 
-	// TEMPORARILY DISABLED FOR DEBUGGING
-	// set_exception_handler( 'ExceptionManager_ExceptionHandler' );
+	set_exception_handler( 'ExceptionManager_ExceptionHandler' );
 
 ?>
