@@ -727,6 +727,232 @@
     }
 }
 
+/* ============================================
+   モダンサイドバーデザイン
+   ============================================ */
+
+/* 既存のbase.cssスタイルを上書き - より具体的なセレクタを使用 */
+div#side_bar div.side_menu.modern-sidebar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px 15px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+div.side_menu.modern-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* タイトル（オルカASP）のスタイル */
+div.side_menu.modern-sidebar li.title1,
+div.side_menu.modern-sidebar li.title2,
+div.side_menu.modern-sidebar li.title3,
+div.side_menu.modern-sidebar li.title4,
+div.side_menu.modern-sidebar li.title5,
+div.side_menu.modern-sidebar li.title6 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #667eea !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    padding: 15px 20px !important;
+    margin: 0 0 15px 0 !important;
+    border-radius: 12px;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #764ba2;
+}
+
+/* リンク項目のスタイル */
+div.side_menu.modern-sidebar li {
+    line-height: normal !important;
+    height: auto !important;
+    margin-bottom: 10px;
+}
+
+div.side_menu.modern-sidebar ul li a {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    display: block;
+    height: auto !important;
+    line-height: 1.4 !important;
+    padding: 14px 18px 14px 50px !important;
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: 14px !important;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* アイコン（矢印の代わりに✨を使用） */
+div.side_menu.modern-sidebar ul li a::before {
+    content: "✨";
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+div.side_menu.modern-sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+div.side_menu.modern-sidebar ul li a:hover::before {
+    transform: translateY(-50%) scale(1.2);
+}
+
+/* ============================================
+   サイドバーのレスポンシブデザイン: 275px - 1440px
+   ============================================ */
+
+/* 極小画面: 275px - 479px */
+@media (min-width: 275px) and (max-width: 479px) {
+    /* サイドバーを画面上部に配置 */
+    div#side_bar {
+        width: 100% !important;
+        float: none !important;
+        margin-bottom: 15px;
+    }
+
+    div#inc_side_body {
+        width: 100% !important;
+        float: none !important;
+    }
+
+    div#side_bar div.side_menu.modern-sidebar {
+        padding: 12px 10px;
+        border-radius: 10px;
+    }
+
+    div.side_menu.modern-sidebar li.title1,
+    div.side_menu.modern-sidebar li.title2,
+    div.side_menu.modern-sidebar li.title3,
+    div.side_menu.modern-sidebar li.title4,
+    div.side_menu.modern-sidebar li.title5,
+    div.side_menu.modern-sidebar li.title6 {
+        padding: 10px 12px !important;
+        margin: 0 0 10px 0 !important;
+        font-size: 14px !important;
+        border-left-width: 3px;
+    }
+
+    div.side_menu.modern-sidebar ul li a {
+        padding: 10px 12px 10px 38px !important;
+        font-size: 13px !important;
+    }
+
+    div.side_menu.modern-sidebar ul li a::before {
+        left: 12px;
+        font-size: 14px;
+    }
+}
+
+/* 小画面: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    /* サイドバーを画面上部に配置 */
+    div#side_bar {
+        width: 100% !important;
+        float: none !important;
+        margin-bottom: 20px;
+    }
+
+    div#inc_side_body {
+        width: 100% !important;
+        float: none !important;
+    }
+
+    div#side_bar div.side_menu.modern-sidebar {
+        padding: 15px 12px;
+        border-radius: 12px;
+    }
+
+    div.side_menu.modern-sidebar li.title1,
+    div.side_menu.modern-sidebar li.title2,
+    div.side_menu.modern-sidebar li.title3,
+    div.side_menu.modern-sidebar li.title4,
+    div.side_menu.modern-sidebar li.title5,
+    div.side_menu.modern-sidebar li.title6 {
+        padding: 12px 15px !important;
+        margin: 0 0 12px 0 !important;
+        font-size: 16px !important;
+    }
+
+    div.side_menu.modern-sidebar ul li a {
+        padding: 12px 15px 12px 45px !important;
+        font-size: 14px !important;
+    }
+
+    div.side_menu.modern-sidebar ul li a::before {
+        left: 15px;
+        font-size: 15px;
+    }
+}
+
+/* タブレット: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* サイドバーはそのまま左側に配置 */
+    div#side_bar {
+        width: 180px !important;
+    }
+
+    div#inc_side_body {
+        width: calc(100% - 200px) !important;
+    }
+
+    div#side_bar div.side_menu.modern-sidebar {
+        padding: 18px 12px;
+    }
+
+    div.side_menu.modern-sidebar li.title1,
+    div.side_menu.modern-sidebar li.title2,
+    div.side_menu.modern-sidebar li.title3,
+    div.side_menu.modern-sidebar li.title4,
+    div.side_menu.modern-sidebar li.title5,
+    div.side_menu.modern-sidebar li.title6 {
+        padding: 13px 15px !important;
+        font-size: 16px !important;
+    }
+
+    div.side_menu.modern-sidebar ul li a {
+        padding: 13px 15px 13px 45px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* デスクトップ: 1024px - 1440px */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    /* デフォルトのサイドバーレイアウト */
+    div#side_bar {
+        width: 195px !important;
+    }
+
+    div#inc_side_body {
+        width: 795px !important;
+    }
+}
+
+/* 大画面（1440px以上） */
+@media (min-width: 1441px) {
+    div#side_bar {
+        width: 195px !important;
+    }
+
+    div#inc_side_body {
+        width: 795px !important;
+    }
+}
+
 /* アニメーション */
 @keyframes fadeIn {
     from {
