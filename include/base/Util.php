@@ -1490,18 +1490,18 @@ if(!function_exists('json_encode')){
 				$json_str ="{";
 				$temp = array();
 				foreach($arr as $key => $value) {
-					$temp[] = sprintf("¥"%s¥":%s", $key, json_encode($value));
+					$temp[] = sprintf("\"%s\":%s", $key, json_encode($value));
 				}
 				$json_str .= implode(",",$temp);
 				$json_str .="}";
 			}
 		} else {
 			if(is_string($arr)) {
-				$json_str = "¥"". json_encode_string($arr) . "¥"";
+				$json_str = "\"". json_encode_string($arr) . "\"";
 			} else if(is_numeric($arr)) {
 				$json_str = $arr;
 			} else {
-				$json_str = "¥"". json_encode_string($arr) . "¥"";
+				$json_str = "\"". json_encode_string($arr) . "\"";
 			}
 		}
 		return $json_str;
