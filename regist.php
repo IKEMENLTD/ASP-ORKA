@@ -31,10 +31,18 @@
 		}
 		//パラメータチェックここまで
 
-		// WORKAROUND: Ensure templates exist for nUser registration
-	if ($_GET['type'] == 'nUser' && ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE)) {
-		$tgm = SystemUtil::getGMforType("template");
-		$tdb = $tgm->getDB();
+		// WORKAROUND: Ensure $gm['nUser'] exists and templates are set up
+	if ($_GET['type'] == 'nUser') {
+		// Force create nUser GUIManager if missing
+		if (!isset($gm['nUser'])) {
+			global $DB_NAME;
+			$gm['nUser'] = new GUIManager($DB_NAME, 'nUser');
+		}
+
+		// Only set up templates if not logged in
+		if ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE) {
+			$tgm = SystemUtil::getGMforType("template");
+			$tdb = $tgm->getDB();
 
 		// Add HEAD_DESIGN template for nobody users
 		$check_head = $tdb->getTable();
