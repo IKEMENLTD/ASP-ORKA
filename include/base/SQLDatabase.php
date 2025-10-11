@@ -599,7 +599,7 @@ class SQLDatabaseBase implements DatabaseBase
 		$delete_key = "delete_key = ".$this->sqlDataEscape(true,'boolean').' ';
 
 		$sql	 = 'INSERT INTO '. $this->tableName.'_delete'.' SELECT *' ;
-		$sql	 .= ',¥''.$loginUserType.'¥',¥''.$LOGIN_ID.'¥','.time();
+		$sql	 .= ',\''.$loginUserType.'\',\''.$LOGIN_ID.'\','.time();
 		$sql	 .= ' FROM '.$this->tableName;
 		$sql	 .= ' WHERE '.$delete_key;
 

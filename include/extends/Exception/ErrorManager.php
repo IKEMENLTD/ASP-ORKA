@@ -93,7 +93,7 @@
 
 			//バックトレースと構造が違うので、引数をずらして対応
 			for( $i = $row - 1 ; $i > 0 ; $i-- )
-				$array[ $i ][ 'args' ] = $array[ $i - 1 ][ 'args' ];
+			if (isset($array[ $i - 1 ][ 'args' ])) $array[ $i ][ 'args' ] = $array[ $i - 1 ][ 'args' ];
 
 			//呼び出し順に整形して格納
 			foreach( $array as $trace )
@@ -101,7 +101,7 @@
 				if( array_key_exists( 'file' , $trace ) ){
 					$file = sprintf( '%s %04d' , preg_replace( '/(.*)¥¥¥¥([^¥¥¥¥]+)$/' , '($1) $2' , str_replace( getcwd() . '¥¥' , '' , $trace[ 'file' ] ) ) , $trace[ 'line' ] );
 				}else{
-					$file = sprintf( '%s %04d' , preg_replace( '/(.*)¥¥¥¥([^¥¥¥¥]+)$/' , '($1) $2' , str_replace( getcwd() . '¥¥' , '' , $trace[ 'args' ][2] ) ) , $trace[ 'args' ][3] );
+					$file = (isset($trace[ 'args' ][2]) && isset($trace[ 'args' ][3])) ? sprintf( '%s %04d' , preg_replace( '/(.*)\\\\\\\\([^\\\\\\\\]+)$/' , '($1) $2' , str_replace( getcwd() . '\\\\' , '' , $trace[ 'args' ][2] ) ) , $trace[ 'args' ][3] ) : 'unknown 0000';
 				}
 
 				if( array_key_exists( 'function' , $trace ) )
