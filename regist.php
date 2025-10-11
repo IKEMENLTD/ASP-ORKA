@@ -180,6 +180,15 @@
 
 		$errorManager->OutputErrorLog( $errorMessage );
 
+		// TEMPORARY DEBUG: Display exception details
+		echo "<h1>DEBUG Exception Details</h1>";
+		echo "<p><strong>Exception Class:</strong> " . get_class($e_) . "</p>";
+		echo "<p><strong>Message:</strong> " . htmlspecialchars($e_->getMessage()) . "</p>";
+		echo "<p><strong>File:</strong> " . $e_->getFile() . ":" . $e_->getLine() . "</p>";
+		echo "<pre><strong>Stack Trace:</strong>\n" . htmlspecialchars($e_->getTraceAsString()) . "</pre>";
+		echo "<p><a href='index.php'>Back to top</a></p>";
+		exit;
+
 		//例外に応じてエラーページを出力
 		$className = get_class( $e_ );
 		ExceptionManager::DrawErrorPage($className );
