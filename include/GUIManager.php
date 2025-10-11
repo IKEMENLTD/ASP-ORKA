@@ -651,7 +651,8 @@
 		}
 
         //$gmが不用意に書き換えられる事によりシステム全体に支障をきたさぬ為、$gmは参照で渡さない。
-		function commandComment($buffer, $gm, $rec, &$state , &$current_part , $partkey = null)
+		// PHP 8 compatibility: Changed to static method as called statically
+		static function commandComment($buffer, $gm, $rec, &$state , &$current_part , $partkey = null)
 		{
 			if( $state['draw'] <= 0){
                 //非表示でも処理をすべきコマンドコマメントを含んでいるかどうかチェックする。
