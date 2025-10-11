@@ -21,6 +21,23 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
+		// ULTRA DEBUG: Check if we're handling nUser
+		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
+			error_log("===== REGIST.PHP START =====");
+			error_log("GET[type] = '" . $_GET['type'] . "'");
+			error_log("GET[type] length = " . strlen($_GET['type']));
+			error_log("Strcmp with 'nUser': " . strcmp($_GET['type'], 'nUser'));
+
+			// Output to browser for immediate feedback
+			echo "<div style='background: #ff0; padding: 20px; margin: 20px; border: 3px solid #f00;'>";
+			echo "<h2>DEBUG: regist.php nUser</h2>";
+			echo "<p><strong>GET[type]:</strong> '" . htmlspecialchars($_GET['type']) . "'</p>";
+			echo "<p><strong>Length:</strong> " . strlen($_GET['type']) . "</p>";
+			echo "<p><strong>Comparison (==):</strong> " . (($_GET['type'] == 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
+			echo "<p><strong>Comparison (===):</strong> " . (($_GET['type'] === 'nUser') ? 'TRUE' : 'FALSE') . "</p>";
+			echo "</div>";
+		}
+
 		// Skip access checks for nUser (public registration)
 		if ($_GET['type'] != 'nUser') {
 			if( !$gm[ $_GET[ 'type' ] ] )
@@ -117,6 +134,11 @@
 		if ($_GET['type'] == 'nUser') {
 			$should_proceed = true;
 			error_log("DEBUG nUser: Forcing should_proceed to TRUE for public registration");
+			echo "<div style='background: #0f0; padding: 20px; margin: 20px; border: 3px solid #00f;'>";
+			echo "<h2>DEBUG: should_proceed set to TRUE</h2>";
+			echo "<p><strong>should_proceed:</strong> " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
+			echo "<p><strong>Type:</strong> " . gettype($should_proceed) . "</p>";
+			echo "</div>";
 		} else {
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
 		}
