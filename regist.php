@@ -15,6 +15,24 @@
 	{
 		include_once 'custom/head_main.php';
 
+		// === AGGRESSIVE DEBUG: Check $gm array ===
+		if ($_GET['type'] == 'nUser') {
+			ob_end_clean();
+			echo "<h1>DEBUG: $gm Array Status for nUser</h1>";
+			echo "<p><strong>$_GET['type']:</strong> " . htmlspecialchars($_GET['type']) . "</p>";
+			echo "<p><strong>isset(\$gm['nUser']):</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
+			echo "<p><strong>empty(\$gm['nUser']):</strong> " . (empty($gm['nUser']) ? 'YES' : 'NO') . "</p>";
+			echo "<p><strong>\$gm['nUser'] type:</strong> " . (isset($gm['nUser']) ? gettype($gm['nUser']) : 'NOT SET') . "</p>";
+			if (isset($gm['nUser'])) {
+				echo "<p><strong>\$gm['nUser'] class:</strong> " . get_class($gm['nUser']) . "</p>";
+			}
+			echo "<p><strong>All \$gm keys:</strong> " . implode(', ', array_keys($gm)) . "</p>";
+			echo "<p><strong>\$TABLE_NAME array:</strong> " . (isset($TABLE_NAME) ? implode(', ', $TABLE_NAME) : 'NOT SET') . "</p>";
+			echo "<p><a href='index.php'>Back to top</a></p>";
+			exit;
+		}
+		// === END DEBUG ===
+
 		//パラメータチェック
 		ConceptCheck::IsEssential( $_GET , Array( 'type' ) );
 		ConceptCheck::IsNotNull( $_GET , Array( 'type' ) );
