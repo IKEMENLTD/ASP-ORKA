@@ -728,15 +728,19 @@
 }
 
 /* ============================================
-   モダンサイドバーデザイン
+   洗練されたモダンサイドバーデザイン
    ============================================ */
 
 /* 既存のbase.cssスタイルを上書き - より具体的なセレクタを使用 */
 div#side_bar div.side_menu.modern-sidebar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 15px;
-    padding: 20px 15px;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    border-radius: 16px;
+    padding: 24px 16px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 20px 60px rgba(90, 103, 216, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 div.side_menu.modern-sidebar ul {
@@ -745,71 +749,97 @@ div.side_menu.modern-sidebar ul {
     margin: 0;
 }
 
-/* タイトル（オルカASP）のスタイル */
+/* タイトル（オルカASP）のスタイル - より洗練されたデザイン */
 div.side_menu.modern-sidebar li.title1,
 div.side_menu.modern-sidebar li.title2,
 div.side_menu.modern-sidebar li.title3,
 div.side_menu.modern-sidebar li.title4,
 div.side_menu.modern-sidebar li.title5,
 div.side_menu.modern-sidebar li.title6 {
-    background: rgba(255, 255, 255, 0.95) !important;
-    color: #667eea !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+    color: #5a67d8 !important;
     height: auto !important;
-    line-height: 1.4 !important;
-    padding: 15px 20px !important;
-    margin: 0 0 15px 0 !important;
+    line-height: 1.5 !important;
+    padding: 16px 20px 16px 52px !important;
+    margin: 0 0 18px 0 !important;
     border-radius: 12px;
     font-weight: 700 !important;
-    font-size: 18px !important;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #764ba2;
+    font-size: 17px !important;
+    text-align: left;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-left: 6px solid #6b46c1;
+    position: relative;
+    letter-spacing: 0.02em;
+}
+
+/* タイトルアイコン */
+div.side_menu.modern-sidebar li.title1::before,
+div.side_menu.modern-sidebar li.title2::before,
+div.side_menu.modern-sidebar li.title3::before,
+div.side_menu.modern-sidebar li.title4::before,
+div.side_menu.modern-sidebar li.title5::before,
+div.side_menu.modern-sidebar li.title6::before {
+    content: "●";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #6b46c1;
 }
 
 /* リンク項目のスタイル */
 div.side_menu.modern-sidebar li {
     line-height: normal !important;
     height: auto !important;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 div.side_menu.modern-sidebar ul li a {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: block;
     height: auto !important;
-    line-height: 1.4 !important;
-    padding: 14px 18px 14px 50px !important;
+    line-height: 1.5 !important;
+    padding: 13px 16px 13px 46px !important;
     color: #ffffff !important;
     text-decoration: none;
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     font-size: 14px !important;
     font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.01em;
 }
 
-/* アイコン（矢印の代わりに✨を使用） */
+/* プロフェッショナルな三角形アイコン */
 div.side_menu.modern-sidebar ul li a::before {
-    content: "✨";
+    content: "▸";
     position: absolute;
     left: 18px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    transition: all 0.3s ease;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 div.side_menu.modern-sidebar ul li a:hover {
-    background: rgba(255, 255, 255, 0.25) !important;
-    transform: translateX(5px);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.22) !important;
+    transform: translateX(4px);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 div.side_menu.modern-sidebar ul li a:hover::before {
-    transform: translateY(-50%) scale(1.2);
+    transform: translateY(-50%) translateX(3px);
+    color: #ffffff;
 }
 
 /* ============================================
@@ -854,8 +884,8 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     }
 
     div#side_bar div.side_menu.modern-sidebar {
-        padding: 12px 10px;
-        border-radius: 10px;
+        padding: 16px 12px;
+        border-radius: 12px;
     }
 
     div.side_menu.modern-sidebar li.title1,
@@ -864,20 +894,30 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     div.side_menu.modern-sidebar li.title4,
     div.side_menu.modern-sidebar li.title5,
     div.side_menu.modern-sidebar li.title6 {
-        padding: 10px 12px !important;
-        margin: 0 0 10px 0 !important;
-        font-size: 14px !important;
-        border-left-width: 3px;
+        padding: 12px 15px 12px 38px !important;
+        margin: 0 0 12px 0 !important;
+        font-size: 15px !important;
+        border-left-width: 4px;
+    }
+
+    div.side_menu.modern-sidebar li.title1::before,
+    div.side_menu.modern-sidebar li.title2::before,
+    div.side_menu.modern-sidebar li.title3::before,
+    div.side_menu.modern-sidebar li.title4::before,
+    div.side_menu.modern-sidebar li.title5::before,
+    div.side_menu.modern-sidebar li.title6::before {
+        left: 15px;
+        font-size: 10px;
     }
 
     div.side_menu.modern-sidebar ul li a {
-        padding: 10px 12px 10px 38px !important;
+        padding: 11px 12px 11px 38px !important;
         font-size: 13px !important;
     }
 
     div.side_menu.modern-sidebar ul li a::before {
-        left: 12px;
-        font-size: 14px;
+        left: 14px;
+        font-size: 12px;
     }
 }
 
@@ -919,8 +959,8 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     }
 
     div#side_bar div.side_menu.modern-sidebar {
-        padding: 15px 12px;
-        border-radius: 12px;
+        padding: 18px 14px;
+        border-radius: 14px;
     }
 
     div.side_menu.modern-sidebar li.title1,
@@ -929,19 +969,30 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     div.side_menu.modern-sidebar li.title4,
     div.side_menu.modern-sidebar li.title5,
     div.side_menu.modern-sidebar li.title6 {
-        padding: 12px 15px !important;
-        margin: 0 0 12px 0 !important;
+        padding: 14px 16px 14px 42px !important;
+        margin: 0 0 14px 0 !important;
         font-size: 16px !important;
+        border-left-width: 5px;
+    }
+
+    div.side_menu.modern-sidebar li.title1::before,
+    div.side_menu.modern-sidebar li.title2::before,
+    div.side_menu.modern-sidebar li.title3::before,
+    div.side_menu.modern-sidebar li.title4::before,
+    div.side_menu.modern-sidebar li.title5::before,
+    div.side_menu.modern-sidebar li.title6::before {
+        left: 17px;
+        font-size: 11px;
     }
 
     div.side_menu.modern-sidebar ul li a {
-        padding: 12px 15px 12px 45px !important;
+        padding: 12px 14px 12px 42px !important;
         font-size: 14px !important;
     }
 
     div.side_menu.modern-sidebar ul li a::before {
-        left: 15px;
-        font-size: 15px;
+        left: 16px;
+        font-size: 13px;
     }
 }
 
@@ -981,7 +1032,8 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     }
 
     div#side_bar div.side_menu.modern-sidebar {
-        padding: 18px 12px;
+        padding: 20px 14px;
+        border-radius: 14px;
     }
 
     div.side_menu.modern-sidebar li.title1,
@@ -990,13 +1042,29 @@ div.side_menu.modern-sidebar ul li a:hover::before {
     div.side_menu.modern-sidebar li.title4,
     div.side_menu.modern-sidebar li.title5,
     div.side_menu.modern-sidebar li.title6 {
-        padding: 13px 15px !important;
+        padding: 14px 16px 14px 44px !important;
         font-size: 16px !important;
+        border-left-width: 5px;
+    }
+
+    div.side_menu.modern-sidebar li.title1::before,
+    div.side_menu.modern-sidebar li.title2::before,
+    div.side_menu.modern-sidebar li.title3::before,
+    div.side_menu.modern-sidebar li.title4::before,
+    div.side_menu.modern-sidebar li.title5::before,
+    div.side_menu.modern-sidebar li.title6::before {
+        left: 18px;
+        font-size: 11px;
     }
 
     div.side_menu.modern-sidebar ul li a {
-        padding: 13px 15px 13px 45px !important;
+        padding: 12px 14px 12px 42px !important;
         font-size: 13px !important;
+    }
+
+    div.side_menu.modern-sidebar ul li a::before {
+        left: 16px;
+        font-size: 13px;
     }
 }
 
