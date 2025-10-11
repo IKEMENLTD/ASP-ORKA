@@ -14,37 +14,50 @@
 	try
 	{
 		include_once 'custom/head_main.php';
-		error_log("DEBUG: After head_main include");
 
 		//パラメータチェック
 		ConceptCheck::IsEssential( $_GET , Array( 'type' ) );
-		error_log("DEBUG: After IsEssential check");
 		ConceptCheck::IsNotNull( $_GET , Array( 'type' ) );
-		error_log("DEBUG: After IsNotNull check");
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
-		error_log("DEBUG: After IsScalar checks");
-
-		error_log("DEBUG: Type=" . $_GET['type'] . ", gm_isset=" . (isset($gm[$_GET['type']]) ? 'yes' : 'no') . ", gm_value=" . ($gm[$_GET['type']] ? 'truthy' : 'falsy'));
-		error_log("DEBUG: NOHTML=" . ($THIS_TABLE_IS_NOHTML[$_GET['type']] ? 'true' : 'false'));
 
 		if( !$gm[ $_GET[ 'type' ] ] )
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は定義されていません' );
-
-		error_log("DEBUG: After gm check - passed");
 
 		if( $THIS_TABLE_IS_NOHTML[ $_GET[ 'type' ] ] )
 			throw new IllegalAccessException( $_GET[ 'type' ] . 'は操作できません' );
 		//パラメータチェックここまで
 
-		error_log("DEBUG: After NOHTML check - passed");
-
 		print System::getHead($gm,$loginUserType,$loginUserRank);
-		error_log("DEBUG: After System::getHead");
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
-		error_log("DEBUG: After CheckData creation");
-	
+
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
+
+		// WORKAROUND: For nUser registration, manually ensure template exists in database
+		if ($_GET['type'] == 'nUser' && ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE)) {
+			$tgm = SystemUtil::getGMforType("template");
+			$tdb = $tgm->getDB();
+
+			// Check if fallback template exists
+			$check_table = $tdb->getTable();
+			$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
+			$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
+			$check_table = $tdb->searchTable($check_table, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
+
+			if ($tdb->getRow($check_table) == 0) {
+				// Add fallback template on-the-fly
+				$new_rec = $tdb->getNewRecord();
+				$tdb->setData($new_rec, 'id', '999');
+				$tdb->setData($new_rec, 'user_type', '//');
+				$tdb->setData($new_rec, 'target_type', 'nUser');
+				$tdb->setData($new_rec, 'activate', 15);
+				$tdb->setData($new_rec, 'owner', 3);
+				$tdb->setData($new_rec, 'label', 'REGIST_FORM_PAGE_DESIGN');
+				$tdb->setData($new_rec, 'file', 'nUser/Regist.html');
+				$tdb->setData($new_rec, 'sort', 999);
+				$tdb->addRecord($new_rec);
+			}
+		}
 	
 		if(   $THIS_TABLE_IS_NOHTML[ $_GET['type'] ] || !isset(  $gm[ $_GET['type'] ]  )   )
 		{
