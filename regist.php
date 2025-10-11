@@ -105,7 +105,10 @@
 
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
 
-		if(   $THIS_TABLE_IS_NOHTML[ $_GET['type'] ] || !isset(  $gm[ $_GET['type'] ]  )   )
+		// Skip NOHTML check for nUser (public registration always allowed)
+		$should_proceed = ($_GET['type'] == 'nUser') || (!$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] ));
+
+		if( !$should_proceed )
 		{
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
