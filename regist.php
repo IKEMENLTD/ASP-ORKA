@@ -9,30 +9,56 @@
 	 * </PRE>
 	 *******************************************************************************************************/
 
+	// === LOGGING START ===
+	$LOG_FILE = '/var/www/html/regist_debug.log';
+	function log_debug($msg) {
+		global $LOG_FILE;
+		$timestamp = date('Y-m-d H:i:s');
+		file_put_contents($LOG_FILE, "[$timestamp] $msg\n", FILE_APPEND);
+		error_log("REGIST_DEBUG: $msg");
+	}
+
+	log_debug("=== REGIST.PHP EXECUTION START ===");
+	log_debug("GET params: " . json_encode($_GET));
+	log_debug("POST params: " . json_encode($_POST));
+
 	ob_start();
 
 	try
 	{
+		log_debug("STEP 1: About to include custom/head_main.php");
 		include_once 'custom/head_main.php';
+		log_debug("STEP 1: Successfully included custom/head_main.php");
 
 		//パラメータチェック
+		log_debug("STEP 2: Starting parameter checks");
 		ConceptCheck::IsEssential( $_GET , Array( 'type' ) );
+		log_debug("STEP 2.1: IsEssential passed");
 		ConceptCheck::IsNotNull( $_GET , Array( 'type' ) );
+		log_debug("STEP 2.2: IsNotNull passed");
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
+		log_debug("STEP 2.3: IsScalar for GET passed");
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
+		log_debug("STEP 2.4: All parameter checks passed");
 
 		// Skip access checks for nUser (public registration)
+		log_debug("STEP 3: Checking access for type=" . $_GET['type']);
 		if ($_GET['type'] != 'nUser') {
+			log_debug("STEP 3.1: Not nUser, performing standard access checks");
 			if( !$gm[ $_GET[ 'type' ] ] )
 				throw new IllegalAccessException( $_GET[ 'type' ] . ' is not defined' );
 
 			if( $THIS_TABLE_IS_NOHTML[ $_GET[ 'type' ] ] )
 				throw new IllegalAccessException( $_GET[ 'type' ] . ' cannot be operated' );
+		} else {
+			log_debug("STEP 3.2: Is nUser, skipping initial access checks");
 		}
 		//パラメータチェックここまで
 
 		// WORKAROUND: Ensure $gm['nUser'] exists and templates are set up
+		log_debug("STEP 4: nUser workaround section");
 		if ($_GET['type'] == 'nUser') {
+			log_debug("STEP 4.1: Entering nUser workaround");
 			// Force create nUser GUIManager if missing
 			if (!isset($gm['nUser'])) {
 				global $DB_NAME;
@@ -117,53 +143,54 @@
 			}  // Close the if ($loginUserType == 'nobody') block
 		}  // Close the if ($_GET['type'] == 'nUser') block
 
+		log_debug("STEP 5: Calling System::getHead()");
 		print System::getHead($gm,$loginUserType,$loginUserRank);
+		log_debug("STEP 5: System::getHead() completed");
+
 		System::$checkData	 = new CheckData( $gm, false, $loginUserType, $loginUserRank );
+		log_debug("STEP 6: CheckData created");
 
 		$sys	 = SystemUtil::getSystem( $_GET["type"] );
+		log_debug("STEP 7: Got System object for type=" . $_GET["type"]);
 
 		// Skip NOHTML check for nUser (public registration always allowed)
 		// Force should_proceed to true for nUser to bypass all access checks
+		log_debug("STEP 8: Determining should_proceed");
 		if ($_GET['type'] == 'nUser') {
 			$should_proceed = true;
+			log_debug("STEP 8.1: nUser detected, forcing should_proceed=TRUE");
 		} else {
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
+			log_debug("STEP 8.2: Standard should_proceed=" . ($should_proceed ? 'TRUE' : 'FALSE'));
 		}
 
-		// CRITICAL DEBUG for nUser
-		if ($_GET['type'] == 'nUser') {
-			ob_end_clean();
-			echo "<h1 style='background: red; color: white; padding: 20px;'>CRITICAL DEBUG LINE 133</h1>";
-			echo "<p><strong>should_proceed:</strong> " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
-			echo "<p><strong>About to check if (!should_proceed)...</strong></p>";
-			if (!$should_proceed) {
-				echo "<p style='color: red;'><strong>ERROR: Will call drawRegistFailed!</strong></p>";
-			} else {
-				echo "<p style='color: green;'><strong>SUCCESS: Will enter registration form logic!</strong></p>";
-				echo "<p><strong>gm[nUser] exists:</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
-			}
-			die();
-		}
-
+		log_debug("STEP 9: Checking should_proceed value=" . ($should_proceed ? 'TRUE' : 'FALSE'));
 		if( !$should_proceed )
 		{
+			log_debug("STEP 9.1: should_proceed is FALSE, calling drawRegistFailed");
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
+			log_debug("STEP 9.2: drawRegistFailed completed");
 		}
 		else
 		{
+			log_debug("STEP 10: Entering registration form logic (should_proceed=TRUE)");
 			$db		 = $gm[ $_GET['type'] ]->getDB();
-			
+			log_debug("STEP 10.1: Got DB object");
+
 	        if(isset($_POST['back']))
 			{
+				log_debug("STEP 10.2: Back button pressed");
 				$_POST['post'] = "";
-	
+
 				if($_POST['step'])
 					$_POST['step']--;
 			}
-	
+
 			// 登録情報入力フォームを描画
+			log_debug("STEP 11: Checking POST state - post=" . (isset($_POST['post']) ? $_POST['post'] : 'NOT_SET'));
 			if(  !isset( $_POST['post'] ) || !strlen($_POST['post']) )
 			{
+				log_debug("STEP 11.1: Drawing registration input form");
 				if(!$_POST['step'])
 					$_POST['step'] = 1;
 				
@@ -188,39 +215,13 @@
 						$gm[ $_GET['type'] ]->addHiddenForm( $key , ($_POST['back'] ? $_POST[$key] : $_GET[$key]) );
 				}
 	
-				// DEBUG: Check template before drawing form
-				if ($_GET['type'] == 'nUser') {
-					ob_end_clean();
-					echo "<h1>DEBUG: About to call drawRegistForm</h1>";
-					echo "<p>loginUserType: " . $loginUserType . "</p>";
-					echo "<p>loginUserRank: " . $loginUserRank . "</p>";
-
-					// Check if template exists
-					$template_file = Template::getTemplate($loginUserType, $loginUserRank, 'nUser', 'REGIST_FORM_PAGE_DESIGN');
-					echo "<p>Template file returned: '" . ($template_file ? $template_file : 'EMPTY/NULL') . "'</p>";
-
-					// Check database for template
-					$tgm = SystemUtil::getGMforType("template");
-					$tdb = $tgm->getDB();
-					$check = $tdb->getTable();
-					$check = $tdb->searchTable($check, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
-					echo "<p>Templates with label 'REGIST_FORM_PAGE_DESIGN': " . $tdb->getRow($check) . "</p>";
-
-					if ($tdb->getRow($check) > 0) {
-						$tmpl = $tdb->getFirstRecord($check);
-						echo "<pre>";
-						echo "id: " . $tdb->getData($tmpl, 'id') . "\n";
-						echo "user_type: " . $tdb->getData($tmpl, 'user_type') . "\n";
-						echo "target_type: " . $tdb->getData($tmpl, 'target_type') . "\n";
-						echo "owner: " . $tdb->getData($tmpl, 'owner') . "\n";
-						echo "activate: " . $tdb->getData($tmpl, 'activate') . "\n";
-						echo "file: " . $tdb->getData($tmpl, 'file') . "\n";
-						echo "</pre>";
-					}
-					die();
-				}
+				log_debug("STEP 11.5: About to call drawRegistForm");
+				log_debug("STEP 11.5.1: loginUserType=" . $loginUserType);
+				log_debug("STEP 11.5.2: loginUserRank=" . $loginUserRank);
+				log_debug("STEP 11.5.3: rec=" . json_encode($rec));
 
 				$sys->drawRegistForm( $gm, $rec, $loginUserType, $loginUserRank );
+				log_debug("STEP 11.6: drawRegistForm completed");
 			}
 			else
 			{
@@ -299,10 +300,16 @@
 	        }
 		}
 		
+		log_debug("STEP 999: About to print footer");
 		print System::getFoot($gm,$loginUserType,$loginUserRank);
+		log_debug("STEP 999: Footer printed, execution completed successfully");
 	}
 	catch( Exception $e_ )
 	{
+		log_debug("EXCEPTION CAUGHT: " . get_class($e_) . " - " . $e_->getMessage());
+		log_debug("EXCEPTION FILE: " . $e_->getFile() . ":" . $e_->getLine());
+		log_debug("EXCEPTION TRACE: " . $e_->getTraceAsString());
+
 		ob_end_clean();
 
 		//エラーメッセージをログに出力
@@ -318,6 +325,15 @@
 		echo "<p><strong>File:</strong> " . $e_->getFile() . ":" . $e_->getLine() . "</p>";
 		echo "<pre><strong>Stack Trace:</strong>\n" . htmlspecialchars($e_->getTraceAsString()) . "</pre>";
 		echo "<p><a href='index.php'>Back to top</a></p>";
+		echo "<hr>";
+		echo "<h2>Debug Log:</h2>";
+		echo "<pre>";
+		if (file_exists($LOG_FILE)) {
+			echo htmlspecialchars(file_get_contents($LOG_FILE));
+		} else {
+			echo "Log file not found!";
+		}
+		echo "</pre>";
 		exit;
 
 		//例外に応じてエラーページを出力
