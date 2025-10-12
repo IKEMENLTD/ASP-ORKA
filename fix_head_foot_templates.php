@@ -6,7 +6,14 @@ header('Content-Type: text/html; charset=utf-8');
 echo "<h1>Fix HEAD/FOOT Templates</h1>";
 
 try {
-    require_once 'custom/conf.php';
+    // Use environment variables (Render deployment)
+    $DB_HOST = getenv('SUPABASE_DB_HOST') ?: 'aws-1-ap-northeast-1.pooler.supabase.com';
+    $DB_PORT = getenv('SUPABASE_DB_PORT') ?: '5432';
+    $DB_NAME = getenv('SUPABASE_DB_NAME') ?: 'postgres';
+    $DB_USER = getenv('SUPABASE_DB_USER') ?: 'postgres.ezucbzqzvxgcyikkrznj';
+    $DB_PASS = getenv('SUPABASE_DB_PASS') ?: 'akutu4256';
+
+    echo "<p style='font-size: 11px; color: #666;'>Using: $DB_HOST:$DB_PORT/$DB_NAME as $DB_USER</p>";
 
     $dsn = "pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_NAME;";
     $pdo = new PDO($dsn, $DB_USER, $DB_PASS, [
