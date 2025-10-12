@@ -34,7 +34,8 @@
 	log_debug("GET params: " . json_encode($_GET));
 	log_debug("POST params: " . json_encode($_POST));
 
-	ob_start();
+	// TEMPORARY DEBUG: Disable ob_start() to see all logs immediately
+	// ob_start();
 
 	try
 	{
@@ -263,7 +264,8 @@
 		log_debug("EXCEPTION FILE: " . $e_->getFile() . ":" . $e_->getLine());
 		log_debug("EXCEPTION TRACE: " . $e_->getTraceAsString());
 
-		ob_end_clean();
+		// TEMPORARY DEBUG: ob_start() is disabled
+		// ob_end_clean();
 
 		//エラーメッセージをログに出力
 		$errorManager = new ErrorManager();
@@ -309,5 +311,6 @@
 		ExceptionManager::DrawErrorPage($className );
 	}
 
-	ob_end_flush();
+	// TEMPORARY DEBUG: ob_start() is disabled
+	// ob_end_flush();
 ?>
