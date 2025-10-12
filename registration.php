@@ -1,5 +1,6 @@
 <?php
 	// IMMEDIATE OUTPUT TEST - THIS MUST APPEAR IF regist.php IS EXECUTED
+	echo "<!-- REGISTRATION.PHP VERSION: 2025-10-12 19:55 (b3f9f5e) -->\n";
 	echo "<!-- REGIST.PHP STARTED AT " . date('Y-m-d H:i:s') . " -->\n";
 	flush();
 
