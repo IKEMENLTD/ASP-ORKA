@@ -26,39 +26,32 @@
             global $LOGIN_ID;
             global $template_path;
 
-            // DEBUG: Log all template searches
+            // DEBUG: Log to error_log only (no echo/flush to avoid breaking output)
             error_log("TEMPLATE_SEARCH: label=$label, usertype=$usertype, target=$target, activate=$activate");
-            echo "<!-- TEMPLATE_SEARCH: label=$label, usertype=$usertype, target=$target, activate=$activate -->\n";
-            flush();
 
             if(isset(self::$template_cash[$usertype.$target.$label])){
                 if(self::$_DEBUG){ d( "getTemplate() : cash load(".self::$template_cash[$usertype.$target.$label].")\n","template"); d(func_get_args(),"args");}
-                echo "<!-- TEMPLATE_CACHE_HIT: " . self::$template_cash[$usertype.$target.$label] . " -->\n";
-                flush();
+                error_log("TEMPLATE_CACHE_HIT: " . self::$template_cash[$usertype.$target.$label]);
                 return self::$template_cash[$usertype.$target.$label];
             }
             $tgm = SystemUtil::getGMforType("template");
             $tdb = $tgm->getDB();
 
             $table = $tdb->getTable();
-            echo "<!-- TEMPLATE_DB: Total templates = " . count($table) . " -->\n";
-            flush();
+            error_log("TEMPLATE_DB: Total templates = " . count($table));
 
             $table = $tdb->searchTable( $table , 'label' , '==' , $label );
-            echo "<!-- TEMPLATE_DB: After label search = " . count($table) . " -->\n";
-            flush();
+            error_log("TEMPLATE_DB: After label search = " . count($table));
 
             $table = $tdb->searchTable( $table , 'user_type' , '=' , "%/".$usertype."/%" );
-            echo "<!-- TEMPLATE_DB: After user_type search = " . count($table) . " (pattern: %/$usertype/%) -->\n";
-            flush();
+            error_log("TEMPLATE_DB: After user_type search = " . count($table) . " (pattern: %/$usertype/%)");
 
             if(strlen($target))
                 $table = $tdb->searchTable( $table , 'target_type' , '==' , $target );
             else
                 $table = $tdb->searchTable( $table , 'target_type' , 'isnull' , $target );
 
-            echo "<!-- TEMPLATE_DB: After target_type search = " . count($table) . " -->\n";
-            flush();
+            error_log("TEMPLATE_DB: After target_type search = " . count($table));
 
             // BUGFIX: activate & owner columns may be string type, bitwise search fails
             // Skip both activate and owner searches - rely on label, user_type, target_type only
