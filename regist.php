@@ -9,13 +9,19 @@
 	 * </PRE>
 	 *******************************************************************************************************/
 
-	// === LOGGING START ===
-	$LOG_FILE = '/var/www/html/regist_debug.log';
+	// === LOGGING & ERROR DISPLAY START ===
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL);
+
+	$LOG_FILE = '/tmp/regist_debug.log'; // Changed to /tmp for permissions
 	function log_debug($msg) {
 		global $LOG_FILE;
 		$timestamp = date('Y-m-d H:i:s');
-		file_put_contents($LOG_FILE, "[$timestamp] $msg\n", FILE_APPEND);
+		@file_put_contents($LOG_FILE, "[$timestamp] $msg\n", FILE_APPEND);
 		error_log("REGIST_DEBUG: $msg");
+		// Also echo to screen for immediate visibility
+		echo "<!-- DEBUG: $msg -->\n";
 	}
 
 	log_debug("=== REGIST.PHP EXECUTION START ===");
