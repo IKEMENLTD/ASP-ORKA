@@ -21,9 +21,54 @@ try {
 
     echo "<p style='color: green;'>✓ Connected to database</p>";
 
+    // INSERT HEAD_DESIGN and FOOT_DESIGN if missing
+    if (isset($_GET['fix']) && $_GET['fix'] == '1') {
+        echo "<hr><h2 style='color: blue;'>🔧 FIX MODE: Inserting Missing Templates</h2>";
+
+        // Insert HEAD_DESIGN
+        $sql_head = "INSERT INTO template (label, user_type, target_type, owner, activate, file)
+                     SELECT 'HEAD_DESIGN', '/nobody/', '', '2', 15, 'base/Head.html'
+                     WHERE NOT EXISTS (
+                         SELECT 1 FROM template
+                         WHERE label = 'HEAD_DESIGN' AND user_type LIKE '%nobody%' AND target_type = ''
+                     )";
+        $result_head = pg_query($conn, $sql_head);
+        if ($result_head) {
+            $affected = pg_affected_rows($result_head);
+            if ($affected > 0) {
+                echo "<p style='color: green; font-weight: bold;'>✅ Inserted HEAD_DESIGN template</p>";
+            } else {
+                echo "<p style='color: orange;'>⚠ HEAD_DESIGN already exists</p>";
+            }
+        } else {
+            echo "<p style='color: red;'>❌ Failed to insert HEAD_DESIGN: " . pg_last_error($conn) . "</p>";
+        }
+
+        // Insert FOOT_DESIGN
+        $sql_foot = "INSERT INTO template (label, user_type, target_type, owner, activate, file)
+                     SELECT 'FOOT_DESIGN', '/nobody/', '', '2', 15, 'base/Foot.html'
+                     WHERE NOT EXISTS (
+                         SELECT 1 FROM template
+                         WHERE label = 'FOOT_DESIGN' AND user_type LIKE '%nobody%' AND target_type = ''
+                     )";
+        $result_foot = pg_query($conn, $sql_foot);
+        if ($result_foot) {
+            $affected = pg_affected_rows($result_foot);
+            if ($affected > 0) {
+                echo "<p style='color: green; font-weight: bold;'>✅ Inserted FOOT_DESIGN template</p>";
+            } else {
+                echo "<p style='color: orange;'>⚠ FOOT_DESIGN already exists</p>";
+            }
+        } else {
+            echo "<p style='color: red;'>❌ Failed to insert FOOT_DESIGN: " . pg_last_error($conn) . "</p>";
+        }
+
+        echo "<hr>";
+    }
+
     // Check HEAD_DESIGN
     echo "<h2>HEAD_DESIGN Templates</h2>";
-    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'HEAD_DESIGN' AND target_type = 'nUser' ORDER BY id";
+    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'HEAD_DESIGN' ORDER BY id";
     $result = pg_query($conn, $query);
     $count = pg_num_rows($result);
     echo "<p>Found $count templates</p>";
@@ -45,12 +90,13 @@ try {
         }
         echo "</table>";
     } else {
-        echo "<p style='color: red;'>⚠ No HEAD_DESIGN template found for nUser!</p>";
+        echo "<p style='color: red;'>⚠ No HEAD_DESIGN template found!</p>";
+        echo "<p><a href='?fix=1' style='background: #ff6600; color: white; padding: 10px 20px; text-decoration: none; font-weight: bold;'>🔧 FIX NOW</a></p>";
     }
 
     // Check FOOT_DESIGN
     echo "<h2>FOOT_DESIGN Templates</h2>";
-    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'FOOT_DESIGN' AND target_type = 'nUser' ORDER BY id";
+    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'FOOT_DESIGN' ORDER BY id";
     $result = pg_query($conn, $query);
     $count = pg_num_rows($result);
     echo "<p>Found $count templates</p>";
@@ -72,7 +118,8 @@ try {
         }
         echo "</table>";
     } else {
-        echo "<p style='color: red;'>⚠ No FOOT_DESIGN template found for nUser!</p>";
+        echo "<p style='color: red;'>⚠ No FOOT_DESIGN template found!</p>";
+        echo "<p><a href='?fix=1' style='background: #ff6600; color: white; padding: 10px 20px; text-decoration: none; font-weight: bold;'>🔧 FIX NOW</a></p>";
     }
 
     // Check REGIST_FORM_PAGE_DESIGN
