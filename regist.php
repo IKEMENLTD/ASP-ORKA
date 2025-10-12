@@ -21,6 +21,12 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
+		// ULTRA EARLY DEBUG - Right after parameter checks
+		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
+			ob_end_clean();
+			die("<h1 style='background: yellow; padding: 20px;'>ULTRA DEBUG: Line 23 - After parameter checks for nUser. This confirms regist.php is executing!</h1>");
+		}
+
 		// Skip access checks for nUser (public registration)
 		if ($_GET['type'] != 'nUser') {
 			if( !$gm[ $_GET[ 'type' ] ] )
