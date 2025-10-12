@@ -254,22 +254,37 @@
 
 		$errorManager->OutputErrorLog( $errorMessage );
 
-		// TEMPORARY DEBUG: Display exception details
-		echo "<h1>DEBUG Exception Details</h1>";
+		// FORCE DEBUG OUTPUT: Display exception details before ExceptionManager takes over
+		header('Content-Type: text/html; charset=utf-8');
+		echo "<!DOCTYPE html><html><head><meta charset='utf-8'><title>REGIST DEBUG</title></head><body>";
+		echo "<h1>🔴 REGIST.PHP EXCEPTION CAUGHT</h1>";
+		echo "<div style='background: #ffe6e6; border: 2px solid red; padding: 20px; margin: 10px;'>";
 		echo "<p><strong>Exception Class:</strong> " . get_class($e_) . "</p>";
 		echo "<p><strong>Message:</strong> " . htmlspecialchars($e_->getMessage()) . "</p>";
 		echo "<p><strong>File:</strong> " . $e_->getFile() . ":" . $e_->getLine() . "</p>";
 		echo "<pre><strong>Stack Trace:</strong>\n" . htmlspecialchars($e_->getTraceAsString()) . "</pre>";
-		echo "<p><a href='index.php'>Back to top</a></p>";
-		echo "<hr>";
-		echo "<h2>Debug Log:</h2>";
+		echo "</div>";
+		echo "<h2>Debug Log Contents:</h2>";
+		echo "<div style='background: #f0f0f0; padding: 10px; font-family: monospace; font-size: 11px;'>";
 		echo "<pre>";
 		if (file_exists($LOG_FILE)) {
 			echo htmlspecialchars(file_get_contents($LOG_FILE));
 		} else {
-			echo "Log file not found!";
+			echo "❌ Log file not found at: $LOG_FILE\n";
+			echo "Trying alternate locations...\n";
+			$alt_paths = ['/var/www/html/regist_debug.log', './regist_debug.log', 'regist_debug.log'];
+			foreach ($alt_paths as $alt) {
+				if (file_exists($alt)) {
+					echo "\n✓ Found at: $alt\n";
+					echo htmlspecialchars(file_get_contents($alt));
+					break;
+				}
+			}
 		}
 		echo "</pre>";
+		echo "</div>";
+		echo "<p><a href='index.php'>Back to top</a></p>";
+		echo "</body></html>";
 		exit;
 
 		//例外に応じてエラーページを出力
