@@ -173,6 +173,38 @@
 						$gm[ $_GET['type'] ]->addHiddenForm( $key , ($_POST['back'] ? $_POST[$key] : $_GET[$key]) );
 				}
 	
+				// DEBUG: Check template before drawing form
+				if ($_GET['type'] == 'nUser') {
+					ob_end_clean();
+					echo "<h1>DEBUG: About to call drawRegistForm</h1>";
+					echo "<p>loginUserType: " . $loginUserType . "</p>";
+					echo "<p>loginUserRank: " . $loginUserRank . "</p>";
+
+					// Check if template exists
+					$template_file = Template::getTemplate($loginUserType, $loginUserRank, 'nUser', 'REGIST_FORM_PAGE_DESIGN');
+					echo "<p>Template file returned: '" . ($template_file ? $template_file : 'EMPTY/NULL') . "'</p>";
+
+					// Check database for template
+					$tgm = SystemUtil::getGMforType("template");
+					$tdb = $tgm->getDB();
+					$check = $tdb->getTable();
+					$check = $tdb->searchTable($check, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
+					echo "<p>Templates with label 'REGIST_FORM_PAGE_DESIGN': " . $tdb->getRow($check) . "</p>";
+
+					if ($tdb->getRow($check) > 0) {
+						$tmpl = $tdb->getFirstRecord($check);
+						echo "<pre>";
+						echo "id: " . $tdb->getData($tmpl, 'id') . "\n";
+						echo "user_type: " . $tdb->getData($tmpl, 'user_type') . "\n";
+						echo "target_type: " . $tdb->getData($tmpl, 'target_type') . "\n";
+						echo "owner: " . $tdb->getData($tmpl, 'owner') . "\n";
+						echo "activate: " . $tdb->getData($tmpl, 'activate') . "\n";
+						echo "file: " . $tdb->getData($tmpl, 'file') . "\n";
+						echo "</pre>";
+					}
+					die();
+				}
+
 				$sys->drawRegistForm( $gm, $rec, $loginUserType, $loginUserRank );
 			}
 			else
