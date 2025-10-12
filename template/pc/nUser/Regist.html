@@ -1,142 +1,61 @@
-<div id="contents">
-
-<!--# include head #-->
-
-<!--# include side_bar #-->
-
-<div id="inc_side_body">
-
-<div class="modern-form-container">
-<div class="form-card">
-
-<h1 style="color: #667eea; margin-bottom: 10px; font-size: 28px;">新規会員登録</h1>
-<p style="color: #718096; margin-bottom: 30px;">会員登録を行って頂くと、あなたのwebサイトにアフィリエイト広告を掲載して、報酬を得ることができます。</p>
-
-<div class="topics" style="margin-bottom: 20px;">HOME &gt; アフィリエイト会員登録 &gt; <span>入力フォーム</span> &gt; 入力内容の確認 &gt; 登録完了</div>
-
 <!--# variable error_msg #-->
+<div style="background:#336;color:#FFF;text-align:center;font-size:normal;">【 会員登録 】</div>
 
-<div class="search_list">
-<dl>
-<dt>ログイン用のメールアドレスとパスワードを半角英数で入力してください。</dt>
-<dd>
-<table class="search_list_table" summary="詳細テーブル">
-<tr>
-    <th>メールアドレス<span>※</span></th>
-    <td>
-		<!--# form text mail 50 128 #-->
-<!--# ifbegin val_equal (!--# ecode getSiteProfile nuser_default_activate #--) 1 #-->
-	<span class="info">
-		※必ず受信可能なメールアドレスを入力してください。<br />
-		入力されたメールアドレスにアクティベートメールを送信しますので、手順に従ってユーザー認証を行ってください。
-	</span>
-<!--# endif #-->
-	</td>
-</tr>
-<tr>
-    <th>メールアドレス(再入力)<span>※</span></th>
-    <td><!--# form text mail_confirm 50 128 #--></td>
-</tr>
-<tr>
-    <th>パスワード<span>※</span></th>
-    <td><!--# form password pass 25 128 #--></td>
-</tr>
-<tr>
-    <th>パスワード(再入力)<span>※</span></th>
-    <td><!--# form password pass_confirm 25 128 #--></td>
-</tr>
-</table>
-</dd>
-</dl>
-</div>
+<div style="text-align:left;">
 
-<div class="search_list">
-<dl>
-<dt>お名前、住所、電話番号、必要に応じFAX番号を入力してください。</dt>
-<dd>
-<table class="search_list_table" summary="詳細テーブル">
-<tr>
-    <th>お名前<span>※</span></th>
-    <td><!--# form text name 25 32 #--></td>
-</tr>
-<tr>
-    <th>現住所<span>※</span></th>
-    <td>〒&nbsp;<!--# form text zip1 3 3 #-->&nbsp;-&nbsp;<!--# form text zip2 4 4 #-->
-    &nbsp;<!--# code tableSelectForm adds prefectures name id  未選択 #-->
-    &nbsp;<!--# form text add_sub 48 128 #-->
-</tr>
-<tr>
-    <th>電話番号<span>※</span></th>
-    <td><!--# form text tel 15 15  #--></td>
-</tr>
-<tr>
-    <th>FAX番号</th>
-    <td><!--# form text fax 15 15  #--></td>
-</tr>
-</table>
-</dd>
-</dl>
-</div>
+<div style="background:#EEE;">名前<span style="color:#ff0000">*</span>:<br />
+<!--# form text name 16 16  #--><br /><br /></div>
 
-<div class="search_list">
-<dl>
-<dt>アフィリエイト用バナーを掲載するページのURLを入力してください。</dt>
-<dd>
-<table class="search_list_table" summary="詳細テーブル">
-<tr>
-    <th>バナー掲載ＵＲＬ<span>※</span></th>
-    <td><!--# form text url 80 256 http:// #--></td>
-</tr>
-</table>
-</dd>
-</dl>
-</div>
+<div style="background:#DDD;">住所<span style="color:#ff0000">*</span>:<br />
+〒<!--# form text zip1 3 3  (!--# code getInputMode 4 #--) #-->-<!--# form text zip2 4 4  (!--# code getInputMode 4 #--) #-->　
+<!--# code tableSelectForm adds prefectures name id  未選択 #--><br /><br />
+<!--# form text add_sub 30 128 #--><br /><br /></div>
 
-<div class="search_list">
-<dl>
-<dt>アフィリエイト報酬の振込先を入力してください。</dt>
-<dd>
-<table class="search_list_table" summary="詳細テーブル">
-<tr>
-    <th width="25%">金融機関名<span>※</span></th>
-    <td width="25%"><!--# form text bank 30 30 #--></td>
-    <th width="25%">金融機関番号<span>※</span></th>
-    <td width="25%"><!--# form text bank_code 6 4 #--></td>
-</tr>
-<tr>
-    <th>支店名<span>※</span></th>
-    <td><!--# form text branch 30 30 #--></td>
-    <th>支店番号<span>※</span></th>
-    <td><!--# form text branch_code 5 3 #--></td>
-</tr>
-<tr>
-    <th>種別<span>※</span></th>
-    <td colspan="3"><!--# form radio bank_type 1  1/2/4 普通/当座/貯蓄 #--></td>
-</tr>
-<tr>
-    <th>口座番号<span>※</span></th>
-    <td colspan="3"><!--# form text number 15 7 #--></td>
-</tr>
-<tr>
-    <th>口座名義(カナ)<span>※</span></th>
-    <td colspan="3"><!--# form text bank_name 30 30 #--></td>
-</tr>
-</table>
-</dd>
-</dl>
-</div>
+<div style="background:#EEE;">電話番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text tel 16 16  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">FAX番号:<br />
+<!--# form text fax 16 16  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">バナー掲載URL<span style="color:#ff0000">*</span>:<br />
+<!--# form text url 30 256  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">メールアドレス<span style="color:#ff0000">*</span>:<br />
+<!--# form text mail 32 128  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#DDD;">メールアドレス再入力<span style="color:#ff0000">*</span>:<br />
+<!--# form text mail_confirm 32 128  (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">金融機関番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text bank_code 6 4 #--><br /><br /></div>
+
+<div style="background:#EEE;">支店番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text branch_code 5 3 #--><br /><br /></div>
+
+<div style="background:#EEE;">銀行名<span style="color:#ff0000">*</span>:<br />
+<!--# form text bank 32 128  #--><br /><br /></div>
+
+<div style="background:#DDD;">支店<span style="color:#ff0000">*</span>:<br />
+<!--# form text branch 32 128  #--><br /><br />
+
+<div style="background:#EEE;">口座種別<span style="color:#ff0000">*</span>:<br />
+<!--# form radio bank_type 1  1/2/3 普通/当座/貯蓄 #--><br /><br /></div>
+
+<div style="background:#DDD;">口座番号<span style="color:#ff0000">*</span>:<br />
+<!--# form text number 16 32  (!--# code getInputMode 4 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">口座名義(カナ)<span style="color:#ff0000">*</span>:<br /> 
+<!--# form text bank_name 16 32  #--><br /><br /></div>
+
+<div style="background:#DDD;">パスワード<span style="color:#ff0000">*</span>:<br />
+<!--# form password pass 8 8 (!--# code getInputMode 3 #--) #--><br /><br /></div>
+
+<div style="background:#EEE;">パスワード再入力<span style="color:#ff0000">*</span>:<br />
+<!--# form password pass_confirm 8 8 (!--# code getInputMode 3 #--) #--><br /><br /></div>
+<br />
 <!--# form hidden parent #-->
 
-<div class="input_box">
-<input type="submit" value="入力内容の確認" class="input_base">
-<input type="reset" value="リセット" class="input_base">
+<div style="text-align:center;"><input type="submit" value="確認">　<input type="reset" value="リセット"></div>
+<br />
+
 </div>
-
-</div><!--form-card_END-->
-</div><!--modern-form-container_END-->
-
-</div><!--inc_side_body_END-->
-
-<br class="clear">
-
-</div><!--contents_END-->
