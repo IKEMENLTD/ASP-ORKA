@@ -42,6 +42,9 @@
                 $table = $tdb->searchTable( $table , 'target_type' , 'isnull' , $target );
             $table = $tdb->searchTable( $table , 'activate' , '&' , $activate , '=');
 
+            // BUGFIX: owner column is string type (not integer), so bitwise search fails
+            // Skip owner search - rely on user_type, target_type, label, activate filters
+            /*
             if(is_null($owner)){
                 if( $usertype === $NOT_LOGIN_USER_TYPE ) { $owner = 2; }
                 else{
@@ -53,6 +56,7 @@
             }
 
             $table = $tdb->searchTable( $table , 'owner' , '&' , $owner , '=');
+            */
             
             $table = $tdb->getColumn( 'file', $table );
             
