@@ -130,6 +130,21 @@
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
 		}
 
+		// CRITICAL DEBUG for nUser
+		if ($_GET['type'] == 'nUser') {
+			ob_end_clean();
+			echo "<h1 style='background: red; color: white; padding: 20px;'>CRITICAL DEBUG LINE 133</h1>";
+			echo "<p><strong>should_proceed:</strong> " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
+			echo "<p><strong>About to check if (!should_proceed)...</strong></p>";
+			if (!$should_proceed) {
+				echo "<p style='color: red;'><strong>ERROR: Will call drawRegistFailed!</strong></p>";
+			} else {
+				echo "<p style='color: green;'><strong>SUCCESS: Will enter registration form logic!</strong></p>";
+				echo "<p><strong>gm[nUser] exists:</strong> " . (isset($gm['nUser']) ? 'YES' : 'NO') . "</p>";
+			}
+			die();
+		}
+
 		if( !$should_proceed )
 		{
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
