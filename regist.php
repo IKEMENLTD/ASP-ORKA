@@ -110,12 +110,24 @@
 		// Force should_proceed to true for nUser to bypass all access checks
 		if ($_GET['type'] == 'nUser') {
 			$should_proceed = true;
+			// Emergency debug output
+			ob_end_clean();
+			echo "<h1 style='color: green;'>DEBUG: should_proceed was set to TRUE for nUser</h1>";
+			echo "<p>This line confirms the fix is deployed and working.</p>";
+			echo "<p>About to enter the registration form logic...</p>";
+			ob_start();
 		} else {
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
 		}
 
 		if( !$should_proceed )
 		{
+			// This should NOT execute for nUser
+			ob_end_clean();
+			echo "<h1 style='color: red;'>ERROR: This should not happen for nUser!</h1>";
+			echo "<p>should_proceed = " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
+			echo "<p>GET[type] = " . htmlspecialchars($_GET['type']) . "</p>";
+			die();
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
 		else
