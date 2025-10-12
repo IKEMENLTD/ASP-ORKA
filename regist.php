@@ -60,33 +60,50 @@
 		if ($_GET['type'] == 'nUser') {
 			log_debug("STEP 4.1: Entering nUser workaround");
 			// Force create nUser GUIManager if missing
+			log_debug("STEP 4.1.1: Checking if gm[nUser] exists");
 			if (!isset($gm['nUser'])) {
+				log_debug("STEP 4.1.2: gm[nUser] not found, creating...");
 				global $DB_NAME;
+				log_debug("STEP 4.1.3: DB_NAME=" . $DB_NAME);
 				$gm['nUser'] = new GUIManager($DB_NAME, 'nUser');
+				log_debug("STEP 4.1.4: gm[nUser] created successfully");
+			} else {
+				log_debug("STEP 4.1.5: gm[nUser] already exists");
 			}
 
 			// Only set up templates if not logged in
+			log_debug("STEP 4.2: Checking loginUserType=" . $loginUserType);
 			if ($loginUserType == 'nobody' || $loginUserType == $NOT_LOGIN_USER_TYPE) {
-				$tgm = SystemUtil::getGMforType("template");
-				$tdb = $tgm->getDB();
+				log_debug("STEP 4.2.1: User is nobody/not-logged-in, setting up templates");
+				try {
+					$tgm = SystemUtil::getGMforType("template");
+					log_debug("STEP 4.2.2: Got template GUIManager");
+					$tdb = $tgm->getDB();
+					log_debug("STEP 4.2.3: Got template DB object");
 
-				// Add HEAD_DESIGN template for nobody users
-				$check_head = $tdb->getTable();
-				$check_head = $tdb->searchTable($check_head, 'user_type', '==', '//');
-				$check_head = $tdb->searchTable($check_head, 'label', '==', 'HEAD_DESIGN');
+					// Add HEAD_DESIGN template for nobody users
+					log_debug("STEP 4.3: Checking HEAD_DESIGN template");
+					$check_head = $tdb->getTable();
+					$check_head = $tdb->searchTable($check_head, 'user_type', '==', '//');
+					$check_head = $tdb->searchTable($check_head, 'label', '==', 'HEAD_DESIGN');
+					log_debug("STEP 4.3.1: Found " . $tdb->getRow($check_head) . " HEAD_DESIGN templates");
 
-				if ($tdb->getRow($check_head) == 0) {
-					$new_head = $tdb->getNewRecord();
-					$tdb->setData($new_head, 'id', '997');
-					$tdb->setData($new_head, 'user_type', '//');
-					$tdb->setData($new_head, 'target_type', '');
-					$tdb->setData($new_head, 'activate', 15);
-					$tdb->setData($new_head, 'owner', 2);
-					$tdb->setData($new_head, 'label', 'HEAD_DESIGN');
-					$tdb->setData($new_head, 'file', 'pc/include/HeadNobody.html');
-					$tdb->setData($new_head, 'sort', 997);
-					$tdb->addRecord($new_head);
-				}
+					if ($tdb->getRow($check_head) == 0) {
+						log_debug("STEP 4.3.2: Creating HEAD_DESIGN template");
+						$new_head = $tdb->getNewRecord();
+						$tdb->setData($new_head, 'id', '997');
+						$tdb->setData($new_head, 'user_type', '//');
+						$tdb->setData($new_head, 'target_type', '');
+						$tdb->setData($new_head, 'activate', 15);
+						$tdb->setData($new_head, 'owner', 2);
+						$tdb->setData($new_head, 'label', 'HEAD_DESIGN');
+						$tdb->setData($new_head, 'file', 'pc/include/HeadNobody.html');
+						$tdb->setData($new_head, 'sort', 997);
+						$tdb->addRecord($new_head);
+						log_debug("STEP 4.3.3: HEAD_DESIGN template created");
+					} else {
+						log_debug("STEP 4.3.4: HEAD_DESIGN template already exists");
+					}
 
 				// Add FOOT_DESIGN template for nobody users
 				$check_foot = $tdb->getTable();
@@ -140,7 +157,16 @@
 					$tdb->setData($new_rec, 'sort', 999);
 					$tdb->addRecord($new_rec);
 				}
-			}  // Close the if ($loginUserType == 'nobody') block
+				log_debug("STEP 4.9: All templates checked/created successfully");
+				} catch (Exception $template_error) {
+					log_debug("STEP 4.ERROR: Template creation failed: " . $template_error->getMessage());
+					log_debug("STEP 4.ERROR: File: " . $template_error->getFile() . ":" . $template_error->getLine());
+					// Don't throw, just log and continue
+				}
+			} else {
+				log_debug("STEP 4.2.9: User is logged in, skipping template setup");
+			}
+			log_debug("STEP 4.99: nUser workaround completed");
 		}  // Close the if ($_GET['type'] == 'nUser') block
 
 		log_debug("STEP 5: Calling System::getHead()");
