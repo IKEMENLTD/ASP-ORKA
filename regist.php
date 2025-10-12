@@ -21,12 +21,6 @@
 		ConceptCheck::IsScalar( $_GET , Array( 'type' , 'copy' ) );
 		ConceptCheck::IsScalar( $_POST , Array( 'post' , 'step' , 'back' ) );
 
-		// ULTRA EARLY DEBUG - Right after parameter checks
-		if (isset($_GET['type']) && $_GET['type'] == 'nUser') {
-			ob_end_clean();
-			die("<h1 style='background: yellow; padding: 20px;'>ULTRA DEBUG: Line 23 - After parameter checks for nUser. This confirms regist.php is executing!</h1>");
-		}
-
 		// Skip access checks for nUser (public registration)
 		if ($_GET['type'] != 'nUser') {
 			if( !$gm[ $_GET[ 'type' ] ] )
@@ -86,7 +80,23 @@
 					$tdb->addRecord($new_foot);
 				}
 
-				// Add REGIST_FORM_PAGE_DESIGN template
+				// Add/Update REGIST_FORM_PAGE_DESIGN template with correct owner value
+				$check_table = $tdb->getTable();
+				$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
+				$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
+				$check_table = $tdb->searchTable($check_table, 'label', '==', 'REGIST_FORM_PAGE_DESIGN');
+
+				// Delete any existing record with wrong owner value
+				if ($tdb->getRow($check_table) > 0) {
+					$existing_rec = $tdb->getFirstRecord($check_table);
+					$existing_owner = $tdb->getData($existing_rec, 'owner');
+					if ($existing_owner != 2) {
+						// Delete and recreate with correct owner
+						$tdb->deleteRecord($tdb->getData($existing_rec, 'id'));
+					}
+				}
+
+				// Re-check after potential deletion
 				$check_table = $tdb->getTable();
 				$check_table = $tdb->searchTable($check_table, 'user_type', '==', '//');
 				$check_table = $tdb->searchTable($check_table, 'target_type', '==', 'nUser');
@@ -98,7 +108,7 @@
 					$tdb->setData($new_rec, 'user_type', '//');
 					$tdb->setData($new_rec, 'target_type', 'nUser');
 					$tdb->setData($new_rec, 'activate', 15);
-					$tdb->setData($new_rec, 'owner', 3);
+					$tdb->setData($new_rec, 'owner', 2);  // Correct value for NOT_LOGIN_USER_TYPE
 					$tdb->setData($new_rec, 'label', 'REGIST_FORM_PAGE_DESIGN');
 					$tdb->setData($new_rec, 'file', 'nUser/Regist.html');
 					$tdb->setData($new_rec, 'sort', 999);
@@ -116,24 +126,12 @@
 		// Force should_proceed to true for nUser to bypass all access checks
 		if ($_GET['type'] == 'nUser') {
 			$should_proceed = true;
-			// Emergency debug output
-			ob_end_clean();
-			echo "<h1 style='color: green;'>DEBUG: should_proceed was set to TRUE for nUser</h1>";
-			echo "<p>This line confirms the fix is deployed and working.</p>";
-			echo "<p>About to enter the registration form logic...</p>";
-			ob_start();
 		} else {
 			$should_proceed = !$THIS_TABLE_IS_NOHTML[ $_GET['type'] ] && isset( $gm[ $_GET['type'] ] );
 		}
 
 		if( !$should_proceed )
 		{
-			// This should NOT execute for nUser
-			ob_end_clean();
-			echo "<h1 style='color: red;'>ERROR: This should not happen for nUser!</h1>";
-			echo "<p>should_proceed = " . ($should_proceed ? 'TRUE' : 'FALSE') . "</p>";
-			echo "<p>GET[type] = " . htmlspecialchars($_GET['type']) . "</p>";
-			die();
 			$sys->drawRegistFaled( $gm, $loginUserType, $loginUserRank );
 		}
 		else
