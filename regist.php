@@ -59,6 +59,19 @@
 		log_debug("STEP 4: nUser workaround section");
 		if ($_GET['type'] == 'nUser') {
 			log_debug("STEP 4.1: Entering nUser workaround");
+
+			// EMERGENCY: Force die here to check if we reach this point
+			ob_end_clean();
+			echo "<h1 style='background: yellow; padding: 20px;'>EMERGENCY DEBUG: Reached STEP 4.1</h1>";
+			echo "<p>About to check gm[nUser]...</p>";
+			echo "<pre>";
+			echo "gm array keys: " . implode(", ", array_keys($gm)) . "\n";
+			echo "gm[nUser] isset: " . (isset($gm['nUser']) ? 'YES' : 'NO') . "\n";
+			echo "loginUserType: " . $loginUserType . "\n";
+			echo "NOT_LOGIN_USER_TYPE: " . $NOT_LOGIN_USER_TYPE . "\n";
+			echo "</pre>";
+			die("STOPPED AT STEP 4.1 FOR DEBUGGING");
+
 			// Force create nUser GUIManager if missing
 			log_debug("STEP 4.1.1: Checking if gm[nUser] exists");
 			if (!isset($gm['nUser'])) {
