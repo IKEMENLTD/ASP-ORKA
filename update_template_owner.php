@@ -5,7 +5,7 @@
 header('Content-Type: text/html; charset=utf-8');
 
 echo "<h1>Template Owner Update Script</h1>";
-echo "<p>Fixing REGIST_FORM_PAGE_DESIGN template owner values...</p>";
+echo "<p>Fixing ALL template owner values (changing owner=3 to owner=2)...</p>";
 
 try {
     // Get database connection details from environment variables
@@ -27,9 +27,9 @@ try {
 
     echo "<p style='color: green;'>✓ Connected successfully</p>";
 
-    // Check existing templates
-    echo "<h2>Step 2: Checking existing templates...</h2>";
-    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'REGIST_FORM_PAGE_DESIGN' ORDER BY id";
+    // Check existing templates with owner=3
+    echo "<h2>Step 2: Checking existing templates with owner=3...</h2>";
+    $query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE owner = 3 ORDER BY label, id";
     $result = pg_query($conn, $query);
 
     if (!$result) {
@@ -37,7 +37,7 @@ try {
     }
 
     $count = pg_num_rows($result);
-    echo "<p>Found $count templates with label REGIST_FORM_PAGE_DESIGN</p>";
+    echo "<p>Found $count templates with owner=3</p>";
 
     if ($count > 0) {
         echo "<table border='1' style='border-collapse: collapse;'>";
@@ -56,9 +56,9 @@ try {
         }
         echo "</table>";
 
-        // Update owner values from 3 to 2
-        echo "<h2>Step 3: Updating owner values...</h2>";
-        $update_query = "UPDATE template SET owner = 2 WHERE label = 'REGIST_FORM_PAGE_DESIGN' AND owner = 3";
+        // Update ALL templates with owner values from 3 to 2
+        echo "<h2>Step 3: Updating ALL template owner values...</h2>";
+        $update_query = "UPDATE template SET owner = 2 WHERE owner = 3";
         $update_result = pg_query($conn, $update_query);
 
         if (!$update_result) {
@@ -68,29 +68,39 @@ try {
         $affected = pg_affected_rows($update_result);
         echo "<p style='color: green; font-weight: bold;'>✓ Updated $affected template(s) from owner=3 to owner=2</p>";
 
-        // Verify update
+        // Verify update - check if any owner=3 remain
         echo "<h2>Step 4: Verification...</h2>";
-        $verify_query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE label = 'REGIST_FORM_PAGE_DESIGN' ORDER BY id";
+        $verify_query = "SELECT COUNT(*) as count FROM template WHERE owner = 3";
         $verify_result = pg_query($conn, $verify_query);
+        $verify_row = pg_fetch_assoc($verify_result);
+        $remaining = $verify_row['count'];
+
+        if ($remaining == 0) {
+            echo "<p style='color: green; font-weight: bold;'>✓ All templates verified! No templates with owner=3 remaining.</p>";
+        } else {
+            echo "<p style='color: red; font-weight: bold;'>⚠ Warning: $remaining template(s) still have owner=3</p>";
+        }
+
+        // Show sample of updated templates
+        echo "<h3>Sample of updated templates (showing first 20):</h3>";
+        $sample_query = "SELECT id, user_type, target_type, owner, activate, label, file FROM template WHERE owner = 2 ORDER BY label, id LIMIT 20";
+        $sample_result = pg_query($conn, $sample_query);
 
         echo "<table border='1' style='border-collapse: collapse;'>";
         echo "<tr><th>ID</th><th>user_type</th><th>target_type</th><th>owner</th><th>activate</th><th>label</th><th>file</th></tr>";
 
-        while ($row = pg_fetch_assoc($verify_result)) {
-            $owner_color = ($row['owner'] == 2) ? 'green' : 'red';
+        while ($row = pg_fetch_assoc($sample_result)) {
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['id']) . "</td>";
             echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
             echo "<td>" . htmlspecialchars($row['target_type']) . "</td>";
-            echo "<td style='color: $owner_color; font-weight: bold;'>" . htmlspecialchars($row['owner']) . "</td>";
+            echo "<td style='color: green; font-weight: bold;'>" . htmlspecialchars($row['owner']) . "</td>";
             echo "<td>" . htmlspecialchars($row['activate']) . "</td>";
             echo "<td>" . htmlspecialchars($row['label']) . "</td>";
             echo "<td>" . htmlspecialchars($row['file']) . "</td>";
             echo "</tr>";
         }
         echo "</table>";
-
-        echo "<p style='color: green; font-weight: bold;'>✓ All templates verified!</p>";
     } else {
         echo "<p>No templates found. No update needed.</p>";
     }
