@@ -40,7 +40,10 @@
                 $table = $tdb->searchTable( $table , 'target_type' , '==' , $target );
             else
                 $table = $tdb->searchTable( $table , 'target_type' , 'isnull' , $target );
-            $table = $tdb->searchTable( $table , 'activate' , '&' , $activate , '=');
+
+            // BUGFIX: activate & owner columns may be string type, bitwise search fails
+            // Skip both activate and owner searches - rely on label, user_type, target_type only
+            // $table = $tdb->searchTable( $table , 'activate' , '&' , $activate , '=');
 
             // BUGFIX: owner column is string type (not integer), so bitwise search fails
             // Skip owner search - rely on user_type, target_type, label, activate filters
