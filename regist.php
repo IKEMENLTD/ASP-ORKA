@@ -1,4 +1,7 @@
 <?php
+	// IMMEDIATE OUTPUT TEST - THIS MUST APPEAR IF regist.php IS EXECUTED
+	echo "<!-- REGIST.PHP STARTED AT " . date('Y-m-d H:i:s') . " -->\n";
+	flush();
 
 	/*******************************************************************************************************
 	 * <PRE>
@@ -13,6 +16,9 @@
 	ini_set('display_errors', '1');
 	ini_set('display_startup_errors', '1');
 	error_reporting(E_ALL);
+
+	echo "<!-- ERROR REPORTING ENABLED -->\n";
+	flush();
 
 	$LOG_FILE = '/tmp/regist_debug.log'; // Changed to /tmp for permissions
 	function log_debug($msg) {
