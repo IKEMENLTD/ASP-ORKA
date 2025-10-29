@@ -25,7 +25,18 @@ ADD COLUMN `afad_gid` VARCHAR(100) NULL DEFAULT NULL COMMENT 'AFAD広告グル�
 ADD COLUMN `afad_param_name` VARCHAR(50) NOT NULL DEFAULT 'afad_sid' COMMENT 'AFADセッションIDパラメータ名' AFTER `afad_gid`;
 
 -- --------------------------------------------
--- 3. afad_postback_logテーブル作成（新規）
+-- 3. secretAdwaresテーブル拡張（クローズド広告）
+-- --------------------------------------------
+
+-- AFAD連携設定カラムを追加（adwaresと同じ構成）
+ALTER TABLE `secretAdwares`
+ADD COLUMN `afad_enabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AFAD連携有効フラグ (0:無効, 1:有効)' AFTER `url_over`,
+ADD COLUMN `afad_postback_url` TEXT NULL DEFAULT NULL COMMENT 'AFADポストバックURL' AFTER `afad_enabled`,
+ADD COLUMN `afad_gid` VARCHAR(100) NULL DEFAULT NULL COMMENT 'AFAD広告グループID' AFTER `afad_postback_url`,
+ADD COLUMN `afad_param_name` VARCHAR(50) NOT NULL DEFAULT 'afad_sid' COMMENT 'AFADセッションIDパラメータ名' AFTER `afad_gid`;
+
+-- --------------------------------------------
+-- 4. afad_postback_logテーブル作成（新規）
 -- --------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `afad_postback_log` (

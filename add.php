@@ -596,7 +596,7 @@
 	}
 
 	/**
-		@brief  HTTPリクエストを送信する。
+		@brief  HTTPリクエストを送信する（file_get_contents使用、curl不要）。
 		@param  $url_ リクエストURL。
 		@return 結果配列 ['status' => HTTPステータスコード, 'body' => レスポンスボディ, 'error' => エラーメッセージ]
 	*/
@@ -609,27 +609,40 @@
 		);
 
 		try {
-			$ch = curl_init();
+			// HTTPコンテキストオプション
+			$opts = array(
+				'http' => array(
+					'method' => 'GET',
+					'timeout' => 10,
+					'ignore_errors' => true  // HTTPエラーでも本文を取得
+				),
+				'ssl' => array(
+					'verify_peer' => true,
+					'verify_peer_name' => true
+				)
+			);
 
-			curl_setopt( $ch , CURLOPT_URL , $url_ );
-			curl_setopt( $ch , CURLOPT_RETURNTRANSFER , true );
-			curl_setopt( $ch , CURLOPT_TIMEOUT , 10 );
-			curl_setopt( $ch , CURLOPT_CONNECTTIMEOUT , 5 );
-			curl_setopt( $ch , CURLOPT_FOLLOWLOCATION , true );
-			curl_setopt( $ch , CURLOPT_SSL_VERIFYPEER , true );
-			curl_setopt( $ch , CURLOPT_SSL_VERIFYHOST , 2 );
+			$context = stream_context_create( $opts );
 
-			$response = curl_exec( $ch );
-			$httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
-			$error = curl_error( $ch );
+			// HTTPリクエスト送信
+			$response = @file_get_contents( $url_ , false , $context );
 
-			curl_close( $ch );
+			// HTTPステータスコードを取得
+			if( isset( $http_response_header ) && count( $http_response_header ) > 0 ) {
+				// 最初の行から HTTPステータスコードを抽出
+				// 例: "HTTP/1.1 200 OK"
+				$statusLine = $http_response_header[0];
+				if( preg_match( '/HTTP\/[0-9\.]+ ([0-9]+)/' , $statusLine , $matches ) ) {
+					$result['status'] = intval( $matches[1] );
+				}
+			}
 
-			$result['status'] = $httpCode;
 			$result['body'] = $response;
 
-			if( $error ) {
-				$result['error'] = $error;
+			// エラーチェック
+			if( $response === false ) {
+				$error = error_get_last();
+				$result['error'] = $error['message'] ?? 'Unknown error';
 			}
 
 		} catch( Exception $e ) {
