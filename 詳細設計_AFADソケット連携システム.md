@@ -293,6 +293,74 @@ CREATE TABLE socket_messages (
 );
 ```
 
+### 3.4 デプロイメントオプション
+
+#### オプション1: 同一サーバー配置（推奨・簡易）
+
+Gateway を CATS と同じサーバーに配置し、同じデータベース接続を共有。
+
+**メリット:**
+- 設定が簡単
+- DB接続を共有できる
+- レイテンシが低い
+
+**デメリット:**
+- 単一障害点
+- スケーリングが制限される
+
+**実装:**
+- SocketMessageHandler.php と SocketAuthenticator.php が CATS の Initialize.php を require
+- 現在の設計書の実装がこのオプションに対応
+
+#### オプション2: 別サーバー配置（スケーラブル）
+
+Gateway を独立したサーバーに配置。
+
+**メリット:**
+- 水平スケーリング可能
+- CATS サーバーの負荷を分散
+- 高可用性構成が可能
+
+**デメリット:**
+- 独立した DB 接続が必要
+- 設定が複雑
+
+**実装変更が必要な箇所:**
+
+1. **SocketAuthenticator.php の修正:**
+```php
+class SocketAuthenticator {
+    private $pdo;
+
+    public function __construct() {
+        // 独立したDB接続
+        $this->pdo = new PDO(
+            "mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME'),
+            getenv('DB_USER'),
+            getenv('DB_PASS')
+        );
+    }
+
+    public function recordConnection($connection_id, $client_type, $client_ip) {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO socket_connections
+            (connection_id, client_type, client_ip, connected_at, last_heartbeat)
+            VALUES (?, ?, ?, NOW(), NOW())
+        ");
+        $stmt->execute([$connection_id, $client_type, $client_ip]);
+    }
+    // ... 他のメソッドも同様に修正
+}
+```
+
+2. **SocketMessageHandler.php の修正:**
+- 同様に PDO を使った独立したDB接続に変更
+
+**注意事項:**
+- 現在の設計書は**オプション1（同一サーバー配置）**を前提としています
+- オプション2を選択する場合は、上記の修正が必要です
+- 本番環境でのスケーラビリティが重要な場合は、オプション2を検討してください
+
 ---
 
 ## 4. ソケット通信仕様
@@ -377,7 +445,30 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 }
 ```
 
-#### 4.2.2 広告更新通知（AFAD → CATS）
+#### 4.2.2 クリック通知（CATS → AFAD）
+
+```json
+{
+    "version": "1.0",
+    "type": "click",
+    "timestamp": "2025-10-29T12:34:56Z",
+    "message_id": "550e8400-e29b-41d4-a716-446655440002",
+    "sender": "CATS",
+    "payload": {
+        "access_id": 67890,
+        "adware_id": 100,
+        "owner_id": 500,
+        "ipaddress": "192.0.2.1",
+        "useragent": "Mozilla/5.0...",
+        "referer": "https://affiliate-site.com",
+        "has_reward": true,
+        "reward_amount": 10,
+        "created_at": "2025-10-29T12:34:56Z"
+    }
+}
+```
+
+#### 4.2.3 広告更新通知（AFAD → CATS）
 
 ```json
 {
@@ -404,22 +495,30 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 
 ### 4.3 イベントタイプ一覧
 
-| イベントタイプ | 方向 | 説明 |
-|---------------|------|------|
-| `auth` | Client → Gateway | 認証リクエスト |
-| `auth_success` | Gateway → Client | 認証成功 |
-| `auth_failed` | Gateway → Client | 認証失敗 |
-| `ping` | Bidirectional | ハートビート |
-| `pong` | Bidirectional | ハートビート応答 |
-| `conversion` | CATS → AFAD | コンバージョン通知 |
-| `click` | CATS → AFAD | クリック通知 |
-| `tier_reward` | CATS → AFAD | ティア報酬計算完了 |
-| `adware_update` | AFAD → CATS | 広告情報更新 |
-| `budget_alert` | CATS → AFAD | 予算アラート |
-| `fraud_alert` | CATS → AFAD | 不正検知アラート |
-| `stats_update` | CATS → Dashboard | リアルタイム統計 |
-| `user_online` | CATS → Dashboard | ユーザーオンライン通知 |
-| `error` | Bidirectional | エラー通知 |
+#### 実装済みイベント
+
+| イベントタイプ | 方向 | 説明 | 実装状況 |
+|---------------|------|------|---------|
+| `auth` | Client → Gateway | 認証リクエスト | ✅ 実装済 |
+| `auth_success` | Gateway → Client | 認証成功 | ✅ 実装済 |
+| `auth_failed` | Gateway → Client | 認証失敗 | ✅ 実装済 |
+| `ping` | Bidirectional | ハートビート | ✅ 実装済 |
+| `pong` | Bidirectional | ハートビート応答 | ✅ 実装済 |
+| `conversion` | CATS → AFAD | コンバージョン通知 | ✅ 実装済 |
+| `click` | CATS → AFAD | クリック通知 | ✅ 実装済 |
+| `tier_reward` | CATS → AFAD | ティア報酬計算完了 | ✅ 実装済 |
+| `adware_update` | AFAD → CATS | 広告情報更新 | ✅ 実装済 |
+| `budget_update` | AFAD → CATS | 広告予算更新 | ✅ 実装済 |
+| `budget_alert` | CATS → AFAD | 予算アラート | ✅ 実装済 |
+| `fraud_alert` | CATS → AFAD | 不正検知アラート | ✅ 実装済 |
+| `error` | Bidirectional | エラー通知 | ✅ 実装済 |
+
+#### 将来の拡張候補（未実装）
+
+| イベントタイプ | 方向 | 説明 | 備考 |
+|---------------|------|------|------|
+| `stats_update` | CATS → Dashboard | リアルタイム統計 | フェーズ2で実装予定 |
+| `user_online` | CATS → Dashboard | ユーザーオンライン通知 | フェーズ2で実装予定 |
 
 ---
 
@@ -506,6 +605,8 @@ class SocketTemporaryException extends SocketException {
 require_once dirname(__FILE__) . '/../Util.php';
 require_once dirname(__FILE__) . '/Exception/SocketException.php';
 require_once dirname(__FILE__) . '/Exception/SocketTemporaryException.php';
+require_once dirname(__FILE__) . '/Exception/SocketAuthException.php';
+require_once dirname(__FILE__) . '/SocketRetryStrategy.php';
 
 class SocketClient {
 
@@ -760,7 +861,10 @@ class SocketClient {
         }
 
         $this->reconnect_attempts++;
-        sleep($this->reconnect_delay * $this->reconnect_attempts);
+
+        // SocketRetryStrategy を使用して遅延時間を計算
+        $delay = SocketRetryStrategy::getDelay($this->reconnect_attempts);
+        sleep($delay);
 
         $this->connect();
     }
@@ -1009,10 +1113,38 @@ class SocketEventDispatcher {
     }
 
     public function processQueue() {
+        global $_db;
+
+        // 1. データベースから失敗イベントを取得
+        if (isset($_db['socket_events'])) {
+            $event_db = &$_db['socket_events'];
+
+            // FAILEDまたはPENDINGで、retry_countが5未満のイベントを取得
+            $failed_events = $event_db->select([
+                'status' => ['FAILED', 'PENDING'],
+                'retry_count' => ['<', 5],
+                'ORDER BY' => 'created_at ASC',
+                'LIMIT' => 100
+            ]);
+
+            if (is_array($failed_events)) {
+                foreach ($failed_events as $event_rec) {
+                    $this->queue[] = [
+                        'type' => $event_rec['event_type'],
+                        'payload' => json_decode($event_rec['event_data'], true),
+                        'event_id' => $event_rec['id'],
+                        'retry_count' => (int)$event_rec['retry_count']
+                    ];
+                }
+            }
+        }
+
+        // 2. キューが空なら終了
         if (empty($this->queue)) {
             return;
         }
 
+        // 3. クライアント初期化
         $this->initClient();
 
         if (!$this->client || !$this->client->isConnected()) {
@@ -1021,19 +1153,90 @@ class SocketEventDispatcher {
 
         $processed = [];
 
+        // 4. キュー内のイベントを処理
         foreach ($this->queue as $index => $item) {
             try {
+                require_once dirname(__FILE__) . '/SocketRetryStrategy.php';
+
                 $this->client->send($item['type'], $item['payload']);
-                $this->updateDatabaseStatus($item['type'], $item['payload'], 'SENT');
+
+                // 成功したら SENT にステータス更新
+                if (isset($item['event_id'])) {
+                    $this->updateDatabaseStatusById($item['event_id'], 'SENT');
+                } else {
+                    $this->updateDatabaseStatus($item['type'], $item['payload'], 'SENT');
+                }
+
                 $processed[] = $index;
+
             } catch (Exception $e) {
                 error_log('Queue processing failed: ' . $e->getMessage());
-                break;
+
+                // SocketRetryStrategy でリトライ可否判定
+                if (SocketRetryStrategy::shouldRetry($e)) {
+                    // リトライ可能なエラー：retry_countを増やす
+                    if (isset($item['event_id'])) {
+                        $this->incrementRetryCount($item['event_id'], $e->getMessage());
+                    } else {
+                        $this->updateDatabaseStatus($item['type'], $item['payload'], 'FAILED', $e->getMessage());
+                    }
+                } else {
+                    // リトライ不可能なエラー（認証エラー等）：処理済みとしてキューから削除
+                    if (isset($item['event_id'])) {
+                        $this->updateDatabaseStatusById($item['event_id'], 'FAILED', $e->getMessage());
+                    } else {
+                        $this->updateDatabaseStatus($item['type'], $item['payload'], 'FAILED', $e->getMessage());
+                    }
+                    $processed[] = $index;
+                }
+
+                break; // 1つ失敗したら以降は次回に回す
             }
         }
 
+        // 5. 処理済みアイテムをキューから削除
         foreach (array_reverse($processed) as $index) {
             array_splice($this->queue, $index, 1);
+        }
+    }
+
+    private function updateDatabaseStatusById($event_id, $status, $error_message = null) {
+        global $_db;
+
+        if (!isset($_db['socket_events'])) {
+            return;
+        }
+
+        $event_db = &$_db['socket_events'];
+        $event_rec = $event_db->select(['id' => $event_id], 'first');
+
+        if ($event_rec) {
+            $event_rec['status'] = $status;
+            $event_rec['sent_at'] = date('Y-m-d H:i:s');
+            if ($error_message) {
+                $event_rec['error_message'] = $error_message;
+            }
+            $event_db->edit($event_rec);
+        }
+    }
+
+    private function incrementRetryCount($event_id, $error_message = null) {
+        global $_db;
+
+        if (!isset($_db['socket_events'])) {
+            return;
+        }
+
+        $event_db = &$_db['socket_events'];
+        $event_rec = $event_db->select(['id' => $event_id], 'first');
+
+        if ($event_rec) {
+            $event_rec['retry_count'] = (int)$event_rec['retry_count'] + 1;
+            $event_rec['status'] = 'FAILED';
+            if ($error_message) {
+                $event_rec['error_message'] = $error_message;
+            }
+            $event_db->edit($event_rec);
         }
     }
 
@@ -1179,6 +1382,10 @@ class SocketMessageReceiver {
  * @package include/extends
  */
 
+require_once dirname(__FILE__) . '/Exception/SocketException.php';
+require_once dirname(__FILE__) . '/Exception/SocketAuthException.php';
+require_once dirname(__FILE__) . '/Exception/SocketTemporaryException.php';
+
 class SocketRetryStrategy {
 
     public static function getDelay($attempt) {
@@ -1217,30 +1424,39 @@ class SocketRetryStrategy {
  */
 
 $SOCKET_CONF = [
-    'enabled' => true,
-    'url' => 'wss://socket.example.com:8080/ws',
+    // 環境変数を優先、なければデフォルト値を使用
+    'enabled' => (getenv('SOCKET_ENABLED') !== false) ? (getenv('SOCKET_ENABLED') === 'true') : true,
+    'url' => getenv('SOCKET_SERVER_URL') ?: 'wss://socket.example.com:8080/ws',
     'token' => getenv('SOCKET_AUTH_TOKEN') ?: 'your-secret-token-here',
-    'timeout' => 10,
-    'auto_reconnect' => true,
-    'max_reconnect_attempts' => 5,
-    'heartbeat_interval' => 30,
-    'queue_process_interval' => 60,
-    'debug' => false,
-    'log_file' => dirname(__FILE__) . '/../../logs/socket.log'
+    'timeout' => (int)(getenv('SOCKET_TIMEOUT') ?: 10),
+    'auto_reconnect' => (getenv('SOCKET_AUTO_RECONNECT') !== false) ? (getenv('SOCKET_AUTO_RECONNECT') === 'true') : true,
+    'max_reconnect_attempts' => (int)(getenv('SOCKET_MAX_RECONNECT_ATTEMPTS') ?: 5),
+    'heartbeat_interval' => (int)(getenv('SOCKET_HEARTBEAT_INTERVAL') ?: 30),
+    'queue_process_interval' => (int)(getenv('SOCKET_QUEUE_PROCESS_INTERVAL') ?: 60),
+    'debug' => (getenv('SOCKET_DEBUG') !== false) ? (getenv('SOCKET_DEBUG') === 'true') : false,
+    'log_file' => getenv('SOCKET_LOG_FILE') ?: (dirname(__FILE__) . '/../../logs/socket.log')
 ];
 ```
 
 ### 5.7 .env.example（環境変数テンプレート）
 
 ```env
-# Socket通信設定
-SOCKET_AUTH_TOKEN=your-secret-token-change-this
-SOCKET_SERVER_URL=wss://socket.example.com:8080/ws
+# Socket通信設定（CATS側）
 SOCKET_ENABLED=true
+SOCKET_SERVER_URL=wss://socket.example.com:8080/ws
+SOCKET_AUTH_TOKEN=your-secret-token-change-this
+SOCKET_TIMEOUT=10
+SOCKET_AUTO_RECONNECT=true
+SOCKET_MAX_RECONNECT_ATTEMPTS=5
+SOCKET_HEARTBEAT_INTERVAL=30
+SOCKET_QUEUE_PROCESS_INTERVAL=60
+SOCKET_DEBUG=false
+SOCKET_LOG_FILE=/home/user/ASP-ORKA/logs/socket.log
 
-# SSL証明書パス
-SOCKET_SSL_CERT=/path/to/cert.pem
-SOCKET_SSL_KEY=/path/to/privkey.pem
+# Socket通信設定（Gateway側）
+SOCKET_SSL_ENABLED=true
+SOCKET_SSL_CERT=/etc/ssl/certs/socket.crt
+SOCKET_SSL_KEY=/etc/ssl/private/socket.key
 
 # データベース設定（既存）
 DB_TYPE=mysql
@@ -1433,6 +1649,8 @@ class SocketServer implements MessageComponentInterface {
             }
 
             if ($message_type === 'ping') {
+                // ハートビート更新
+                $this->authenticator->updateHeartbeat($connection_id);
                 $this->sendPong($from);
                 return;
             }
@@ -1510,6 +1728,7 @@ class SocketServer implements MessageComponentInterface {
 
     protected function broadcast($message, ConnectionInterface $from = null) {
         $json = json_encode($message);
+        $message_type = $message['type'] ?? 'unknown';
 
         foreach ($this->clients as $client) {
             if ($from !== null && $from === $client) {
@@ -1520,6 +1739,13 @@ class SocketServer implements MessageComponentInterface {
 
             if ($this->connections[$connection_id]['authenticated']) {
                 $client->send($json);
+
+                // OUTBOUND メッセージをログ記録
+                $this->messageHandler->logOutboundMessage(
+                    $connection_id,
+                    $message_type,
+                    $message
+                );
             }
         }
     }
@@ -1672,6 +1898,11 @@ class SocketMessageHandler {
 
         $msg_db->add($msg_rec);
     }
+
+    public function logOutboundMessage($connection_id, $message_type, $data) {
+        // OUTBOUND メッセージをログ記録
+        $this->logMessage($connection_id, 'OUTBOUND', $message_type, $data);
+    }
 }
 ```
 
@@ -1742,6 +1973,23 @@ class SocketAuthenticator {
 
         if ($conn_rec) {
             $conn_rec['disconnected_at'] = date('Y-m-d H:i:s');
+            $conn_db->edit($conn_rec);
+        }
+    }
+
+    public function updateHeartbeat($connection_id) {
+        if (!isset($this->db['socket_connections'])) {
+            return;
+        }
+
+        $conn_db = &$this->db['socket_connections'];
+
+        $conn_rec = $conn_db->select([
+            'connection_id' => $connection_id
+        ], 'first');
+
+        if ($conn_rec) {
+            $conn_rec['last_heartbeat'] = date('Y-m-d H:i:s');
             $conn_db->edit($conn_rec);
         }
     }
@@ -2101,7 +2349,139 @@ WantedBy=multi-user.target
 * * * * * /usr/bin/php /home/user/ASP-ORKA/tools/process_socket_queue.php >> /var/log/socket-queue.log 2>&1
 ```
 
-### 9.5 nginx リバースプロキシ設定
+### 9.5 SocketMessageReceiverデーモン（AFAD受信処理）
+
+#### 9.5.1 デーモンスクリプト
+
+```php
+<?php
+/**
+ * Socket Message Receiver Daemon
+ *
+ * AFADからのメッセージを常時受信するデーモンプロセス
+ *
+ * @package tools
+ */
+
+require_once dirname(__FILE__) . '/../include/extends/SocketClient.php';
+require_once dirname(__FILE__) . '/../include/extends/SocketMessageReceiver.php';
+require_once dirname(__FILE__) . '/../custom/extends/socketConf.php';
+
+// ログ設定
+ini_set('error_log', dirname(__FILE__) . '/../logs/socket-receiver.log');
+error_log("Socket Receiver Daemon starting...");
+
+// シグナルハンドラー設定（グレースフルシャットダウン用）
+$running = true;
+
+if (function_exists('pcntl_signal')) {
+    pcntl_signal(SIGTERM, function() use (&$running) {
+        global $running;
+        $running = false;
+        error_log("Received SIGTERM, shutting down gracefully...");
+    });
+
+    pcntl_signal(SIGINT, function() use (&$running) {
+        global $running;
+        $running = false;
+        error_log("Received SIGINT, shutting down gracefully...");
+    });
+}
+
+try {
+    // SocketClient 初期化
+    $client = new SocketClient([
+        'url' => $SOCKET_CONF['url'],
+        'token' => $SOCKET_CONF['token'],
+        'timeout' => $SOCKET_CONF['timeout'] ?? 10,
+        'auto_reconnect' => true,
+        'max_reconnect_attempts' => $SOCKET_CONF['max_reconnect_attempts'] ?? 5
+    ]);
+
+    error_log("Connecting to WebSocket server: {$SOCKET_CONF['url']}");
+    $client->connect();
+    error_log("Connected successfully");
+
+    // SocketMessageReceiver 初期化
+    $receiver = new SocketMessageReceiver($client);
+
+    // メインループ
+    while ($running && $client->isConnected()) {
+        $message = $client->receive();
+
+        if ($message) {
+            $receiver->processMessage($message);
+        }
+
+        // シグナル処理（PCNTLが有効な場合）
+        if (function_exists('pcntl_signal_dispatch')) {
+            pcntl_signal_dispatch();
+        }
+
+        usleep(100000); // 100ms待機
+    }
+
+    error_log("Socket Receiver Daemon stopped");
+    $client->close();
+
+} catch (Exception $e) {
+    error_log("Socket Receiver Daemon error: " . $e->getMessage());
+    exit(1);
+}
+```
+
+**ファイルパス:** `/tools/socket_receiver_daemon.php`
+
+#### 9.5.2 systemd サービス設定
+
+```ini
+# deployment/socket-receiver.service
+[Unit]
+Description=CATS Socket Message Receiver Daemon
+After=network.target
+Requires=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/user/ASP-ORKA/tools
+ExecStart=/usr/bin/php /home/user/ASP-ORKA/tools/socket_receiver_daemon.php
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/socket-receiver.log
+StandardError=append:/var/log/socket-receiver-error.log
+
+# 環境変数
+EnvironmentFile=/home/user/ASP-ORKA/.env
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### 9.5.3 サービス管理コマンド
+
+```bash
+# サービスの有効化
+sudo systemctl enable socket-receiver.service
+
+# サービスの起動
+sudo systemctl start socket-receiver.service
+
+# ステータス確認
+sudo systemctl status socket-receiver.service
+
+# ログ確認
+sudo journalctl -u socket-receiver.service -f
+
+# サービスの停止
+sudo systemctl stop socket-receiver.service
+
+# サービスの再起動
+sudo systemctl restart socket-receiver.service
+```
+
+### 9.6 nginx リバースプロキシ設定
 
 ```nginx
 # /etc/nginx/sites-available/socket-gateway
@@ -2421,6 +2801,7 @@ class SocketClientTest extends TestCase {
 |-----------|------|---------|
 | 1.0 | 2025-10-28 | 初版作成 |
 | 2.0 | 2025-10-29 | 完全版：全実装コード、デプロイスクリプト、チェックリスト追加 |
+| 2.1 | 2025-10-29 | 相互関係分析で発見された問題を修正：<br>・processQueue()にDB連携追加<br>・SocketRetryStrategyを実際に使用<br>・last_heartbeat更新ロジック追加<br>・SocketMessageReceiverデーモン実装<br>・環境変数の統一<br>・イベントタイプ一覧の整理（budget_update追加、未実装を分離）<br>・clickイベントpayload仕様追加<br>・OUTBOUNDメッセージログ記録追加<br>・デプロイメントオプション（同一/別サーバー）の説明追加 |
 
 ---
 
