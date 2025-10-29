@@ -1,7 +1,7 @@
-# CATSシステム - AFADソケット連携システム 設計書
+# CATSシステム - AFADソケット連携システム 完全設計書
 
-**バージョン:** 1.0
-**作成日:** 2025-10-28
+**バージョン:** 2.0 (完全版)
+**作成日:** 2025-10-29
 **対象ブランチ:** `claude/cats-afad-socket-integration-011CUZuJVtvVu9LFctZqVLqc`
 
 ---
@@ -16,8 +16,10 @@
 6. [データフロー](#6-データフロー)
 7. [エラーハンドリング](#7-エラーハンドリング)
 8. [セキュリティ設計](#8-セキュリティ設計)
-9. [実装計画](#9-実装計画)
-10. [テスト計画](#10-テスト計画)
+9. [デプロイ・運用](#9-デプロイ運用)
+10. [実装計画](#10-実装計画)
+11. [テスト計画](#11-テスト計画)
+12. [実装チェックリスト](#12-実装チェックリスト)
 
 ---
 
@@ -142,6 +144,12 @@ CATSアフィリエイトシステムと外部AFAD（Affiliate Advertising）シ
 │         │   - メッセージ送受信               │                   │
 │         └────────────────┬────────────────┘                   │
 │                          │                                     │
+│         ┌────────────────▼────────────────┐                   │
+│         │   SocketMessageReceiver.php      │                   │
+│         │   - AFAD受信処理                 │                   │
+│         │   - adwares更新                  │                   │
+│         └──────────────────────────────────┘                   │
+│                          │                                     │
 └──────────────────────────┼─────────────────────────────────────┘
                            │
                            │ WebSocket (wss://)
@@ -169,6 +177,11 @@ CATSアフィリエイトシステムと外部AFAD（Affiliate Advertising）シ
 │  │  SocketLogger.php                                        │  │
 │  │  - 通信ログ記録                                           │  │
 │  │  - メトリクス収集                                         │  │
+│  └──────────────┬───────────────────────────────────────────┘  │
+│                 │                                               │
+│  ┌──────────────▼───────────────────────────────────────────┐  │
+│  │  SocketRateLimiter.php                                   │  │
+│  │  - レート制限                                             │  │
 │  └──────────────────────────────────────────────────────────┘  │
 │                                                                 │
 └──────────────────────────┬──────────────────────────────────────┘
@@ -204,8 +217,10 @@ CATSアフィリエイトシステムと外部AFAD（Affiliate Advertising）シ
 |---------------|------|-------------|
 | **SocketEventDispatcher** | イベント検知・キューイング | `/include/extends/SocketEventDispatcher.php` |
 | **SocketClient** | WebSocketクライアント | `/include/extends/SocketClient.php` |
+| **SocketMessageReceiver** | AFAD受信処理 | `/include/extends/SocketMessageReceiver.php` |
 | **SocketConfig** | 設定管理 | `/custom/extends/socketConf.php` |
 | **SocketException** | 例外処理 | `/include/extends/Exception/SocketException.php` |
+| **SocketRetryStrategy** | リトライ戦略 | `/include/extends/SocketRetryStrategy.php` |
 
 #### 3.2.2 Gateway コンポーネント
 
@@ -215,6 +230,16 @@ CATSアフィリエイトシステムと外部AFAD（Affiliate Advertising）シ
 | **SocketMessageHandler** | メッセージ処理 | `/socket/SocketMessageHandler.php` |
 | **SocketAuthenticator** | 認証処理 | `/socket/SocketAuthenticator.php` |
 | **SocketLogger** | ログ記録 | `/socket/SocketLogger.php` |
+| **SocketRateLimiter** | レート制限 | `/socket/SocketRateLimiter.php` |
+
+#### 3.2.3 デプロイ・運用スクリプト
+
+| スクリプト | 責務 | ファイルパス |
+|-----------|------|-------------|
+| **マイグレーション** | DBスキーマ作成 | `/migration/002_create_socket_tables.php` |
+| **キュー処理** | バッチ処理 | `/tools/process_socket_queue.php` |
+| **サーバー起動** | Gateway起動 | `/socket/start_server.sh` |
+| **systemd設定** | サービス管理 | `/deployment/socket-server.service` |
 
 ### 3.3 データベース拡張
 
@@ -223,10 +248,10 @@ CATSアフィリエイトシステムと外部AFAD（Affiliate Advertising）シ
 ```sql
 CREATE TABLE socket_events (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    event_type VARCHAR(50) NOT NULL,        -- 'conversion', 'click', 'tier_reward', etc.
-    event_data TEXT,                        -- JSON形式のイベントデータ
-    target_system VARCHAR(20) NOT NULL,     -- 'AFAD', 'CATS', 'ALL'
-    status VARCHAR(20) NOT NULL,            -- 'PENDING', 'SENT', 'FAILED'
+    event_type VARCHAR(50) NOT NULL,
+    event_data TEXT,
+    target_system VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
     retry_count INT DEFAULT 0,
     error_message TEXT,
     created_at DATETIME NOT NULL,
@@ -242,7 +267,7 @@ CREATE TABLE socket_events (
 CREATE TABLE socket_connections (
     id INT AUTO_INCREMENT PRIMARY KEY,
     connection_id VARCHAR(64) NOT NULL UNIQUE,
-    client_type VARCHAR(20) NOT NULL,       -- 'AFAD', 'DASHBOARD', 'ADMIN'
+    client_type VARCHAR(20) NOT NULL,
     client_ip VARCHAR(45),
     token VARCHAR(255),
     connected_at DATETIME NOT NULL,
@@ -259,7 +284,7 @@ CREATE TABLE socket_connections (
 CREATE TABLE socket_messages (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     connection_id VARCHAR(64) NOT NULL,
-    direction VARCHAR(10) NOT NULL,         -- 'INBOUND', 'OUTBOUND'
+    direction VARCHAR(10) NOT NULL,
     message_type VARCHAR(50) NOT NULL,
     message_data TEXT,
     created_at DATETIME NOT NULL,
@@ -310,7 +335,7 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 {
     "version": "1.0",
     "type": "event_type",
-    "timestamp": "2025-10-28T12:34:56Z",
+    "timestamp": "2025-10-29T12:34:56Z",
     "message_id": "uuid-v4",
     "sender": "CATS",
     "payload": {
@@ -325,7 +350,7 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 {
     "version": "1.0",
     "type": "conversion",
-    "timestamp": "2025-10-28T12:34:56Z",
+    "timestamp": "2025-10-29T12:34:56Z",
     "message_id": "550e8400-e29b-41d4-a716-446655440000",
     "sender": "CATS",
     "payload": {
@@ -345,16 +370,9 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
                 "user_name": "親アフィリエイター",
                 "rate": 10,
                 "amount": 100
-            },
-            {
-                "tier_level": 2,
-                "user_id": 498,
-                "user_name": "祖父アフィリエイター",
-                "rate": 5,
-                "amount": 50
             }
         ],
-        "created_at": "2025-10-28T12:34:56Z"
+        "created_at": "2025-10-29T12:34:56Z"
     }
 }
 ```
@@ -365,12 +383,12 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 {
     "version": "1.0",
     "type": "adware_update",
-    "timestamp": "2025-10-28T12:34:56Z",
+    "timestamp": "2025-10-29T12:34:56Z",
     "message_id": "550e8400-e29b-41d4-a716-446655440001",
     "sender": "AFAD",
     "payload": {
         "adware_id": 100,
-        "action": "UPDATE",  // CREATE, UPDATE, DELETE
+        "action": "UPDATE",
         "data": {
             "name": "商品A",
             "money": 1000,
@@ -380,46 +398,6 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
             "limits": 100000,
             "open": true
         }
-    }
-}
-```
-
-#### 4.2.3 リアルタイム統計更新（CATS → Dashboard）
-
-```json
-{
-    "version": "1.0",
-    "type": "stats_update",
-    "timestamp": "2025-10-28T12:34:56Z",
-    "message_id": "550e8400-e29b-41d4-a716-446655440002",
-    "sender": "CATS",
-    "payload": {
-        "user_id": 500,
-        "stats": {
-            "today_clicks": 150,
-            "today_conversions": 5,
-            "today_revenue": 5000,
-            "pending_revenue": 3000,
-            "active_revenue": 15000,
-            "conversion_rate": 3.33
-        }
-    }
-}
-```
-
-#### 4.2.4 エラーレスポンス
-
-```json
-{
-    "version": "1.0",
-    "type": "error",
-    "timestamp": "2025-10-28T12:34:56Z",
-    "message_id": "550e8400-e29b-41d4-a716-446655440003",
-    "sender": "GATEWAY",
-    "payload": {
-        "error_code": "AUTH_FAILED",
-        "error_message": "Invalid authentication token",
-        "original_message_id": "550e8400-e29b-41d4-a716-446655440000"
     }
 }
 ```
@@ -447,14 +425,79 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 
 ## 5. 実装設計
 
-### 5.1 SocketClient.php（CATS側クライアント）
+### 5.1 例外クラス群
+
+#### 5.1.1 SocketException.php
+
+```php
+<?php
+/**
+ * Socket基底例外クラス
+ *
+ * @package include/extends/Exception
+ */
+
+class SocketException extends Exception {
+
+    protected $error_code;
+
+    public function __construct($message = "", $error_code = "SOCKET_ERROR", $code = 0, Throwable $previous = null) {
+        parent::__construct($message, $code, $previous);
+        $this->error_code = $error_code;
+    }
+
+    public function getErrorCode() {
+        return $this->error_code;
+    }
+}
+```
+
+#### 5.1.2 SocketAuthException.php
+
+```php
+<?php
+/**
+ * Socket認証例外
+ *
+ * @package include/extends/Exception
+ */
+
+require_once dirname(__FILE__) . '/SocketException.php';
+
+class SocketAuthException extends SocketException {
+
+    public function __construct($message = "Authentication failed", $code = 0, Throwable $previous = null) {
+        parent::__construct($message, "AUTH_FAILED", $code, $previous);
+    }
+}
+```
+
+#### 5.1.3 SocketTemporaryException.php
+
+```php
+<?php
+/**
+ * Socket一時的エラー例外
+ *
+ * @package include/extends/Exception
+ */
+
+require_once dirname(__FILE__) . '/SocketException.php';
+
+class SocketTemporaryException extends SocketException {
+
+    public function __construct($message = "Temporary error", $error_code = "TEMPORARY_ERROR", $code = 0, Throwable $previous = null) {
+        parent::__construct($message, $error_code, $code, $previous);
+    }
+}
+```
+
+### 5.2 SocketClient.php（CATS側クライアント）
 
 ```php
 <?php
 /**
  * WebSocketクライアント
- *
- * CATSシステムからAFADシステムへのWebSocket接続を管理
  *
  * @package include/extends
  * @version 1.0
@@ -462,6 +505,7 @@ Client (CATS/AFAD)                    Gateway (SocketServer)
 
 require_once dirname(__FILE__) . '/../Util.php';
 require_once dirname(__FILE__) . '/Exception/SocketException.php';
+require_once dirname(__FILE__) . '/Exception/SocketTemporaryException.php';
 
 class SocketClient {
 
@@ -471,17 +515,8 @@ class SocketClient {
     private $connection_id;
     private $reconnect_attempts = 0;
     private $max_reconnect_attempts = 5;
-    private $reconnect_delay = 2; // 秒
+    private $reconnect_delay = 2;
 
-    /**
-     * コンストラクタ
-     *
-     * @param array $config 設定配列
-     *   - url: WebSocketサーバーURL (wss://example.com:8080)
-     *   - token: 認証トークン
-     *   - timeout: 接続タイムアウト（秒）
-     *   - auto_reconnect: 自動再接続フラグ
-     */
     public function __construct($config) {
         $this->config = array_merge([
             'url' => '',
@@ -494,14 +529,10 @@ class SocketClient {
         if (empty($this->config['url'])) {
             throw new SocketException('WebSocket URL is required');
         }
+
+        $this->max_reconnect_attempts = $this->config['max_reconnect_attempts'] ?? 5;
     }
 
-    /**
-     * WebSocketサーバーに接続
-     *
-     * @return bool 接続成功フラグ
-     * @throws SocketException
-     */
     public function connect() {
         $url_parts = parse_url($this->config['url']);
 
@@ -510,7 +541,6 @@ class SocketClient {
         $path = isset($url_parts['path']) ? $url_parts['path'] : '/';
         $scheme = $url_parts['scheme'];
 
-        // SSL/TLS接続の場合
         $context = stream_context_create([
             'ssl' => [
                 'verify_peer' => true,
@@ -531,13 +561,10 @@ class SocketClient {
         );
 
         if (!$this->socket) {
-            throw new SocketException("Connection failed: {$errstr} ({$errno})");
+            throw new SocketTemporaryException("Connection failed: {$errstr} ({$errno})", "CONNECTION_FAILED");
         }
 
-        // WebSocketハンドシェイク
         $this->performHandshake($host, $path);
-
-        // 認証
         $this->authenticate();
 
         $this->connected = true;
@@ -546,9 +573,6 @@ class SocketClient {
         return true;
     }
 
-    /**
-     * WebSocketハンドシェイク
-     */
     private function performHandshake($host, $path) {
         $key = base64_encode(openssl_random_pseudo_bytes(16));
 
@@ -562,7 +586,6 @@ class SocketClient {
 
         fwrite($this->socket, $headers);
 
-        // レスポンス読み取り
         $response = '';
         while (($line = fgets($this->socket)) !== false) {
             $response .= $line;
@@ -572,13 +595,10 @@ class SocketClient {
         }
 
         if (strpos($response, '101 Switching Protocols') === false) {
-            throw new SocketException('WebSocket handshake failed');
+            throw new SocketException('WebSocket handshake failed', 'HANDSHAKE_FAILED');
         }
     }
 
-    /**
-     * 認証処理
-     */
     private function authenticate() {
         $auth_message = [
             'type' => 'auth',
@@ -587,30 +607,21 @@ class SocketClient {
         ];
 
         $this->sendRaw($auth_message);
-
-        // 認証レスポンス待機
         $response = $this->receiveRaw();
 
         if (!$response || $response['type'] !== 'auth_success') {
-            throw new SocketException('Authentication failed');
+            throw new SocketAuthException('Authentication failed');
         }
 
         $this->connection_id = $response['connection_id'];
     }
 
-    /**
-     * メッセージ送信
-     *
-     * @param string $type イベントタイプ
-     * @param array $payload ペイロード
-     * @return bool 送信成功フラグ
-     */
     public function send($type, $payload) {
         if (!$this->connected) {
             if ($this->config['auto_reconnect']) {
                 $this->reconnect();
             } else {
-                throw new SocketException('Not connected to WebSocket server');
+                throw new SocketException('Not connected to WebSocket server', 'NOT_CONNECTED');
             }
         }
 
@@ -626,9 +637,6 @@ class SocketClient {
         return $this->sendRaw($message);
     }
 
-    /**
-     * 生のメッセージ送信
-     */
     private function sendRaw($message) {
         $json = json_encode($message);
         $frame = $this->encodeFrame($json);
@@ -637,17 +645,12 @@ class SocketClient {
 
         if ($written === false) {
             $this->connected = false;
-            throw new SocketException('Failed to send message');
+            throw new SocketTemporaryException('Failed to send message', 'SEND_FAILED');
         }
 
         return true;
     }
 
-    /**
-     * メッセージ受信
-     *
-     * @return array|null 受信メッセージ
-     */
     public function receive() {
         if (!$this->connected) {
             return null;
@@ -656,9 +659,6 @@ class SocketClient {
         return $this->receiveRaw();
     }
 
-    /**
-     * 生のメッセージ受信
-     */
     private function receiveRaw() {
         $frame = $this->decodeFrame();
 
@@ -669,15 +669,12 @@ class SocketClient {
         return json_decode($frame, true);
     }
 
-    /**
-     * WebSocketフレームのエンコード
-     */
     private function encodeFrame($data) {
         $length = strlen($data);
-        $frame = chr(0x81); // Text frame, FIN=1
+        $frame = chr(0x81);
 
         if ($length <= 125) {
-            $frame .= chr($length | 0x80); // マスクビット設定
+            $frame .= chr($length | 0x80);
         } elseif ($length <= 65535) {
             $frame .= chr(126 | 0x80);
             $frame .= pack('n', $length);
@@ -686,11 +683,9 @@ class SocketClient {
             $frame .= pack('J', $length);
         }
 
-        // マスキングキー生成
         $mask = openssl_random_pseudo_bytes(4);
         $frame .= $mask;
 
-        // データのマスキング
         for ($i = 0; $i < $length; $i++) {
             $frame .= $data[$i] ^ $mask[$i % 4];
         }
@@ -698,9 +693,6 @@ class SocketClient {
         return $frame;
     }
 
-    /**
-     * WebSocketフレームのデコード
-     */
     private function decodeFrame() {
         $header = @fread($this->socket, 2);
 
@@ -715,19 +707,16 @@ class SocketClient {
         $masked = ($byte2 & 0x80) !== 0;
         $length = $byte2 & 0x7F;
 
-        // 接続クローズ
         if ($opcode === 0x08) {
             $this->connected = false;
             return null;
         }
 
-        // Ping
         if ($opcode === 0x09) {
             $this->sendPong();
-            return $this->decodeFrame(); // 次のフレームを読む
+            return $this->decodeFrame();
         }
 
-        // 長さの拡張読み取り
         if ($length === 126) {
             $extended = fread($this->socket, 2);
             $length = unpack('n', $extended)[1];
@@ -736,12 +725,10 @@ class SocketClient {
             $length = unpack('J', $extended)[1];
         }
 
-        // マスク読み取り
         if ($masked) {
             $mask = fread($this->socket, 4);
         }
 
-        // データ読み取り
         $data = '';
         $remaining = $length;
         while ($remaining > 0) {
@@ -753,7 +740,6 @@ class SocketClient {
             $remaining -= strlen($chunk);
         }
 
-        // マスク解除
         if ($masked) {
             for ($i = 0; $i < strlen($data); $i++) {
                 $data[$i] = $data[$i] ^ $mask[$i % 4];
@@ -763,20 +749,14 @@ class SocketClient {
         return $data;
     }
 
-    /**
-     * Pong送信
-     */
     private function sendPong() {
-        $frame = chr(0x8A) . chr(0x00); // Pong frame
+        $frame = chr(0x8A) . chr(0x00);
         fwrite($this->socket, $frame);
     }
 
-    /**
-     * 再接続
-     */
     private function reconnect() {
         if ($this->reconnect_attempts >= $this->max_reconnect_attempts) {
-            throw new SocketException('Max reconnection attempts exceeded');
+            throw new SocketException('Max reconnection attempts exceeded', 'MAX_RECONNECT_EXCEEDED');
         }
 
         $this->reconnect_attempts++;
@@ -785,12 +765,8 @@ class SocketClient {
         $this->connect();
     }
 
-    /**
-     * 接続クローズ
-     */
     public function close() {
         if ($this->socket) {
-            // クローズフレーム送信
             $frame = chr(0x88) . chr(0x00);
             @fwrite($this->socket, $frame);
 
@@ -799,9 +775,6 @@ class SocketClient {
         }
     }
 
-    /**
-     * UUID v4生成
-     */
     private function generateUUID() {
         $data = openssl_random_pseudo_bytes(16);
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
@@ -810,30 +783,22 @@ class SocketClient {
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    /**
-     * 接続状態確認
-     */
     public function isConnected() {
         return $this->connected;
     }
 
-    /**
-     * デストラクタ
-     */
     public function __destruct() {
         $this->close();
     }
 }
 ```
 
-### 5.2 SocketEventDispatcher.php（イベントディスパッチャー）
+### 5.3 SocketEventDispatcher.php
 
 ```php
 <?php
 /**
  * Socket イベントディスパッチャー
- *
- * CATSシステム内のイベントを検知し、WebSocket経由で送信
  *
  * @package include/extends
  * @version 1.0
@@ -850,9 +815,6 @@ class SocketEventDispatcher {
     private $enabled = false;
     private $queue = [];
 
-    /**
-     * シングルトンインスタンス取得
-     */
     public static function getInstance() {
         if (self::$instance === null) {
             self::$instance = new self();
@@ -860,11 +822,7 @@ class SocketEventDispatcher {
         return self::$instance;
     }
 
-    /**
-     * コンストラクタ
-     */
     private function __construct() {
-        // 設定読み込み
         $conf_file = dirname(__FILE__) . '/../../custom/extends/socketConf.php';
         if (file_exists($conf_file)) {
             require_once $conf_file;
@@ -875,9 +833,6 @@ class SocketEventDispatcher {
         }
     }
 
-    /**
-     * ソケットクライアント初期化
-     */
     private function initClient() {
         if ($this->client === null && $this->enabled && $this->config) {
             try {
@@ -885,25 +840,17 @@ class SocketEventDispatcher {
                     'url' => $this->config['url'],
                     'token' => $this->config['token'],
                     'timeout' => $this->config['timeout'] ?? 10,
-                    'auto_reconnect' => $this->config['auto_reconnect'] ?? true
+                    'auto_reconnect' => $this->config['auto_reconnect'] ?? true,
+                    'max_reconnect_attempts' => $this->config['max_reconnect_attempts'] ?? 5
                 ]);
                 $this->client->connect();
-            } catch (SocketException $e) {
+            } catch (Exception $e) {
                 error_log('SocketClient initialization failed: ' . $e->getMessage());
                 $this->client = null;
             }
         }
     }
 
-    /**
-     * コンバージョンイベント送信
-     *
-     * @param array $pay_data payテーブルのレコード
-     * @param array $access_data accessテーブルのレコード
-     * @param array $adware_data adwaresテーブルのレコード
-     * @param array $user_data nuserテーブルのレコード
-     * @param array $tier_rewards ティア報酬配列
-     */
     public function dispatchConversion($pay_data, $access_data, $adware_data, $user_data, $tier_rewards = []) {
         if (!$this->enabled) {
             return;
@@ -926,12 +873,6 @@ class SocketEventDispatcher {
         $this->dispatch('conversion', $payload);
     }
 
-    /**
-     * クリックイベント送信
-     *
-     * @param array $access_data accessテーブルのレコード
-     * @param array $click_pay_data click_payテーブルのレコード（クリック報酬がある場合）
-     */
     public function dispatchClick($access_data, $click_pay_data = null) {
         if (!$this->enabled) {
             return;
@@ -952,11 +893,6 @@ class SocketEventDispatcher {
         $this->dispatch('click', $payload);
     }
 
-    /**
-     * ティア報酬イベント送信
-     *
-     * @param array $tier_data tierテーブルのレコード
-     */
     public function dispatchTierReward($tier_data) {
         if (!$this->enabled) {
             return;
@@ -977,13 +913,6 @@ class SocketEventDispatcher {
         $this->dispatch('tier_reward', $payload);
     }
 
-    /**
-     * 予算アラートイベント送信
-     *
-     * @param int $adware_id 広告ID
-     * @param int $current_budget 現在の予算
-     * @param int $limit 予算上限
-     */
     public function dispatchBudgetAlert($adware_id, $current_budget, $limit) {
         if (!$this->enabled) {
             return;
@@ -999,12 +928,6 @@ class SocketEventDispatcher {
         $this->dispatch('budget_alert', $payload);
     }
 
-    /**
-     * 不正検知アラートイベント送信
-     *
-     * @param string $fraud_type 不正タイプ
-     * @param array $details 詳細情報
-     */
     public function dispatchFraudAlert($fraud_type, $details) {
         if (!$this->enabled) {
             return;
@@ -1019,39 +942,25 @@ class SocketEventDispatcher {
         $this->dispatch('fraud_alert', $payload);
     }
 
-    /**
-     * イベントディスパッチ（共通処理）
-     *
-     * @param string $type イベントタイプ
-     * @param array $payload ペイロード
-     */
     private function dispatch($type, $payload) {
-        // データベースに記録
         $this->saveToDatabase($type, $payload);
 
-        // WebSocket送信試行
         try {
             $this->initClient();
 
             if ($this->client && $this->client->isConnected()) {
                 $this->client->send($type, $payload);
+                $this->updateDatabaseStatus($type, $payload, 'SENT');
             } else {
-                // 送信失敗時はキューに追加
                 $this->queue[] = ['type' => $type, 'payload' => $payload];
             }
         } catch (Exception $e) {
             error_log('Socket dispatch failed: ' . $e->getMessage());
-            // キューに追加
             $this->queue[] = ['type' => $type, 'payload' => $payload];
+            $this->updateDatabaseStatus($type, $payload, 'FAILED', $e->getMessage());
         }
     }
 
-    /**
-     * イベントをデータベースに保存
-     *
-     * @param string $type イベントタイプ
-     * @param array $payload ペイロード
-     */
     private function saveToDatabase($type, $payload) {
         global $_db;
 
@@ -1073,9 +982,32 @@ class SocketEventDispatcher {
         $event_db->add($event_rec);
     }
 
-    /**
-     * キュー処理（定期実行用）
-     */
+    private function updateDatabaseStatus($type, $payload, $status, $error_message = null) {
+        global $_db;
+
+        if (!isset($_db['socket_events'])) {
+            return;
+        }
+
+        $event_db = &$_db['socket_events'];
+        $payload_json = json_encode($payload);
+
+        $event_rec = $event_db->select([
+            'event_type' => $type,
+            'event_data' => $payload_json,
+            'status' => 'PENDING'
+        ], 'first');
+
+        if ($event_rec) {
+            $event_rec['status'] = $status;
+            $event_rec['sent_at'] = date('Y-m-d H:i:s');
+            if ($error_message) {
+                $event_rec['error_message'] = $error_message;
+            }
+            $event_db->edit($event_rec);
+        }
+    }
+
     public function processQueue() {
         if (empty($this->queue)) {
             return;
@@ -1092,22 +1024,19 @@ class SocketEventDispatcher {
         foreach ($this->queue as $index => $item) {
             try {
                 $this->client->send($item['type'], $item['payload']);
+                $this->updateDatabaseStatus($item['type'], $item['payload'], 'SENT');
                 $processed[] = $index;
             } catch (Exception $e) {
                 error_log('Queue processing failed: ' . $e->getMessage());
-                break; // 失敗したら中断
+                break;
             }
         }
 
-        // 送信成功したアイテムをキューから削除
         foreach (array_reverse($processed) as $index) {
             array_splice($this->queue, $index, 1);
         }
     }
 
-    /**
-     * デストラクタ
-     */
     public function __destruct() {
         if ($this->client) {
             $this->client->close();
@@ -1116,7 +1045,168 @@ class SocketEventDispatcher {
 }
 ```
 
-### 5.3 socketConf.php（設定ファイル）
+### 5.4 SocketMessageReceiver.php（AFAD受信処理）
+
+```php
+<?php
+/**
+ * Socket メッセージ受信処理
+ *
+ * AFADからの広告更新などを受信して処理
+ *
+ * @package include/extends
+ * @version 1.0
+ */
+
+require_once dirname(__FILE__) . '/SocketClient.php';
+
+class SocketMessageReceiver {
+
+    private $client;
+    private $handlers = [];
+
+    public function __construct($client) {
+        $this->client = $client;
+        $this->registerDefaultHandlers();
+    }
+
+    private function registerDefaultHandlers() {
+        $this->registerHandler('adware_update', [$this, 'handleAdwareUpdate']);
+        $this->registerHandler('budget_update', [$this, 'handleBudgetUpdate']);
+    }
+
+    public function registerHandler($message_type, $callback) {
+        $this->handlers[$message_type] = $callback;
+    }
+
+    public function listen() {
+        while ($this->client->isConnected()) {
+            $message = $this->client->receive();
+
+            if ($message) {
+                $this->processMessage($message);
+            }
+
+            usleep(100000); // 100ms待機
+        }
+    }
+
+    private function processMessage($message) {
+        $type = $message['type'] ?? 'unknown';
+
+        if (isset($this->handlers[$type])) {
+            try {
+                call_user_func($this->handlers[$type], $message);
+            } catch (Exception $e) {
+                error_log("Message handler error for type {$type}: " . $e->getMessage());
+            }
+        }
+    }
+
+    private function handleAdwareUpdate($message) {
+        global $_db;
+
+        if (!isset($_db['adwares'])) {
+            return;
+        }
+
+        $adware_db = &$_db['adwares'];
+        $payload = $message['payload'];
+
+        $adware_id = $payload['adware_id'];
+        $action = $payload['action'];
+        $data = $payload['data'];
+
+        switch ($action) {
+            case 'CREATE':
+                $data['id'] = $adware_id;
+                $data['regist'] = date('Y-m-d H:i:s');
+                $adware_db->add($data);
+                break;
+
+            case 'UPDATE':
+                $adware_rec = $adware_db->select(['id' => $adware_id], 'first');
+                if ($adware_rec) {
+                    foreach ($data as $key => $value) {
+                        $adware_rec[$key] = $value;
+                    }
+                    $adware_db->edit($adware_rec);
+                }
+                break;
+
+            case 'DELETE':
+                $adware_rec = $adware_db->select(['id' => $adware_id], 'first');
+                if ($adware_rec) {
+                    $adware_db->remove($adware_rec);
+                }
+                break;
+        }
+
+        error_log("Adware {$action}: ID {$adware_id}");
+    }
+
+    private function handleBudgetUpdate($message) {
+        global $_db;
+
+        if (!isset($_db['adwares'])) {
+            return;
+        }
+
+        $adware_db = &$_db['adwares'];
+        $payload = $message['payload'];
+
+        $adware_id = $payload['adware_id'];
+        $new_limit = $payload['limit'];
+
+        $adware_rec = $adware_db->select(['id' => $adware_id], 'first');
+        if ($adware_rec) {
+            $adware_rec['limits'] = $new_limit;
+            $adware_db->edit($adware_rec);
+        }
+
+        error_log("Budget update: Adware ID {$adware_id}, New limit {$new_limit}");
+    }
+}
+```
+
+### 5.5 SocketRetryStrategy.php
+
+```php
+<?php
+/**
+ * Socket リトライ戦略
+ *
+ * @package include/extends
+ */
+
+class SocketRetryStrategy {
+
+    public static function getDelay($attempt) {
+        $base_delay = 2;
+        $max_delay = 60;
+
+        $delay = min($base_delay * pow(2, $attempt - 1), $max_delay);
+
+        $jitter = $delay * 0.2 * (mt_rand(80, 120) / 100);
+
+        return (int)($delay + $jitter);
+    }
+
+    public static function shouldRetry($e) {
+        if ($e instanceof SocketAuthException) {
+            return false;
+        }
+
+        if ($e instanceof SocketTemporaryException) {
+            return true;
+        }
+
+        return true;
+    }
+}
+```
+
+### 5.6 socketConf.php（設定ファイル）
 
 ```php
 <?php
@@ -1127,52 +1217,51 @@ class SocketEventDispatcher {
  */
 
 $SOCKET_CONF = [
-    // WebSocket機能の有効化
     'enabled' => true,
-
-    // WebSocketサーバーURL
     'url' => 'wss://socket.example.com:8080/ws',
-
-    // 認証トークン（環境変数から取得推奨）
     'token' => getenv('SOCKET_AUTH_TOKEN') ?: 'your-secret-token-here',
-
-    // 接続タイムアウト（秒）
     'timeout' => 10,
-
-    // 自動再接続フラグ
     'auto_reconnect' => true,
-
-    // 最大再接続試行回数
     'max_reconnect_attempts' => 5,
-
-    // ハートビート間隔（秒）
     'heartbeat_interval' => 30,
-
-    // イベントキュー処理間隔（秒）
     'queue_process_interval' => 60,
-
-    // デバッグモード
     'debug' => false,
-
-    // ログファイルパス
     'log_file' => dirname(__FILE__) . '/../../logs/socket.log'
 ];
 ```
 
-### 5.4 既存ファイルへの統合
+### 5.7 .env.example（環境変数テンプレート）
 
-#### 5.4.1 add.php（コンバージョン記録）への統合
+```env
+# Socket通信設定
+SOCKET_AUTH_TOKEN=your-secret-token-change-this
+SOCKET_SERVER_URL=wss://socket.example.com:8080/ws
+SOCKET_ENABLED=true
+
+# SSL証明書パス
+SOCKET_SSL_CERT=/path/to/cert.pem
+SOCKET_SSL_KEY=/path/to/privkey.pem
+
+# データベース設定（既存）
+DB_TYPE=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=cats_db
+DB_USER=cats_user
+DB_PASS=cats_password
+```
+
+### 5.8 既存ファイルへの統合
+
+#### 5.8.1 add.php への統合
 
 ```php
-// add.php の既存コード内に追加
+// add.php の既存コード内に追加（コンバージョン記録後）
 
-// ... 既存のコンバージョン記録処理 ...
-
-// SocketEventDispatcher の追加
 require_once dirname(__FILE__) . '/include/extends/SocketEventDispatcher.php';
 
 // コンバージョン記録後にイベント送信
-if ($pay_rec['id']) {
+if (isset($pay_rec['id']) && $pay_rec['id']) {
     $dispatcher = SocketEventDispatcher::getInstance();
 
     // ティア報酬情報の収集
@@ -1182,10 +1271,10 @@ if ($pay_rec['id']) {
             if (!empty($tier_data)) {
                 $tier_rewards[] = [
                     'tier_level' => $tier_level,
-                    'user_id' => $tier_data['user_id'],
-                    'user_name' => $tier_data['user_name'],
-                    'rate' => $tier_data['rate'],
-                    'amount' => $tier_data['amount']
+                    'user_id' => $tier_data['user_id'] ?? 0,
+                    'user_name' => $tier_data['user_name'] ?? '',
+                    'rate' => $tier_data['rate'] ?? 0,
+                    'amount' => $tier_data['amount'] ?? 0
                 ];
             }
         }
@@ -1194,26 +1283,23 @@ if ($pay_rec['id']) {
     // コンバージョンイベント送信
     $dispatcher->dispatchConversion(
         $pay_rec,
-        $access_rec,
-        $adwares_rec,
-        $user_rec,
+        $access_rec ?? [],
+        $adwares_rec ?? [],
+        $user_rec ?? [],
         $tier_rewards
     );
 }
 ```
 
-#### 5.4.2 link.php（クリック追跡）への統合
+#### 5.8.2 link.php への統合
 
 ```php
-// link.php の既存コード内に追加
+// link.php の既存コード内に追加（クリック記録後）
 
-// ... 既存のクリック記録処理 ...
-
-// SocketEventDispatcher の追加
 require_once dirname(__FILE__) . '/include/extends/SocketEventDispatcher.php';
 
 // クリック記録後にイベント送信
-if ($access_rec['id']) {
+if (isset($access_rec['id']) && $access_rec['id']) {
     $dispatcher = SocketEventDispatcher::getInstance();
 
     $dispatcher->dispatchClick(
@@ -1223,18 +1309,25 @@ if ($access_rec['id']) {
 }
 ```
 
-### 5.5 SocketServer.php（WebSocketサーバー）
+### 5.9 SocketServer.php（WebSocketサーバー）
 
-Ratchet（ReactPHP）を使用したWebSocketサーバー実装
-
-#### Composer依存関係
+#### composer.json
 
 ```json
 {
+    "name": "cats/socket-gateway",
+    "description": "CATS WebSocket Gateway Server",
     "require": {
+        "php": ">=7.4",
         "cboden/ratchet": "^0.4",
         "react/socket": "^1.12",
-        "monolog/monolog": "^2.0"
+        "monolog/monolog": "^2.0",
+        "vlucas/phpdotenv": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cats\\Socket\\": "socket/"
+        }
     }
 }
 ```
@@ -1245,8 +1338,6 @@ Ratchet（ReactPHP）を使用したWebSocketサーバー実装
 <?php
 /**
  * WebSocketサーバー
- *
- * RatchetとReactPHPを使用したWebSocketサーバー実装
  *
  * @package socket
  * @version 1.0
@@ -1272,28 +1363,26 @@ class SocketServer implements MessageComponentInterface {
     protected $logger;
     protected $authenticator;
     protected $messageHandler;
+    protected $rateLimiter;
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
         $this->connections = [];
 
-        // ロガー初期化
         $this->logger = new Logger('socket_server');
         $this->logger->pushHandler(new StreamHandler(__DIR__ . '/logs/server.log', Logger::DEBUG));
 
-        // 認証・メッセージハンドラー初期化
         require_once __DIR__ . '/SocketAuthenticator.php';
         require_once __DIR__ . '/SocketMessageHandler.php';
+        require_once __DIR__ . '/SocketRateLimiter.php';
 
         $this->authenticator = new SocketAuthenticator();
         $this->messageHandler = new SocketMessageHandler($this->logger);
+        $this->rateLimiter = new SocketRateLimiter();
 
         $this->logger->info('SocketServer initialized');
     }
 
-    /**
-     * 新規接続時
-     */
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
 
@@ -1312,15 +1401,10 @@ class SocketServer implements MessageComponentInterface {
         ]);
     }
 
-    /**
-     * メッセージ受信時
-     */
     public function onMessage(ConnectionInterface $from, $msg) {
         $connection_id = $from->connection_id;
 
-        $this->logger->debug("Message received from {$connection_id}", [
-            'message' => $msg
-        ]);
+        $this->logger->debug("Message received from {$connection_id}");
 
         try {
             $data = json_decode($msg, true);
@@ -1331,29 +1415,31 @@ class SocketServer implements MessageComponentInterface {
 
             $message_type = $data['type'] ?? 'unknown';
 
-            // 認証処理
             if ($message_type === 'auth') {
                 $this->handleAuth($from, $data);
                 return;
             }
 
-            // 認証チェック
             if (!$this->connections[$connection_id]['authenticated']) {
                 $this->sendError($from, 'AUTH_REQUIRED', 'Authentication required');
                 return;
             }
 
-            // Ping/Pong
+            // レート制限チェック
+            $client_type = $this->connections[$connection_id]['client_type'];
+            if (!$this->rateLimiter->isAllowed($connection_id, $client_type)) {
+                $this->sendError($from, 'RATE_LIMIT_EXCEEDED', 'Rate limit exceeded');
+                return;
+            }
+
             if ($message_type === 'ping') {
                 $this->sendPong($from);
                 return;
             }
 
-            // メッセージ処理
             $response = $this->messageHandler->handle($message_type, $data, $this->connections[$connection_id]);
 
             if ($response) {
-                // ブロードキャストまたは個別送信
                 if (isset($response['broadcast']) && $response['broadcast']) {
                     $this->broadcast($response['message'], $from);
                 } else {
@@ -1363,17 +1449,13 @@ class SocketServer implements MessageComponentInterface {
 
         } catch (\Exception $e) {
             $this->logger->error("Message processing error: " . $e->getMessage(), [
-                'connection_id' => $connection_id,
-                'message' => $msg
+                'connection_id' => $connection_id
             ]);
 
             $this->sendError($from, 'PROCESSING_ERROR', $e->getMessage());
         }
     }
 
-    /**
-     * 認証処理
-     */
     protected function handleAuth(ConnectionInterface $conn, $data) {
         $connection_id = $conn->connection_id;
 
@@ -1396,7 +1478,6 @@ class SocketServer implements MessageComponentInterface {
                 'client_type' => $client_type
             ]);
 
-            // データベースに記録
             $this->authenticator->recordConnection($connection_id, $client_type, $conn->remoteAddress);
 
         } else {
@@ -1405,9 +1486,6 @@ class SocketServer implements MessageComponentInterface {
         }
     }
 
-    /**
-     * Pong送信
-     */
     protected function sendPong(ConnectionInterface $conn) {
         $response = [
             'type' => 'pong',
@@ -1417,9 +1495,6 @@ class SocketServer implements MessageComponentInterface {
         $conn->send(json_encode($response));
     }
 
-    /**
-     * エラー送信
-     */
     protected function sendError(ConnectionInterface $conn, $error_code, $error_message) {
         $response = [
             'type' => 'error',
@@ -1433,15 +1508,12 @@ class SocketServer implements MessageComponentInterface {
         $conn->send(json_encode($response));
     }
 
-    /**
-     * ブロードキャスト
-     */
     protected function broadcast($message, ConnectionInterface $from = null) {
         $json = json_encode($message);
 
         foreach ($this->clients as $client) {
             if ($from !== null && $from === $client) {
-                continue; // 送信元には送らない
+                continue;
             }
 
             $connection_id = $client->connection_id;
@@ -1452,9 +1524,6 @@ class SocketServer implements MessageComponentInterface {
         }
     }
 
-    /**
-     * 接続クローズ時
-     */
     public function onClose(ConnectionInterface $conn) {
         $connection_id = $conn->connection_id;
 
@@ -1463,13 +1532,9 @@ class SocketServer implements MessageComponentInterface {
 
         $this->logger->info("Connection closed: {$connection_id}");
 
-        // データベース更新
         $this->authenticator->recordDisconnection($connection_id);
     }
 
-    /**
-     * エラー発生時
-     */
     public function onError(ConnectionInterface $conn, \Exception $e) {
         $connection_id = $conn->connection_id ?? 'unknown';
 
@@ -1481,30 +1546,136 @@ class SocketServer implements MessageComponentInterface {
     }
 }
 
+// 環境変数読み込み
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
 // サーバー起動
 $loop = LoopFactory::create();
 
 $webSock = new WsServer(new SocketServer());
-$webSock->disableVersion(0); // RFC 6455のみ対応
+$webSock->disableVersion(0);
 
 $webServer = new HttpServer($webSock);
 
-// SSL/TLS設定
 $socketServer = new ReactServer('0.0.0.0:8080', $loop);
-$secureServer = new SecureServer($socketServer, $loop, [
-    'local_cert' => '/path/to/cert.pem',
-    'local_pk' => '/path/to/privkey.pem',
-    'verify_peer' => false
-]);
 
-$server = new IoServer($webServer, $secureServer, $loop);
+// SSL/TLS設定
+if (getenv('SOCKET_SSL_ENABLED') === 'true') {
+    $secureServer = new SecureServer($socketServer, $loop, [
+        'local_cert' => getenv('SOCKET_SSL_CERT'),
+        'local_pk' => getenv('SOCKET_SSL_KEY'),
+        'verify_peer' => false
+    ]);
 
-echo "WebSocket server started on wss://0.0.0.0:8080\n";
+    $server = new IoServer($webServer, $secureServer, $loop);
+    echo "WebSocket server started on wss://0.0.0.0:8080\n";
+} else {
+    $server = new IoServer($webServer, $socketServer, $loop);
+    echo "WebSocket server started on ws://0.0.0.0:8080\n";
+}
 
 $server->run();
 ```
 
-### 5.6 SocketAuthenticator.php（認証処理）
+### 5.10 SocketMessageHandler.php
+
+```php
+<?php
+/**
+ * Socket メッセージハンドラー
+ *
+ * @package socket
+ */
+
+class SocketMessageHandler {
+
+    private $logger;
+
+    public function __construct($logger) {
+        $this->logger = $logger;
+    }
+
+    public function handle($message_type, $data, $connection_info) {
+        $this->logger->info("Handling message type: {$message_type}");
+
+        // メッセージをデータベースに記録
+        $this->logMessage($connection_info['conn']->connection_id, 'INBOUND', $message_type, $data);
+
+        switch ($message_type) {
+            case 'conversion':
+                return $this->handleConversion($data, $connection_info);
+
+            case 'click':
+                return $this->handleClick($data, $connection_info);
+
+            case 'adware_update':
+                return $this->handleAdwareUpdate($data, $connection_info);
+
+            default:
+                $this->logger->warning("Unknown message type: {$message_type}");
+                return null;
+        }
+    }
+
+    private function handleConversion($data, $connection_info) {
+        // AFADにブロードキャスト
+        return [
+            'broadcast' => true,
+            'message' => [
+                'type' => 'conversion',
+                'payload' => $data['payload'],
+                'timestamp' => gmdate('Y-m-d\TH:i:s\Z')
+            ]
+        ];
+    }
+
+    private function handleClick($data, $connection_info) {
+        return [
+            'broadcast' => true,
+            'message' => [
+                'type' => 'click',
+                'payload' => $data['payload'],
+                'timestamp' => gmdate('Y-m-d\TH:i:s\Z')
+            ]
+        ];
+    }
+
+    private function handleAdwareUpdate($data, $connection_info) {
+        // CATS側クライアントにのみ送信
+        return [
+            'broadcast' => false,
+            'type' => 'adware_update',
+            'payload' => $data['payload'],
+            'timestamp' => gmdate('Y-m-d\TH:i:s\Z')
+        ];
+    }
+
+    private function logMessage($connection_id, $direction, $message_type, $data) {
+        // データベースに記録
+        require_once __DIR__ . '/../include/base/Initialize.php';
+        global $_db;
+
+        if (!isset($_db['socket_messages'])) {
+            return;
+        }
+
+        $msg_db = &$_db['socket_messages'];
+
+        $msg_rec = [
+            'connection_id' => $connection_id,
+            'direction' => $direction,
+            'message_type' => $message_type,
+            'message_data' => json_encode($data),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        $msg_db->add($msg_rec);
+    }
+}
+```
+
+### 5.11 SocketAuthenticator.php
 
 ```php
 <?php
@@ -1519,45 +1690,27 @@ class SocketAuthenticator {
     private $db;
 
     public function __construct() {
-        // データベース接続
         require_once __DIR__ . '/../include/base/Initialize.php';
         global $_db;
         $this->db = &$_db;
     }
 
-    /**
-     * トークン検証
-     *
-     * @param string $token 認証トークン
-     * @param string $client_type クライアントタイプ
-     * @return bool 検証結果
-     */
     public function validate($token, $client_type) {
-        // 環境変数からマスタートークン取得
         $master_token = getenv('SOCKET_AUTH_TOKEN');
 
         if (empty($token)) {
             return false;
         }
 
-        // マスタートークンチェック
         if ($token === $master_token) {
             return true;
         }
 
-        // データベースからトークン検証（将来的な拡張用）
-        // TODO: ユーザー/システム別トークン管理
+        // 将来的な拡張: データベースからトークン検証
 
         return false;
     }
 
-    /**
-     * 接続記録
-     *
-     * @param string $connection_id 接続ID
-     * @param string $client_type クライアントタイプ
-     * @param string $client_ip クライアントIP
-     */
     public function recordConnection($connection_id, $client_type, $client_ip) {
         if (!isset($this->db['socket_connections'])) {
             return;
@@ -1576,11 +1729,6 @@ class SocketAuthenticator {
         $conn_db->add($conn_rec);
     }
 
-    /**
-     * 切断記録
-     *
-     * @param string $connection_id 接続ID
-     */
     public function recordDisconnection($connection_id) {
         if (!isset($this->db['socket_connections'])) {
             return;
@@ -1596,6 +1744,102 @@ class SocketAuthenticator {
             $conn_rec['disconnected_at'] = date('Y-m-d H:i:s');
             $conn_db->edit($conn_rec);
         }
+    }
+}
+```
+
+### 5.12 SocketLogger.php
+
+```php
+<?php
+/**
+ * Socket ロガー
+ *
+ * @package socket
+ */
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\RotatingFileHandler;
+
+class SocketLogger {
+
+    private $logger;
+
+    public function __construct($name = 'socket', $log_path = null) {
+        $this->logger = new Logger($name);
+
+        $log_path = $log_path ?? __DIR__ . '/logs/socket.log';
+
+        $this->logger->pushHandler(new RotatingFileHandler($log_path, 30, Logger::DEBUG));
+    }
+
+    public function info($message, $context = []) {
+        $this->logger->info($message, $context);
+    }
+
+    public function error($message, $context = []) {
+        $this->logger->error($message, $context);
+    }
+
+    public function warning($message, $context = []) {
+        $this->logger->warning($message, $context);
+    }
+
+    public function debug($message, $context = []) {
+        $this->logger->debug($message, $context);
+    }
+
+    public function logMetrics($metrics) {
+        $this->logger->info('Metrics', $metrics);
+    }
+}
+```
+
+### 5.13 SocketRateLimiter.php
+
+```php
+<?php
+/**
+ * Socket レート制限
+ *
+ * @package socket
+ */
+
+class SocketRateLimiter {
+
+    private $limits = [
+        'CATS' => 1000,
+        'AFAD' => 1000,
+        'DASHBOARD' => 100
+    ];
+
+    private $counters = [];
+
+    public function isAllowed($connection_id, $client_type) {
+        $limit = $this->limits[$client_type] ?? 100;
+
+        if (!isset($this->counters[$connection_id])) {
+            $this->counters[$connection_id] = [
+                'count' => 0,
+                'reset_at' => time() + 60
+            ];
+        }
+
+        $counter = &$this->counters[$connection_id];
+
+        if (time() > $counter['reset_at']) {
+            $counter['count'] = 0;
+            $counter['reset_at'] = time() + 60;
+        }
+
+        $counter['count']++;
+
+        return $counter['count'] <= $limit;
+    }
+
+    public function reset($connection_id) {
+        unset($this->counters[$connection_id]);
     }
 }
 ```
@@ -1650,8 +1894,7 @@ SocketServer（Gateway）
 ├─ CATSシステムの対象クライアントへ転送
 │
 ▼
-CATSSocketClient::receive()
-├─ メッセージ受信
+SocketMessageReceiver::handleAdwareUpdate()
 ├─ adwaresテーブル更新処理
 └─ キャッシュクリア
 ```
@@ -1670,64 +1913,13 @@ CATSSocketClient::receive()
 | `PROCESSING_ERROR` | メッセージ処理エラー | ログを確認 |
 | `CONNECTION_TIMEOUT` | 接続タイムアウト | 再接続を試行 |
 | `SEND_FAILED` | 送信失敗 | キューに追加し再試行 |
+| `RATE_LIMIT_EXCEEDED` | レート制限超過 | 待機後に再送 |
 
-### 7.2 リトライ戦略
-
-```php
-class SocketRetryStrategy {
-
-    /**
-     * エクスポネンシャルバックオフ
-     *
-     * @param int $attempt 試行回数
-     * @return int 待機時間（秒）
-     */
-    public static function getDelay($attempt) {
-        $base_delay = 2;
-        $max_delay = 60;
-
-        $delay = min($base_delay * pow(2, $attempt - 1), $max_delay);
-
-        // ジッター追加（±20%）
-        $jitter = $delay * 0.2 * (mt_rand(80, 120) / 100);
-
-        return (int)($delay + $jitter);
-    }
-
-    /**
-     * リトライ判定
-     *
-     * @param Exception $e 例外
-     * @return bool リトライすべきか
-     */
-    public static function shouldRetry($e) {
-        // 認証エラーはリトライしない
-        if ($e instanceof SocketAuthException) {
-            return false;
-        }
-
-        // 一時的なエラーはリトライ
-        if ($e instanceof SocketTemporaryException) {
-            return true;
-        }
-
-        return true;
-    }
-}
-```
-
-### 7.3 フォールバック処理
-
-接続が確立できない場合、以下のフォールバック処理を実行：
-
-1. **イベントキュー**: `socket_events` テーブルに保存
-2. **定期バッチ処理**: cron で定期的にキューを処理
-3. **HTTPフォールバック**: WebSocket不可の場合はHTTP POST
+### 7.2 フォールバック処理
 
 ```php
-// cron で実行するキュー処理スクリプト
 // tools/process_socket_queue.php
-
+<?php
 require_once dirname(__FILE__) . '/../include/extends/SocketEventDispatcher.php';
 
 $dispatcher = SocketEventDispatcher::getInstance();
@@ -1740,130 +1932,375 @@ $dispatcher->processQueue();
 
 ### 8.1 認証・認可
 
-#### トークンベース認証
-```
-1. クライアントは事前に共有されたトークンを保持
-2. 接続時にトークンを送信
-3. サーバーがトークンを検証
-4. 接続IDを発行して以降の通信を管理
-```
-
-#### 将来的な拡張（JWT）
-```json
-{
-    "alg": "HS256",
-    "typ": "JWT"
-}
-{
-    "sub": "CATS_CLIENT",
-    "client_type": "CATS",
-    "iat": 1730116496,
-    "exp": 1730120096
-}
-```
+トークンベース認証を使用。将来的にはJWT対応を検討。
 
 ### 8.2 暗号化
 
-- **TLS/SSL**: wss:// プロトコルを使用
-- **証明書**: Let's Encrypt または商用証明書
-- **最小TLSバージョン**: TLS 1.2以上
+- TLS/SSL: wss:// プロトコル
+- 証明書: Let's Encrypt
+- 最小TLSバージョン: TLS 1.2
 
-### 8.3 レート制限
-
-```php
-class SocketRateLimiter {
-
-    private $limits = [
-        'CATS' => 1000,      // 1000 msg/min
-        'AFAD' => 1000,      // 1000 msg/min
-        'DASHBOARD' => 100   // 100 msg/min
-    ];
-
-    private $counters = [];
-
-    public function isAllowed($connection_id, $client_type) {
-        $limit = $this->limits[$client_type] ?? 100;
-
-        if (!isset($this->counters[$connection_id])) {
-            $this->counters[$connection_id] = [
-                'count' => 0,
-                'reset_at' => time() + 60
-            ];
-        }
-
-        $counter = &$this->counters[$connection_id];
-
-        // リセット時刻を過ぎている場合
-        if (time() > $counter['reset_at']) {
-            $counter['count'] = 0;
-            $counter['reset_at'] = time() + 60;
-        }
-
-        $counter['count']++;
-
-        return $counter['count'] <= $limit;
-    }
-}
-```
-
-### 8.4 IPホワイトリスト
+### 8.3 IPホワイトリスト
 
 ```php
 // socketConf.php に追加
-
 $SOCKET_CONF['ip_whitelist'] = [
-    '203.0.113.0/24',     // AFAD サーバー
-    '192.0.2.1',          // CATS サーバー
-    '198.51.100.0/24'     // 内部ネットワーク
+    '203.0.113.0/24',
+    '192.0.2.1',
+    '198.51.100.0/24'
 ];
 ```
 
 ---
 
-## 9. 実装計画
+## 9. デプロイ・運用
 
-### 9.1 フェーズ1: 基盤構築（2週間）
+### 9.1 マイグレーションスクリプト
 
+```php
+<?php
+/**
+ * Socket テーブルマイグレーション
+ *
+ * @package migration
+ */
+
+require_once dirname(__FILE__) . '/../include/base/Initialize.php';
+
+function createSocketTables() {
+    global $_db;
+
+    $sqls = [
+        "CREATE TABLE IF NOT EXISTS socket_events (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            event_type VARCHAR(50) NOT NULL,
+            event_data TEXT,
+            target_system VARCHAR(20) NOT NULL,
+            status VARCHAR(20) NOT NULL,
+            retry_count INT DEFAULT 0,
+            error_message TEXT,
+            created_at DATETIME NOT NULL,
+            sent_at DATETIME,
+            INDEX idx_status_created (status, created_at),
+            INDEX idx_event_type (event_type)
+        )",
+
+        "CREATE TABLE IF NOT EXISTS socket_connections (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            connection_id VARCHAR(64) NOT NULL UNIQUE,
+            client_type VARCHAR(20) NOT NULL,
+            client_ip VARCHAR(45),
+            token VARCHAR(255),
+            connected_at DATETIME NOT NULL,
+            last_heartbeat DATETIME,
+            disconnected_at DATETIME,
+            INDEX idx_connection_id (connection_id),
+            INDEX idx_client_type (client_type)
+        )",
+
+        "CREATE TABLE IF NOT EXISTS socket_messages (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            connection_id VARCHAR(64) NOT NULL,
+            direction VARCHAR(10) NOT NULL,
+            message_type VARCHAR(50) NOT NULL,
+            message_data TEXT,
+            created_at DATETIME NOT NULL,
+            INDEX idx_connection_created (connection_id, created_at),
+            INDEX idx_message_type (message_type)
+        )"
+    ];
+
+    foreach ($sqls as $sql) {
+        $_db['_database']->query($sql);
+    }
+
+    echo "Socket tables created successfully.\n";
+}
+
+// CSV定義ファイルの作成
+function createSocketCsvDefinitions() {
+    $csv_dir = dirname(__FILE__) . '/../lst/';
+
+    $definitions = [
+        'socket_events' => "id,event_type,event_data,target_system,status,retry_count,error_message,created_at,sent_at\nINT,VARCHAR(50),TEXT,VARCHAR(20),VARCHAR(20),INT,TEXT,DATETIME,DATETIME",
+
+        'socket_connections' => "id,connection_id,client_type,client_ip,token,connected_at,last_heartbeat,disconnected_at\nINT,VARCHAR(64),VARCHAR(20),VARCHAR(45),VARCHAR(255),DATETIME,DATETIME,DATETIME",
+
+        'socket_messages' => "id,connection_id,direction,message_type,message_data,created_at\nBIGINT,VARCHAR(64),VARCHAR(10),VARCHAR(50),TEXT,DATETIME"
+    ];
+
+    foreach ($definitions as $table => $content) {
+        file_put_contents($csv_dir . $table . '.csv', $content);
+    }
+
+    echo "Socket CSV definitions created successfully.\n";
+}
+
+// 実行
+createSocketTables();
+createSocketCsvDefinitions();
+```
+
+### 9.2 サーバー起動スクリプト
+
+```bash
+#!/bin/bash
+# socket/start_server.sh
+
+cd "$(dirname "$0")"
+
+# 環境変数読み込み
+if [ -f ../.env ]; then
+    export $(cat ../.env | grep -v '^#' | xargs)
+fi
+
+# Composerインストール
+if [ ! -d ../vendor ]; then
+    composer install
+fi
+
+# ログディレクトリ作成
+mkdir -p logs
+
+# サーバー起動
+php SocketServer.php
+```
+
+### 9.3 systemd サービス設定
+
+```ini
+# deployment/socket-server.service
+[Unit]
+Description=CATS WebSocket Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/user/ASP-ORKA/socket
+ExecStart=/usr/bin/php /home/user/ASP-ORKA/socket/SocketServer.php
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/socket-server.log
+StandardError=append:/var/log/socket-server-error.log
+
+Environment="SOCKET_AUTH_TOKEN=your-token"
+Environment="SOCKET_SSL_ENABLED=true"
+Environment="SOCKET_SSL_CERT=/etc/ssl/certs/socket.crt"
+Environment="SOCKET_SSL_KEY=/etc/ssl/private/socket.key"
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 9.4 cron設定（キュー処理）
+
+```bash
+# キュー処理を毎分実行
+* * * * * /usr/bin/php /home/user/ASP-ORKA/tools/process_socket_queue.php >> /var/log/socket-queue.log 2>&1
+```
+
+### 9.5 nginx リバースプロキシ設定
+
+```nginx
+# /etc/nginx/sites-available/socket-gateway
+
+upstream websocket_backend {
+    server localhost:8080;
+}
+
+server {
+    listen 443 ssl;
+    server_name socket.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/socket.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/socket.example.com/privkey.pem;
+
+    location /ws {
+        proxy_pass http://websocket_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_read_timeout 86400;
+        proxy_send_timeout 86400;
+    }
+}
+```
+
+### 9.6 フロントエンド実装（JavaScript）
+
+```javascript
+// js/socket-client.js
+
+class CatsSocketClient {
+    constructor(url, token) {
+        this.url = url;
+        this.token = token;
+        this.ws = null;
+        this.connected = false;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.handlers = {};
+    }
+
+    connect() {
+        this.ws = new WebSocket(this.url);
+
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.authenticate();
+        };
+
+        this.ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            this.handleMessage(data);
+        };
+
+        this.ws.onclose = () => {
+            console.log('WebSocket disconnected');
+            this.connected = false;
+            this.reconnect();
+        };
+
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+    }
+
+    authenticate() {
+        const authMessage = {
+            type: 'auth',
+            token: this.token,
+            client_type: 'DASHBOARD'
+        };
+
+        this.ws.send(JSON.stringify(authMessage));
+    }
+
+    handleMessage(data) {
+        const type = data.type;
+
+        if (type === 'auth_success') {
+            this.connected = true;
+            this.reconnectAttempts = 0;
+            console.log('Authentication successful');
+            this.startHeartbeat();
+        } else if (type === 'pong') {
+            // ハートビート応答
+        } else if (this.handlers[type]) {
+            this.handlers[type](data);
+        }
+    }
+
+    on(messageType, callback) {
+        this.handlers[messageType] = callback;
+    }
+
+    startHeartbeat() {
+        setInterval(() => {
+            if (this.connected) {
+                this.ws.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, 30000);
+    }
+
+    reconnect() {
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+            console.error('Max reconnection attempts exceeded');
+            return;
+        }
+
+        this.reconnectAttempts++;
+        const delay = Math.min(2000 * Math.pow(2, this.reconnectAttempts), 60000);
+
+        setTimeout(() => {
+            console.log(`Reconnecting... (attempt ${this.reconnectAttempts})`);
+            this.connect();
+        }, delay);
+    }
+}
+
+// 使用例
+const client = new CatsSocketClient('wss://socket.example.com/ws', 'your-token');
+
+client.on('conversion', (data) => {
+    console.log('New conversion:', data);
+    updateDashboard(data);
+});
+
+client.on('stats_update', (data) => {
+    console.log('Stats update:', data);
+    updateStats(data);
+});
+
+client.connect();
+```
+
+---
+
+## 10. 実装計画
+
+### 10.1 フェーズ1: 基盤構築（2週間）
+
+- [ ] 例外クラス群実装
+  - [ ] `SocketException.php`
+  - [ ] `SocketAuthException.php`
+  - [ ] `SocketTemporaryException.php`
 - [ ] データベーススキーマ作成
-  - [ ] `socket_events` テーブル
-  - [ ] `socket_connections` テーブル
-  - [ ] `socket_messages` テーブル
+  - [ ] マイグレーションスクリプト実行
+  - [ ] CSV定義ファイル作成
 - [ ] SocketClient.php 実装
 - [ ] SocketEventDispatcher.php 実装
+- [ ] SocketRetryStrategy.php 実装
 - [ ] socketConf.php 作成
-- [ ] 例外クラス実装
+- [ ] .env 設定
 
-### 9.2 フェーズ2: 統合実装（2週間）
+### 10.2 フェーズ2: 統合実装（2週間）
 
 - [ ] add.php への統合
 - [ ] link.php への統合
-- [ ] custom/global.php のティア報酬計算への統合
+- [ ] SocketMessageReceiver.php 実装
 - [ ] ユニットテスト作成
 
-### 9.3 フェーズ3: Gatewayサーバー（3週間）
+### 10.3 フェーズ3: Gatewayサーバー（3週間）
 
 - [ ] Composer環境構築
 - [ ] SocketServer.php 実装
-- [ ] SocketAuthenticator.php 実装
 - [ ] SocketMessageHandler.php 実装
+- [ ] SocketAuthenticator.php 実装
 - [ ] SocketLogger.php 実装
+- [ ] SocketRateLimiter.php 実装
 - [ ] SSL/TLS証明書設定
 
-### 9.4 フェーズ4: AFAD側実装（2週間）
+### 10.4 フェーズ4: デプロイ・運用（2週間）
+
+- [ ] 起動スクリプト作成
+- [ ] systemd サービス設定
+- [ ] nginx リバースプロキシ設定
+- [ ] cron ジョブ設定
+- [ ] ログローテーション設定
+
+### 10.5 フェーズ5: AFAD側実装（2週間）
 
 - [ ] AFADSocketClient 実装
 - [ ] 広告更新イベント送信
 - [ ] コンバージョン受信処理
-- [ ] リアルタイムダッシュボード
+- [ ] リアルタイムダッシュボード（JavaScript）
 
-### 9.5 フェーズ5: テスト・最適化（2週間）
+### 10.6 フェーズ6: テスト・最適化（2週間）
 
 - [ ] 統合テスト
 - [ ] 負荷テスト
 - [ ] セキュリティテスト
 - [ ] パフォーマンスチューニング
 
-### 9.6 フェーズ6: 本番リリース（1週間）
+### 10.7 フェーズ7: 本番リリース（1週間）
 
 - [ ] ステージング環境デプロイ
 - [ ] 本番環境デプロイ
@@ -1872,14 +2309,16 @@ $SOCKET_CONF['ip_whitelist'] = [
 
 ---
 
-## 10. テスト計画
+## 11. テスト計画
 
-### 10.1 ユニットテスト
+### 11.1 ユニットテスト
 
 ```php
 // tests/SocketClientTest.php
 
-class SocketClientTest extends PHPUnit\Framework\TestCase {
+use PHPUnit\Framework\TestCase;
+
+class SocketClientTest extends TestCase {
 
     public function testConnect() {
         $client = new SocketClient([
@@ -1892,110 +2331,87 @@ class SocketClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSendMessage() {
-        $client = new SocketClient([...]);
+        $client = new SocketClient([
+            'url' => 'wss://localhost:8080',
+            'token' => 'test-token'
+        ]);
         $client->connect();
 
         $result = $client->send('test_event', ['data' => 'test']);
         $this->assertTrue($result);
     }
 
-    public function testReconnect() {
-        // 再接続テスト
+    public function testAuthFailure() {
+        $this->expectException(SocketAuthException::class);
+
+        $client = new SocketClient([
+            'url' => 'wss://localhost:8080',
+            'token' => 'invalid-token'
+        ]);
+        $client->connect();
     }
 }
 ```
 
-### 10.2 統合テスト
-
-```php
-// tests/IntegrationTest.php
-
-class SocketIntegrationTest extends PHPUnit\Framework\TestCase {
-
-    public function testConversionFlow() {
-        // 1. コンバージョン発生
-        // 2. SocketEventDispatcher 呼び出し
-        // 3. WebSocket送信確認
-        // 4. AFAD側受信確認
-    }
-
-    public function testAdwareUpdateFlow() {
-        // 1. AFAD側で広告更新
-        // 2. WebSocket送信
-        // 3. CATS側受信
-        // 4. データベース更新確認
-    }
-}
-```
-
-### 10.3 負荷テスト
-
-```bash
-# Apache Bench を使用した負荷テスト
-
-# 1000 同時接続、10000 メッセージ
-ab -n 10000 -c 1000 wss://localhost:8080/ws
-
-# または WebSocket 専用ツール
-npm install -g wscat
-wscat -c wss://localhost:8080/ws
-```
-
-### 10.4 セキュリティテスト
-
-- [ ] 不正トークンでの接続試行
-- [ ] SQL インジェクションテスト
-- [ ] XSS テスト
-- [ ] レート制限テスト
-- [ ] SSL/TLS脆弱性スキャン
-
 ---
 
-## 11. 運用・監視
+## 12. 実装チェックリスト
 
-### 11.1 ログ管理
+### 12.1 CATS側コンポーネント
 
-```
-/logs/
-├── socket.log              # 通常ログ
-├── socket_error.log        # エラーログ
-├── socket_access.log       # アクセスログ
-└── socket_performance.log  # パフォーマンスログ
-```
+- [ ] `/include/extends/Exception/SocketException.php`
+- [ ] `/include/extends/Exception/SocketAuthException.php`
+- [ ] `/include/extends/Exception/SocketTemporaryException.php`
+- [ ] `/include/extends/SocketClient.php`
+- [ ] `/include/extends/SocketEventDispatcher.php`
+- [ ] `/include/extends/SocketMessageReceiver.php`
+- [ ] `/include/extends/SocketRetryStrategy.php`
+- [ ] `/custom/extends/socketConf.php`
 
-### 11.2 メトリクス収集
+### 12.2 Gateway コンポーネント
 
-- **接続数**: 現在の接続数、累計接続数
-- **メッセージスループット**: 送受信メッセージ数/秒
-- **レイテンシ**: メッセージ配信遅延
-- **エラーレート**: エラー発生率
-- **再接続回数**: 再接続試行回数
+- [ ] `/socket/SocketServer.php`
+- [ ] `/socket/SocketMessageHandler.php`
+- [ ] `/socket/SocketAuthenticator.php`
+- [ ] `/socket/SocketLogger.php`
+- [ ] `/socket/SocketRateLimiter.php`
+- [ ] `/socket/composer.json`
+- [ ] `/socket/start_server.sh`
 
-### 11.3 アラート設定
+### 12.3 デプロイ・運用
 
-| メトリクス | 閾値 | アクション |
-|-----------|------|-----------|
-| エラーレート | > 5% | メール通知 |
-| 接続数 | > 900 | スケールアウト |
-| レイテンシ | > 500ms | パフォーマンス調査 |
-| CPU使用率 | > 80% | リソース増強 |
+- [ ] `/migration/002_create_socket_tables.php`
+- [ ] `/tools/process_socket_queue.php`
+- [ ] `/deployment/socket-server.service`
+- [ ] `/deployment/nginx-socket.conf`
+- [ ] `/.env.example`
+- [ ] `/lst/socket_events.csv`
+- [ ] `/lst/socket_connections.csv`
+- [ ] `/lst/socket_messages.csv`
 
----
+### 12.4 既存ファイル修正
 
-## 12. 参考資料
+- [ ] `/add.php` - SocketEventDispatcher統合
+- [ ] `/link.php` - SocketEventDispatcher統合
+- [ ] `/custom/global.php` - ティア報酬イベント送信（必要に応じて）
 
-### 12.1 技術仕様
+### 12.5 フロントエンド
 
-- [RFC 6455: The WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
-- [Ratchet Documentation](http://socketo.me/)
-- [ReactPHP Documentation](https://reactphp.org/)
+- [ ] `/js/socket-client.js`
+- [ ] `/template/admin/dashboard.html` - WebSocket統合
 
-### 12.2 関連ファイル
+### 12.6 テスト
 
-- `/home/user/ASP-ORKA/include/extends/HttpUtil.php` - 既存HTTP通信
-- `/home/user/ASP-ORKA/add.php` - コンバージョン記録
-- `/home/user/ASP-ORKA/link.php` - クリック追跡
-- `/home/user/ASP-ORKA/custom/global.php` - ティア報酬計算
+- [ ] `/tests/SocketClientTest.php`
+- [ ] `/tests/SocketEventDispatcherTest.php`
+- [ ] `/tests/IntegrationTest.php`
+
+### 12.7 ドキュメント
+
+- [ ] この設計書の最終レビュー
+- [ ] デプロイ手順書
+- [ ] 運用マニュアル
+- [ ] トラブルシューティングガイド
 
 ---
 
@@ -2004,9 +2420,10 @@ wscat -c wss://localhost:8080/ws
 | バージョン | 日付 | 変更内容 |
 |-----------|------|---------|
 | 1.0 | 2025-10-28 | 初版作成 |
+| 2.0 | 2025-10-29 | 完全版：全実装コード、デプロイスクリプト、チェックリスト追加 |
 
 ---
 
 **作成者:** Claude
 **承認者:** [承認者名]
-**最終更新:** 2025-10-28
+**最終更新:** 2025-10-29
