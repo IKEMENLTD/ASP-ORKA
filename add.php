@@ -484,6 +484,9 @@
 
 		//会員ランク更新チェック
 		updateRank( $nUser->getID() );
+
+		// AFAD連携: ポストバック送信
+		SendAFADPostback( $adwares_ , $access_ , $pay , $sales );
 	}
 
 	/**
@@ -510,6 +513,162 @@
 		$errorMessage = $errorManager->GetExceptionStr( $e_ );
 
 		$errorManager->OutputErrorLog( $errorMessage );
+	}
+
+	//■AFAD連携 //
+
+	/**
+		@brief  AFADにポストバックを送信する。
+		@param  $adwares_ RecordModelオブジェクト。
+		@param  $access_  RecordModelオブジェクト。
+		@param  $pay_     RecordModelオブジェクト。
+		@param  $sales_   売上金額。
+	*/
+	function SendAFADPostback( $adwares_ , $access_ , $pay_ , $sales_ )
+	{
+		try {
+			// AFAD連携が有効かチェック
+			if( !$adwares_->getData( 'afad_enabled' ) ) {
+				return;
+			}
+
+			// AFADセッションIDを取得
+			$afadSessionId = $access_->getData( 'afad_session_id' );
+			if( !$afadSessionId ) {
+				return; // AFADセッションIDがない場合は送信しない
+			}
+
+			// ポストバックURLを取得
+			$postbackUrl = $adwares_->getData( 'afad_postback_url' );
+			if( !$postbackUrl ) {
+				throw new RuntimeException( 'AFAD連携が有効ですがポストバックURLが設定されていません' );
+			}
+
+			// パラメータを構築
+			$params = array();
+
+			// gidがURLに含まれていない場合は追加
+			if( strpos( $postbackUrl , 'gid=' ) === false ) {
+				$gid = $adwares_->getData( 'afad_gid' );
+				if( $gid ) {
+					$params['gid'] = $gid;
+				}
+			}
+
+			// 必須パラメータ
+			$params['af'] = $afadSessionId;
+
+			// 任意パラメータ
+			if( isset( $_GET['uid'] ) && $_GET['uid'] ) {
+				$params['uid'] = $_GET['uid'];
+			}
+			if( isset( $_GET['uid2'] ) && $_GET['uid2'] ) {
+				$params['uid2'] = $_GET['uid2'];
+			}
+			if( $sales_ > 0 ) {
+				$params['amount'] = $sales_;
+			}
+
+			// 承認ステータス（自動承認の場合は「承認待ち」）
+			global $ADWARES_AUTO_ON;
+			if( $ADWARES_AUTO_ON == $adwares_->getData( 'auto' ) ) {
+				$params['Status'] = 1; // 承認待ち
+			}
+
+			// URLを構築
+			$separator = ( strpos( $postbackUrl , '?' ) === false ) ? '?' : '&';
+			$fullUrl = $postbackUrl . $separator . http_build_query( $params );
+
+			// HTTPリクエスト送信
+			$result = SendHTTPRequest( $fullUrl );
+
+			// ログに記録
+			LogAFADPostback( $pay_->getID() , $access_->getID() , $afadSessionId , $fullUrl , $result );
+
+		} catch( Exception $e ) {
+			// エラーログ出力
+			$errorManager = new ErrorManager();
+			$errorMessage = 'AFAD Postback Error: ' . $errorManager->GetExceptionStr( $e );
+			$errorManager->OutputErrorLog( $errorMessage );
+
+			// エラーでも処理は継続（成果記録は成功しているため）
+		}
+	}
+
+	/**
+		@brief  HTTPリクエストを送信する。
+		@param  $url_ リクエストURL。
+		@return 結果配列 ['status' => HTTPステータスコード, 'body' => レスポンスボディ, 'error' => エラーメッセージ]
+	*/
+	function SendHTTPRequest( $url_ )
+	{
+		$result = array(
+			'status' => null,
+			'body' => null,
+			'error' => null
+		);
+
+		try {
+			$ch = curl_init();
+
+			curl_setopt( $ch , CURLOPT_URL , $url_ );
+			curl_setopt( $ch , CURLOPT_RETURNTRANSFER , true );
+			curl_setopt( $ch , CURLOPT_TIMEOUT , 10 );
+			curl_setopt( $ch , CURLOPT_CONNECTTIMEOUT , 5 );
+			curl_setopt( $ch , CURLOPT_FOLLOWLOCATION , true );
+			curl_setopt( $ch , CURLOPT_SSL_VERIFYPEER , true );
+			curl_setopt( $ch , CURLOPT_SSL_VERIFYHOST , 2 );
+
+			$response = curl_exec( $ch );
+			$httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+			$error = curl_error( $ch );
+
+			curl_close( $ch );
+
+			$result['status'] = $httpCode;
+			$result['body'] = $response;
+
+			if( $error ) {
+				$result['error'] = $error;
+			}
+
+		} catch( Exception $e ) {
+			$result['error'] = $e->getMessage();
+		}
+
+		return $result;
+	}
+
+	/**
+		@brief  AFADポストバック送信ログを記録する。
+		@param  $payId_          成果ID。
+		@param  $accessId_       アクセスID。
+		@param  $afadSessionId_  AFADセッションID。
+		@param  $postbackUrl_    送信したURL。
+		@param  $result_         SendHTTPRequest()の結果。
+	*/
+	function LogAFADPostback( $payId_ , $accessId_ , $afadSessionId_ , $postbackUrl_ , $result_ )
+	{
+		try {
+			$db = GMlist::getDB( 'afad_postback_log' );
+			$rec = $db->getNewRecord();
+
+			$db->setData( $rec , 'id' , md5( time() . $payId_ . rand() ) );
+			$db->setData( $rec , 'pay_id' , $payId_ );
+			$db->setData( $rec , 'access_id' , $accessId_ );
+			$db->setData( $rec , 'afad_session_id' , $afadSessionId_ );
+			$db->setData( $rec , 'postback_url' , $postbackUrl_ );
+			$db->setData( $rec , 'http_status' , $result_['status'] );
+			$db->setData( $rec , 'response_body' , substr( $result_['body'] , 0 , 1000 ) );
+			$db->setData( $rec , 'error_message' , $result_['error'] );
+			$db->setData( $rec , 'sent_at' , time() );
+			$db->setData( $rec , 'retry_count' , 0 );
+
+			$db->addRecord( $rec );
+
+		} catch( Exception $e ) {
+			// ログ記録失敗は無視（成果送信は完了しているため）
+		}
 	}
 
 	//■リダイレクト //
