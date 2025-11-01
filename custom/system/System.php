@@ -414,18 +414,18 @@ class System extends SystemBase
 		 */
 		static function getHead($gm,$loginUserType,$loginUserRank){
 			global $NOT_LOGIN_USER_TYPE;
-			
+
 			if( self::$head || isset( $_GET['hfnull'] ) ){ return "";}
-			
+
 			self::$head = true;
-			
+
 			$html = "";
-			
+
 			if( $loginUserType == $NOT_LOGIN_USER_TYPE )	{ $html = Template::getTemplateString( null , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
-			else											{ $html = Template::getTemplateString( $gm[ $loginUserType ] , $rec , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
-			
-			if($_SESSION['ADMIN_MODE']){
-				$html .= Template::getTemplateString( $gm[ $loginUserType ] , $rec , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN_ADMIN_MODE' );
+			else											{ $html = Template::getTemplateString( $gm[ $loginUserType ] , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
+
+			if(isset($_SESSION['ADMIN_MODE']) && $_SESSION['ADMIN_MODE']){
+				$html .= Template::getTemplateString( $gm[ $loginUserType ] , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN_ADMIN_MODE' );
 			}
 			return $html;
 		}

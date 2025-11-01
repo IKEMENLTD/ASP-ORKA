@@ -154,18 +154,18 @@
 	{
 		case 'SESSION':
 
-			if( $path == $_SESSION[ $SESSION_PATH_NAME ] ){
-				$LOGIN_ID						= $_SESSION[ $SESSION_NAME ];
-				$LOGIN_TYPE                     = $_SESSION[ $SESSION_TYPE ];
+			if( isset($_SESSION[ $SESSION_PATH_NAME ]) && $path == $_SESSION[ $SESSION_PATH_NAME ] ){
+				$LOGIN_ID						= isset($_SESSION[ $SESSION_NAME ]) ? $_SESSION[ $SESSION_NAME ] : null;
+				$LOGIN_TYPE                     = isset($_SESSION[ $SESSION_TYPE ]) ? $_SESSION[ $SESSION_TYPE ] : null;
 			}
 			break;
 
 		case 'COOKIE':
 		default:
 
-			if( $path == $_COOKIE[ $COOKIE_PATH_NAME ] ){
-				$LOGIN_ID					  = $_COOKIE[ $COOKIE_NAME ];
-				$LOGIN_TYPE                   = $_COOKIE[ $COOKIE_TYPE ];
+			if( isset($_COOKIE[ $COOKIE_PATH_NAME ]) && $path == $_COOKIE[ $COOKIE_PATH_NAME ] ){
+				$LOGIN_ID					  = isset($_COOKIE[ $COOKIE_NAME ]) ? $_COOKIE[ $COOKIE_NAME ] : null;
+				$LOGIN_TYPE                   = isset($_COOKIE[ $COOKIE_TYPE ]) ? $_COOKIE[ $COOKIE_TYPE ] : null;
 			}
 			break;
 	}
