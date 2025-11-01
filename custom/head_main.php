@@ -110,8 +110,21 @@
 		$tdb = $gm['system']->getDB();
 		error_log("DEBUG: Got system DB, getting table");
 		$table = $tdb->getTable();
-		error_log("DEBUG: Got table, row count: " . $tdb->getRow($table));
+		$rowCount = $tdb->getRow($table);
+		error_log("DEBUG: Got table, row count: " . $rowCount);
+
+		if ($rowCount == 0) {
+			error_log("ERROR: System table is empty! No initial data found.");
+			throw new Exception("System table is empty. Database migration may not have completed. Please check database initial data.");
+		}
+
 		$trec = $tdb->getRecord( $table , 0 );
+
+		if (!$trec) {
+			error_log("ERROR: Failed to get system record at index 0");
+			throw new Exception("Failed to retrieve system configuration record.");
+		}
+
 		error_log("DEBUG: Got system record successfully");
 	} catch (Exception $e) {
 		error_log("ERROR: Failed to get system data: " . $e->getMessage());
