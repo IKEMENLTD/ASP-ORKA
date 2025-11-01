@@ -71,7 +71,7 @@
 	{
 		ConceptCheck::IsEssential( $_GET , Array( 'adwares' , 's_adwares' ) , 'or' );
 		ConceptCheck::IsNotNull( $_GET , Array( 'adwares' , 's_adwares' ) , 'or' );
-		ConceptCheck::IsScalar( $_GET , Array( 'adwares' , 'id' , 's_adwares' , 'url' ) );
+		ConceptCheck::IsScalar( $_GET , Array( 'adwares' , 'id' , 's_adwares' , 'url' , 'afad_sid' ) );
 		ConceptCheck::IsScalar( $_COOKIE , Array( 'adwares_cookie' ) );
 	}
 
@@ -274,6 +274,13 @@
 		$access->setID( md5( time() . getenv( 'REMOTE_ADDR' ) ) );
 		$access->setData( 'ipaddress'    , getenv( 'REMOTE_ADDR' ) );
 		$access->setData( 'cookie'       , $cookieID );
+
+		// AFAD連携: セッションIDを保存
+		$afadSessionId = GetAFADSessionId( $adwares_ );
+		if( $afadSessionId ) {
+			$access->setData( 'afad_session_id' , $afadSessionId );
+		}
+
 		$access->setData( 'adwares_type' , $adwares_->getType() );
 		$access->setData( 'adwares'      , $adwares_->getID() );
 		$access->setData( 'owner'        , SafeString( $_GET[ 'id' ] ) );
@@ -521,6 +528,32 @@
 
 		header( 'Location: ' . $url );
 		exit();
+	}
+
+	/**
+		@brief  AFADセッションIDを取得する。
+		@param  $adwares_ RecordModelオブジェクト。
+		@return AFADセッションID、存在しない場合はnull。
+	*/
+	function GetAFADSessionId( $adwares_ )
+	{
+		// AFAD連携が有効かチェック
+		if( !$adwares_->getData( 'afad_enabled' ) ) {
+			return null;
+		}
+
+		// パラメータ名を取得（デフォルト: afad_sid）
+		$paramName = $adwares_->getData( 'afad_param_name' );
+		if( !$paramName ) {
+			$paramName = 'afad_sid';
+		}
+
+		// GETパラメータから取得
+		if( isset( $_GET[ $paramName ] ) && !empty( $_GET[ $paramName ] ) ) {
+			return SafeString( $_GET[ $paramName ] );
+		}
+
+		return null;
 	}
 
 	/**
