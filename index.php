@@ -10,9 +10,12 @@
 	 *******************************************************************************************************/
 
 	ob_start();
+	error_log("DEBUG index.php: Starting index.php execution");
 	try
 	{
+		error_log("DEBUG index.php: About to include custom/head_main.php");
 		include_once 'custom/head_main.php';
+		error_log("DEBUG index.php: Successfully included custom/head_main.php");
 
 		//紹介コード処理
 		friendProc();
@@ -36,13 +39,18 @@
 		ob_end_clean();
 
 		//エラーメッセージをログに出力
+		error_log("EXCEPTION CAUGHT in index.php: " . $e_->getMessage());
+		error_log("Exception file: " . $e_->getFile());
+		error_log("Exception line: " . $e_->getLine());
+		error_log("Exception trace: " . $e_->getTraceAsString());
+
 		try {
 			if (class_exists('ErrorManager')) {
 				$errorManager = new ErrorManager();
 				$errorMessage = $errorManager->GetExceptionStr( $e_ );
 				$errorManager->OutputErrorLog( $errorMessage );
 			} else {
-				error_log("Exception: " . $e_->getMessage() . " in " . $e_->getFile() . " line " . $e_->getLine());
+				error_log("ErrorManager class not available");
 			}
 		} catch (Exception $e2) {
 			error_log("Exception in error handler: " . $e2->getMessage());

@@ -206,7 +206,26 @@ else
         TABLE_EXISTS=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'system');" 2>/dev/null || echo "false")
 
         if [ "$TABLE_EXISTS" = "t" ]; then
-            echo "✓ Database tables already exist. Skipping migration."
+            echo "✓ Database tables exist. Checking for initial data..."
+
+            # systemテーブルにデータが存在するかチェック
+            SYSTEM_DATA_EXISTS=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -tAc "SELECT EXISTS (SELECT 1 FROM system WHERE id = '0' LIMIT 1);" 2>/dev/null || echo "false")
+
+            if [ "$SYSTEM_DATA_EXISTS" = "t" ]; then
+                echo "✓ Initial data already exists. Skipping data insertion."
+            else
+                echo "⚠️  Initial data not found. Inserting initial data..."
+                if [ -f "/var/www/html/migration/002_insert_initial_data.sql" ]; then
+                    if psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f "/var/www/html/migration/002_insert_initial_data.sql" > /tmp/initial_data.log 2>&1; then
+                        echo "✓ Initial data inserted successfully"
+                    else
+                        echo "⚠️  Warning: Could not insert initial data"
+                        cat /tmp/initial_data.log
+                    fi
+                else
+                    echo "❌ Initial data script not found: /var/www/html/migration/002_insert_initial_data.sql"
+                fi
+            fi
         else
             echo "⚠️  Database tables not found. Running migration..."
 
