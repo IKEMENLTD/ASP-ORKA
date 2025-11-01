@@ -1,5 +1,5 @@
-<?php 
-	$ALL_DEBUG_FLAG = false;
+<?php
+	$ALL_DEBUG_FLAG = true;
 
 	$DEBUG_TYPE = 'subview';	//  echo/file/header/subview
     $DEBUG_TRACE = false;
