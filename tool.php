@@ -76,7 +76,7 @@
 	$result = $SQL->fetch( $result );
 	$TOOL_PASS = $result[ 0 ];
 
-	if( $TOOL_PASS != $_SESSION[ 'tool_login' ] )
+	if( $TOOL_PASS != (isset($_SESSION[ 'tool_login' ]) ? $_SESSION[ 'tool_login' ] : '') )
 	{
 		header( 'Content-Type: text/html;charset=shift_jis' );
 		if( $TOOL_PASS != md5( $_POST[ 'password' ] ) )

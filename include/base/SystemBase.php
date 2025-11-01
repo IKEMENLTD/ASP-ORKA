@@ -597,7 +597,7 @@ class SystemBase extends command_base
 	//返り値をfalseにするとログアウトが中止される
 	function logoutProc( $loginUserType ){
 
-		if( $_SESSION['ADMIN_MODE'] ){
+		if( isset($_SESSION['ADMIN_MODE']) && $_SESSION['ADMIN_MODE'] ){
 			unset($_SESSION['ADMIN_MODE']);
 		}
 
@@ -620,7 +620,7 @@ class SystemBase extends command_base
 			return true;
 		}
 
-		if( $_SESSION['ADMIN_MODE'] ){
+		if( isset($_SESSION['ADMIN_MODE']) && $_SESSION['ADMIN_MODE'] ){
 			$loginType = 'admin';
 			$id	= 'ADMIN';
 			unset($_SESSION['ADMIN_MODE']);
@@ -2050,10 +2050,10 @@ class SystemBase extends command_base
 		$html = "";
 
 		if( $loginUserType == $NOT_LOGIN_USER_TYPE )	{ $html = Template::getTemplateString( $gm[ 'system' ] , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
-		else											{ $html = Template::getTemplateString( $gm[ $loginUserType ] , $rec , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
+		else											{ $html = Template::getTemplateString( $gm[ $loginUserType ] , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN' ); }
 
-		if( $_SESSION['ADMIN_MODE'] || $loginUserType == 'admin' ){
-			$html .= Template::getTemplateString( $gm[ $loginUserType ] , $rec , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN_ADMIN_MODE' );
+		if( (isset($_SESSION['ADMIN_MODE']) && $_SESSION['ADMIN_MODE']) || $loginUserType == 'admin' ){
+			$html .= Template::getTemplateString( $gm[ $loginUserType ] , null , $loginUserType , $loginUserRank , '' , 'HEAD_DESIGN_ADMIN_MODE' );
 		}
 		return $html;
 	}

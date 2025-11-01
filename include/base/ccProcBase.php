@@ -877,7 +877,7 @@
 			$getSwap   = $_GET;
 			$queryHash = sha1( serialize( $query ) );
 
-			if( !$_SESSION[ 'search_query_index' ] ) //クエリキャッシュのインデックスがない場合
+			if( !isset($_SESSION[ 'search_query_index' ]) || !$_SESSION[ 'search_query_index' ] ) //クエリキャッシュのインデックスがない場合
 				{ $_SESSION[ 'search_query_index' ] = 0; }
 
 			if( !isset( $_SESSION[ 'search_query_hash' ][ $queryHash ] ) ) //クエリキャッシュがない場合
