@@ -564,7 +564,7 @@ class SystemUtil{
     function getDataStak( $name ){
     global $terminal_type;
         if($terminal_type){
-            return $_SESSION[$name];
+            return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
         }else{
             return self::getCookieUtil( $name );
         }

@@ -985,7 +985,7 @@ class SystemUtilBase{
     static function getDataStak( $name ){
     global $terminal_type;
         if($terminal_type){
-            return $_SESSION[$name];
+            return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
         }else{
             return self::getCookieUtil( $name );
         }
@@ -1198,7 +1198,7 @@ class SystemUtilBase{
 
 		if( is_null($authenticity_token) ){ return false; }
 
-		$old_authenticity_token = $_SESSION['authenticity_token_' . $tokenName ];
+		$old_authenticity_token = isset($_SESSION['authenticity_token_' . $tokenName ]) ? $_SESSION['authenticity_token_' . $tokenName ] : null;
 		unset($_SESSION['authenticity_token_' . $tokenName ]);
 		return $old_authenticity_token == $authenticity_token;
 	}

@@ -21,7 +21,7 @@
 		function registProc( &$iGM_ , &$ioRec_ , $iLoginUserType_ , $iLoginUserRank_ ,$iCheck_ = false )
 		{
 			NUserLogic::SetDefaultParameter( $ioRec_ );
-			NUserLogic::SetParentID( $ioRec_ , $_SESSION[ 'friend' ] );
+			NUserLogic::SetParentID( $ioRec_ , isset($_SESSION[ 'friend' ]) ? $_SESSION[ 'friend' ] : '' );
 			NUserLogic::SetClientTerminalType( $ioRec_ );
 
 			parent::registProc( $iGM_ , $ioRec_ , $iLoginUserType_ , $iLoginUserRank_ , $iCheck_ );
@@ -36,7 +36,7 @@
 		 */
 		function registComp( &$iGM_ , &$ioRec_ , $iLoginUserType_ , $iLoginUserRank_ )
 		{
-			if( $_SESSION[ 'friend' ] ) //親IDが指定されている場合
+			if( isset($_SESSION[ 'friend' ]) && $_SESSION[ 'friend' ] ) //親IDが指定されている場合
 				{ $_SESSION[ 'friend' ] = ''; }
 
 			NUserLogic::SendActivateMail( $ioRec_ );
