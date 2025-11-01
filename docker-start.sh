@@ -177,6 +177,81 @@ echo "✓ Skipping test-error.php execution for faster startup"
 echo "  (Run manually if needed: php /var/www/html/test-error.php)"
 echo ""
 
+# データベースマイグレーション
+echo "=== Database Migration Check ==="
+if [ -z "${SUPABASE_DB_HOST:-}" ] || [ -z "${SUPABASE_DB_USER:-}" ] || [ -z "${SUPABASE_DB_PASS:-}" ]; then
+    echo "⚠️  WARNING: Database credentials not set. Skipping migration."
+    echo "  Please configure database environment variables in Render."
+else
+    # PostgreSQLクライアントのインストール確認
+    if ! command -v psql &> /dev/null; then
+        echo "Installing PostgreSQL client..."
+        apt-get update -qq && apt-get install -y -qq postgresql-client > /dev/null 2>&1
+    fi
+
+    # データベース接続文字列
+    DB_HOST="${SUPABASE_DB_HOST}"
+    DB_PORT="${SUPABASE_DB_PORT:-5432}"
+    DB_NAME="${SUPABASE_DB_NAME:-postgres}"
+    DB_USER="${SUPABASE_DB_USER}"
+    export PGPASSWORD="${SUPABASE_DB_PASS}"
+
+    echo "Checking database connection..."
+
+    # データベース接続テスト（タイムアウト10秒）
+    if psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "SELECT 1;" > /dev/null 2>&1; then
+        echo "✓ Database connection successful"
+
+        # systemテーブルが存在するかチェック
+        TABLE_EXISTS=$(psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'system');" 2>/dev/null || echo "false")
+
+        if [ "$TABLE_EXISTS" = "t" ]; then
+            echo "✓ Database tables already exist. Skipping migration."
+        else
+            echo "⚠️  Database tables not found. Running migration..."
+
+            # マイグレーションファイルの存在確認
+            if [ -f "/var/www/html/migration/001_create_all_tables.sql" ]; then
+                echo "Executing migration script..."
+                if psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f "/var/www/html/migration/001_create_all_tables.sql" > /tmp/migration.log 2>&1; then
+                    echo "✓ Database migration completed successfully"
+
+                    # 初期データの挿入
+                    echo "Inserting initial system data..."
+                    if [ -f "/var/www/html/migration/002_insert_initial_data.sql" ]; then
+                        if psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f "/var/www/html/migration/002_insert_initial_data.sql" > /tmp/initial_data.log 2>&1; then
+                            echo "✓ Initial data inserted successfully"
+                        else
+                            echo "⚠️  Warning: Could not insert initial data"
+                            cat /tmp/initial_data.log
+                        fi
+                    else
+                        echo "⚠️  Warning: Initial data script not found"
+                    fi
+                else
+                    echo "❌ Migration failed. Check logs:"
+                    cat /tmp/migration.log
+                    echo ""
+                    echo "⚠️  Continuing anyway - application may not work correctly"
+                fi
+            else
+                echo "❌ Migration file not found: /var/www/html/migration/001_create_all_tables.sql"
+                echo "⚠️  Database tables must be created manually"
+            fi
+        fi
+    else
+        echo "❌ Cannot connect to database"
+        echo "  Host: $DB_HOST:$DB_PORT"
+        echo "  Database: $DB_NAME"
+        echo "  User: $DB_USER"
+        echo "⚠️  Continuing anyway - application will fail until database is accessible"
+    fi
+
+    # パスワードをクリア
+    unset PGPASSWORD
+fi
+echo ""
+
 # Apache起動
 echo "=== Starting Apache ==="
 echo "Starting Apache..."

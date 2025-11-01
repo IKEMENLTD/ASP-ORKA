@@ -4,6 +4,7 @@ FROM php:8.2-apache
 # 必要なシステムパッケージとPHP拡張を一度にインストール（ビルド時間短縮）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
+    postgresql-client \
     libcurl4-openssl-dev \
     libpng-dev \
     libjpeg-dev \
