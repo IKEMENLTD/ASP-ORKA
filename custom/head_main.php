@@ -92,12 +92,32 @@
 
 	CleanGlobal::action();
 
-	// データベースロード
-	$gm		 = SystemUtil::getGM();
+	// デバッグ: データベースロード開始
+	error_log("DEBUG: Starting database load");
 
-	//sytem data set
-	$tdb = $gm['system']->getDB();
-	$trec = $tdb->getRecord( $tdb->getTable() , 0 );
+	try {
+		// データベースロード
+		$gm = SystemUtil::getGM();
+		error_log("DEBUG: SystemUtil::getGM() completed successfully");
+	} catch (Exception $e) {
+		error_log("ERROR: SystemUtil::getGM() failed: " . $e->getMessage());
+		throw $e;
+	}
+
+	try {
+		//sytem data set
+		error_log("DEBUG: Getting system DB");
+		$tdb = $gm['system']->getDB();
+		error_log("DEBUG: Got system DB, getting table");
+		$table = $tdb->getTable();
+		error_log("DEBUG: Got table, row count: " . $tdb->getRow($table));
+		$trec = $tdb->getRecord( $table , 0 );
+		error_log("DEBUG: Got system record successfully");
+	} catch (Exception $e) {
+		error_log("ERROR: Failed to get system data: " . $e->getMessage());
+		error_log("ERROR: Stack trace: " . $e->getTraceAsString());
+		throw $e;
+	}
 
 	//global変数の定義
 	$HOME				= $tdb->getData( $trec , 'home' );
