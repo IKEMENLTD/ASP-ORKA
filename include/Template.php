@@ -26,32 +26,44 @@
             global $LOGIN_ID;
             global $template_path;
 
-            // DEBUG: Log to error_log only (no echo/flush to avoid breaking output)
-            error_log("TEMPLATE_SEARCH: label=$label, usertype=$usertype, target=$target, activate=$activate");
+            // DEBUG: Log to error_log only when DEBUG_FLAG_TEMPLATE is enabled
+            if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                error_log("TEMPLATE_SEARCH: label=$label, usertype=$usertype, target=$target, activate=$activate");
+            }
 
             if(isset(self::$template_cash[$usertype.$target.$label])){
                 if(self::$_DEBUG){ d( "getTemplate() : cash load(".self::$template_cash[$usertype.$target.$label].")\n","template"); d(func_get_args(),"args");}
-                error_log("TEMPLATE_CACHE_HIT: " . self::$template_cash[$usertype.$target.$label]);
+                if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                    error_log("TEMPLATE_CACHE_HIT: " . self::$template_cash[$usertype.$target.$label]);
+                }
                 return self::$template_cash[$usertype.$target.$label];
             }
             $tgm = SystemUtil::getGMforType("template");
             $tdb = $tgm->getDB();
 
             $table = $tdb->getTable();
-            error_log("TEMPLATE_DB: Total templates = " . $tdb->getRow($table));
+            if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                error_log("TEMPLATE_DB: Total templates = " . $tdb->getRow($table));
+            }
 
             $table = $tdb->searchTable( $table , 'label' , '==' , $label );
-            error_log("TEMPLATE_DB: After label search = " . $tdb->getRow($table));
+            if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                error_log("TEMPLATE_DB: After label search = " . $tdb->getRow($table));
+            }
 
             $table = $tdb->searchTable( $table , 'user_type' , '=' , "%/".$usertype."/%" );
-            error_log("TEMPLATE_DB: After user_type search = " . $tdb->getRow($table) . " (pattern: %/$usertype/%)");
+            if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                error_log("TEMPLATE_DB: After user_type search = " . $tdb->getRow($table) . " (pattern: %/$usertype/%)");
+            }
 
             if(strlen($target))
                 $table = $tdb->searchTable( $table , 'target_type' , '==' , $target );
             else
                 $table = $tdb->searchTable( $table , 'target_type' , 'isnull' , $target );
 
-            error_log("TEMPLATE_DB: After target_type search = " . $tdb->getRow($table));
+            if (defined('DEBUG_FLAG_TEMPLATE') && DEBUG_FLAG_TEMPLATE) {
+                error_log("TEMPLATE_DB: After target_type search = " . $tdb->getRow($table));
+            }
 
             // BUGFIX: activate & owner columns may be string type, bitwise search fails
             // Skip both activate and owner searches - rely on label, user_type, target_type only
