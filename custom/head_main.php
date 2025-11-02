@@ -99,6 +99,13 @@
 		// データベースロード
 		$gm = SystemUtil::getGM();
 		error_log("DEBUG: SystemUtil::getGM() completed successfully");
+
+		// Ensure nUser GUIManager exists (required for public registration)
+		if (!isset($gm['nUser']) || !$gm['nUser']) {
+			error_log("DEBUG: Creating missing nUser GUIManager");
+			$gm['nUser'] = new GUIManager($DB_NAME, 'nUser');
+			error_log("DEBUG: nUser GUIManager created successfully");
+		}
 	} catch (Exception $e) {
 		error_log("ERROR: SystemUtil::getGM() failed: " . $e->getMessage());
 		throw $e;

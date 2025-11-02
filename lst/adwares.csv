@@ -34,4 +34,8 @@ click_auto,char,1,,,
 continue_auto,char,1,,,
 check_type,varchar,10,Null,Null,
 open,boolean,,,,
+afad_enabled,boolean,,,,
+afad_postback_url,text,,Null,Null
+afad_gid,varchar,100,Null,Null
+afad_param_name,varchar,50,,,
 regist,timestamp,,,Const,

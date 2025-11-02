@@ -1,0 +1,10 @@
+id,char,32,,Const
+pay_id,char,32,,,
+access_id,char,32,,,
+afad_session_id,varchar,255,,,
+postback_url,text,,,
+http_status,int,,Null,Null
+response_body,text,,Null,Null
+error_message,text,,Null,Null
+sent_at,int,,,
+retry_count,int,,,
