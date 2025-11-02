@@ -8,4 +8,5 @@ useragent,string,,,Const
 referer,string,,,Const
 state,int,,,Const
 utn,varchar,128,,Const
+afad_session_id,varchar,255,Null,Null
 regist,timestamp,,,Const
