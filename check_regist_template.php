@@ -23,7 +23,7 @@ try {
     $table = $tdb->getTable();
     $table = $tdb->searchTable( $table , 'label' , '=' , "%REGIST%" );
 
-    echo "Found " . count($table) . " REGIST templates:<br><br>";
+    echo "Found " . $tdb->getRow($table) . " REGIST templates:<br><br>";
 
     echo "<table border='1' cellpadding='5' style='border-collapse: collapse;'>";
     echo "<tr style='background: #ddd;'><th>ID</th><th>Label</th><th>User Type</th><th>Target Type</th><th>Owner</th><th>Activate</th><th>File</th></tr>";
@@ -75,7 +75,7 @@ try {
     echo "SELECT * FROM template WHERE label LIKE '%REGIST%' ORDER BY label;\n\n";
 
     $all_table = $tdb->getTable();
-    echo "Total templates in database: " . count($all_table) . "\n";
+    echo "Total templates in database: " . $tdb->getRow($all_table) . "\n";
     echo "</pre>";
 
 } catch (Exception $e) {
