@@ -38,20 +38,20 @@
             $tdb = $tgm->getDB();
 
             $table = $tdb->getTable();
-            error_log("TEMPLATE_DB: Total templates = " . count($table));
+            error_log("TEMPLATE_DB: Total templates = " . $tdb->getRow($table));
 
             $table = $tdb->searchTable( $table , 'label' , '==' , $label );
-            error_log("TEMPLATE_DB: After label search = " . count($table));
+            error_log("TEMPLATE_DB: After label search = " . $tdb->getRow($table));
 
             $table = $tdb->searchTable( $table , 'user_type' , '=' , "%/".$usertype."/%" );
-            error_log("TEMPLATE_DB: After user_type search = " . count($table) . " (pattern: %/$usertype/%)");
+            error_log("TEMPLATE_DB: After user_type search = " . $tdb->getRow($table) . " (pattern: %/$usertype/%)");
 
             if(strlen($target))
                 $table = $tdb->searchTable( $table , 'target_type' , '==' , $target );
             else
                 $table = $tdb->searchTable( $table , 'target_type' , 'isnull' , $target );
 
-            error_log("TEMPLATE_DB: After target_type search = " . count($table));
+            error_log("TEMPLATE_DB: After target_type search = " . $tdb->getRow($table));
 
             // BUGFIX: activate & owner columns may be string type, bitwise search fails
             // Skip both activate and owner searches - rely on label, user_type, target_type only
